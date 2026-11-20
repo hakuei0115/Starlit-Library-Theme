@@ -1,0 +1,165 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MascotPortrait from '../components/mascot/MascotPortrait.astro';
+---
+
+<BaseLayout
+  title="404 — 迷失在星空書架間 | Mascot's Library"
+  description="找不到您所請求的頁面。館員在書架間找了又找，似乎沒有這本書呢……"
+>
+  <div class="notfound-page">
+    <div class="notfound-container">
+      <div class="notfound-visual">
+        <MascotPortrait
+          variant="thinking"
+          size="lg"
+          message="館員在書架間找了又找，似乎沒有這本書呢……"
+        />
+      </div>
+
+      <div class="notfound-content">
+        <span class="error-code">404 NOT FOUND</span>
+        <h1 class="notfound-title">迷失在星空書架間</h1>
+        <p class="notfound-desc">
+          這條星光路徑似乎不存在，或者該篇筆記已經移往其他藏書閣。別擔心，館員為你準備了返回的路徑：
+        </p>
+
+        <div class="notfound-actions">
+          <a href="/" class="btn btn-primary">
+            <span>返回圖書館首頁</span>
+          </a>
+          <a href="/articles" class="btn btn-secondary">
+            <span>瀏覽全部典藏文章</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .notfound-page {
+    width: 100%;
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-12) var(--page-gutter);
+  }
+
+  .notfound-container {
+    max-width: var(--container-article);
+    width: 100%;
+    background: var(--color-surface);
+    border: var(--border-thin);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-card);
+    padding: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-8);
+  }
+
+  @media (min-width: 768px) {
+    .notfound-container {
+      padding: var(--space-12) var(--space-10);
+    }
+  }
+
+  .notfound-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .notfound-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 32rem;
+  }
+
+  .error-code {
+    font-family: var(--font-code);
+    font-size: var(--text-small);
+    color: var(--color-gold);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-2);
+  }
+
+  .notfound-title {
+    font-family: var(--font-display);
+    font-size: var(--text-h1);
+    color: var(--color-text);
+    margin: 0 0 var(--space-4) 0;
+    line-height: 1.25;
+  }
+
+  .notfound-desc {
+    font-size: var(--text-article);
+    line-height: 1.8;
+    color: var(--color-text-muted);
+    margin: 0 0 var(--space-8) 0;
+  }
+
+  .notfound-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    justify-content: center;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.625rem;
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: var(--radius-pill);
+    transition: all var(--motion-fast) var(--ease-soft);
+    cursor: pointer;
+  }
+
+  .btn-primary {
+    background: var(--color-night);
+    color: var(--color-on-dark);
+    box-shadow: var(--shadow-card);
+  }
+
+  .btn-primary:hover {
+    background: var(--color-text);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .btn-secondary {
+    background: var(--color-surface);
+    color: var(--color-text);
+    border: var(--border-thin);
+  }
+
+  .btn-secondary:hover {
+    background: var(--color-surface-alt);
+    border-color: var(--color-accent);
+    color: var(--color-night);
+    transform: translateY(-2px);
+  }
+
+  .btn:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn {
+      transition: none !important;
+      transform: none !important;
+    }
+  }
+</style>

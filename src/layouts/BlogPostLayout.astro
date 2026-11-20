@@ -1,0 +1,219 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import ArticleCompanion from '../components/blog/ArticleCompanion.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  pubDate?: Date | string;
+  updatedDate?: Date | string;
+  category?: string;
+  tags?: string[];
+  cover?: string;
+  headings?: Array<{ depth: number; slug: string; text: string }>;
+}
+
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  category,
+  tags,
+  cover,
+  headings = []
+} = Astro.props;
+
+const formattedDate = pubDate ? new Date(pubDate).toISOString() : undefined;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  image={cover}
+  articleDate={formattedDate}
+>
+  <div class="article-layout container-site">
+    <div class="article-grid">
+      <!-- Main Content Column -->
+      <article class="article-main">
+        <header class="article-header-slot">
+          <slot name="header" />
+        </header>
+
+        <!-- Mobile Table of Contents slot (< 1024px) -->
+        <div class="article-toc-mobile">
+          <slot name="toc-mobile" />
+        </div>
+
+        <!-- Article Prose Body -->
+        <div class="article-prose container-prose">
+          <slot />
+        </div>
+
+        <!-- Article Footer (Tags, Prev/Next) -->
+        <footer class="article-footer-slot">
+          <slot name="footer" />
+        </footer>
+
+        <!-- Mobile Reading Companion Slot (< 1024px, after footer) -->
+        <div class="article-companion-mobile">
+          <slot name="companion-mobile">
+            <slot name="mobile-companion">
+              <ArticleCompanion />
+            </slot>
+          </slot>
+        </div>
+      </article>
+
+      <!-- Desktop Sticky Sidebar (>= 1024px) -->
+      <aside class="article-sidebar" aria-label="文章目錄與閱讀陪伴">
+        <div class="sidebar-sticky-wrapper">
+          <!-- Desktop TOC Slot (Flexible & scrollable when list is tall) -->
+          <div class="sidebar-toc-container">
+            <slot name="toc" />
+          </div>
+
+          <!-- Desktop Compact Companion Slot (Docked below TOC) -->
+          <div class="sidebar-companion-container">
+            <slot name="sidebar-companion">
+              <slot name="companion">
+                <ArticleCompanion />
+              </slot>
+            </slot>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .article-layout {
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-16);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Responsive Grid: Single column < 1024px, 2 columns >= 1024px */
+  .article-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-8);
+    width: 100%;
+    box-sizing: border-box;
+    align-items: start;
+  }
+
+  @media (min-width: 1024px) {
+    .article-grid {
+      grid-template-columns: minmax(0, 1fr) var(--container-toc);
+      column-gap: var(--space-10);
+      align-items: stretch;
+    }
+  }
+
+  .article-main {
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .article-header-slot {
+    margin-bottom: var(--space-8);
+  }
+
+  /* Mobile TOC slot (< 1024px) */
+  .article-toc-mobile {
+    display: block;
+    margin-bottom: var(--space-8);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 1024px) {
+    .article-toc-mobile {
+      display: none;
+    }
+  }
+
+  /* Prose container adhering to --container-prose (~736px) */
+  .article-prose {
+    font-size: var(--text-article);
+    line-height: 1.9;
+    color: var(--color-text);
+    width: 100%;
+    max-width: var(--container-prose);
+    box-sizing: border-box;
+  }
+
+  .article-footer-slot {
+    margin-top: var(--space-12);
+    padding-top: var(--space-8);
+    border-top: var(--border-thin);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Mobile Companion: shown only below 1024px, after footer */
+  .article-companion-mobile {
+    display: block;
+    margin-top: var(--space-8);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 1024px) {
+    .article-companion-mobile {
+      display: none;
+    }
+  }
+
+  /* Desktop Sidebar (>= 1024px) */
+  .article-sidebar {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .article-sidebar {
+      display: block;
+      width: var(--container-toc);
+      max-width: var(--container-toc);
+      min-width: 0;
+      box-sizing: border-box;
+      align-self: stretch;
+    }
+
+    /* Sticky Wrapper with Height Budget for TOC and Companion */
+    .sidebar-sticky-wrapper {
+      position: sticky;
+      top: 5.5rem;
+      max-height: calc(100vh - 6.5rem);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      box-sizing: border-box;
+    }
+
+    /* TOC container flexes and allows independent scrolling */
+    .sidebar-toc-container {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-companion-container {
+      flex-shrink: 0;
+    }
+
+    /* Extreme Short Viewport Fallback (<= 450px): Revert to normal document flow */
+    @media (max-height: 450px) {
+      .sidebar-sticky-wrapper {
+        position: static;
+        max-height: none;
+      }
+    }
+  }
+</style>

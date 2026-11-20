@@ -1,0 +1,184 @@
+---
+/**
+ * HeroBanner.astro
+ *
+ * Full-width responsive Hero banner slot for Starlit Library Theme v1.1.
+ * Follows docs/design/page-layout-spec.md v1.1:
+ * - Full-width inside the site container (not divided into columns)
+ * - Aspect ratio: ~2.4:1 on desktop (>=768px), 16:9 on mobile (<768px)
+ * - Neutral development placeholder awaiting finished banner from Mascot Art Studio
+ * - No hand-drawn character illustrations or status badges
+ */
+
+interface Props {
+  src?: string;
+  alt?: string;
+  class?: string;
+}
+
+const {
+  src,
+  alt = "Mascot's Library — 星空技術圖書館橫幅",
+  class: className = '',
+} = Astro.props;
+---
+
+<div class:list={['hero-banner-container', className]}>
+  {src ? (
+    <img
+      src={src}
+      alt={alt}
+      class="hero-banner-img"
+      loading="eager"
+      decoding="async"
+    />
+  ) : (
+    <div class="hero-banner-placeholder" role="region" aria-label="Hero 橫幅素材佔位區">
+      <!-- Subtle Starlit Ambient Decor -->
+      <div class="banner-starlit-bg" aria-hidden="true">
+        <svg class="ambient-stars" viewBox="0 0 1200 500" fill="none" preserveAspectRatio="xMidYMid slice">
+          <circle cx="150" cy="120" r="1.5" fill="var(--color-gold)" opacity="0.6" />
+          <circle cx="280" cy="80" r="1" fill="#FFFFFF" opacity="0.8" />
+          <circle cx="450" cy="160" r="1.2" fill="var(--color-lavender)" opacity="0.7" />
+          <circle cx="620" cy="90" r="2" fill="var(--color-gold)" opacity="0.7" />
+          <circle cx="780" cy="140" r="1" fill="#FFFFFF" opacity="0.6" />
+          <circle cx="950" cy="100" r="1.5" fill="var(--color-gold)" opacity="0.8" />
+          <circle cx="1080" cy="180" r="1.2" fill="#FFFFFF" opacity="0.7" />
+          <circle cx="200" cy="350" r="1" fill="#FFFFFF" opacity="0.5" />
+          <circle cx="500" cy="380" r="1.5" fill="var(--color-gold)" opacity="0.6" />
+          <circle cx="850" cy="360" r="1.2" fill="var(--color-lavender)" opacity="0.7" />
+          <circle cx="1020" cy="390" r="1" fill="#FFFFFF" opacity="0.5" />
+          <!-- Small 4-point gold constellation sparkles -->
+          <path d="M620 90L622 96L628 98L622 100L620 106L618 100L612 98L618 96L620 90Z" fill="var(--color-gold)" opacity="0.85" />
+          <path d="M320 220L321.5 224L326 225.5L321.5 227L320 231L318.5 227L314 225.5L318.5 224L320 220Z" fill="var(--color-gold)" opacity="0.5" />
+          <path d="M920 260L921.5 264L926 265.5L921.5 267L920 271L918.5 267L914 265.5L918.5 264L920 260Z" fill="var(--color-gold)" opacity="0.6" />
+        </svg>
+      </div>
+
+      <!-- Neutral Placeholder Badge per v1.1 Spec -->
+      <div class="banner-placeholder-content">
+        <div class="banner-studio-badge">
+          <svg class="badge-star" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" fill="var(--color-gold)" />
+          </svg>
+          <span class="badge-text">橫幅素材待提供 · Mascot Art Studio</span>
+        </div>
+        <p class="banner-spec-note">
+          Hero Banner Slot &middot; 2.4 : 1 (Desktop) / 16 : 9 (Mobile)
+        </p>
+      </div>
+    </div>
+  )}
+</div>
+
+<style>
+  .hero-banner-container {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    border: var(--border-thin);
+  }
+
+  .hero-banner-img {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    height: auto;
+    display: block;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
+  @media (min-width: 768px) {
+    .hero-banner-img {
+      aspect-ratio: 2.4 / 1;
+    }
+  }
+
+  .hero-banner-placeholder {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    aspect-ratio: 16 / 9;
+    background: radial-gradient(circle at 50% 35%, #302B40 0%, #201C2B 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    .hero-banner-placeholder {
+      aspect-ratio: 2.4 / 1;
+    }
+  }
+
+  .banner-starlit-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .ambient-stars {
+    width: 100%;
+    height: 100%;
+  }
+
+  .banner-placeholder-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    background-color: rgba(248, 247, 252, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: var(--border-thin);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-floating);
+    text-align: center;
+    max-width: 90%;
+    box-sizing: border-box;
+    min-width: 0;
+  }
+
+  .banner-studio-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    max-width: 100%;
+  }
+
+  .badge-star {
+    flex-shrink: 0;
+  }
+
+  .badge-text {
+    font-family: var(--font-display);
+    font-size: clamp(0.875rem, 3.5vw, var(--text-body));
+    font-weight: 650;
+    color: var(--color-night);
+    letter-spacing: -0.01em;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    text-align: center;
+  }
+
+  .banner-spec-note {
+    margin: 0;
+    font-size: var(--text-caption);
+    color: var(--color-text-muted);
+    font-family: var(--font-body);
+    overflow-wrap: break-word;
+  }
+</style>

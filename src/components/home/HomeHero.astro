@@ -1,0 +1,44 @@
+---
+import HeroBanner from '../mascot/HeroBanner.astro';
+---
+
+<section class="home-hero-section" aria-label="圖書館首頁橫幅">
+  <div class="hero-container container-site">
+    <!-- Semantic Visually-Hidden H1 per v1.1 Spec -->
+    <h1 class="sr-only">Mascot's Library — 星空技術圖書館</h1>
+    
+    <!-- Full-Width Banner Image Slot -->
+    <div class="hero-banner-wrapper">
+      <HeroBanner />
+    </div>
+  </div>
+</section>
+
+<style>
+  .home-hero-section {
+    width: 100%;
+    position: relative;
+    padding-top: var(--space-4);
+    padding-bottom: var(--space-4);
+  }
+
+  @media (min-width: 1024px) {
+    .home-hero-section {
+      padding-top: var(--space-6);
+      padding-bottom: var(--space-6);
+    }
+  }
+
+  .hero-container {
+    width: 100%;
+  }
+
+  .hero-banner-wrapper {
+    width: 100%;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    border: var(--border-thin);
+    background-color: var(--color-surface);
+  }
+</style>

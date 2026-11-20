@@ -1,0 +1,219 @@
+---
+interface PostLink {
+  id?: string;
+  slug?: string;
+  data?: {
+    title: string;
+  };
+  title?: string;
+}
+
+interface Props {
+  tags?: string[];
+  prevPost?: PostLink | null;
+  nextPost?: PostLink | null;
+}
+
+const { tags = [], prevPost, nextPost } = Astro.props;
+
+const getLinkSlug = (post: PostLink) => post.slug || post.id || '';
+const getLinkTitle = (post: PostLink) => post.title || post.data?.title || '相關文章';
+---
+
+<footer class="article-footer">
+  {tags.length > 0 && (
+    <div class="article-footer__tags-section">
+      <h3 class="section-heading">
+        <span class="star-accent">✦</span> 文章標籤
+      </h3>
+      <ul class="article-footer__tags-list">
+        {tags.map((tag) => (
+          <li>
+            <a href={`/articles?tag=${encodeURIComponent(tag)}`} class="tag-pill">
+              #{tag}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+
+  {(prevPost || nextPost) && (
+    <nav class="article-nav" aria-label="前後文章導航">
+      <div class="article-nav__grid">
+        {prevPost ? (
+          <a href={`/posts/${getLinkSlug(prevPost)}/`} class="article-nav__card article-nav__card--prev">
+            <span class="article-nav__direction">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+              上一篇文章
+            </span>
+            <span class="article-nav__title">{getLinkTitle(prevPost)}</span>
+          </a>
+        ) : (
+          <div class="article-nav__card-placeholder" aria-hidden="true"></div>
+        )}
+
+        {nextPost ? (
+          <a href={`/posts/${getLinkSlug(nextPost)}/`} class="article-nav__card article-nav__card--next">
+            <span class="article-nav__direction">
+              下一篇文章
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </span>
+            <span class="article-nav__title">{getLinkTitle(nextPost)}</span>
+          </a>
+        ) : (
+          <div class="article-nav__card-placeholder" aria-hidden="true"></div>
+        )}
+      </div>
+    </nav>
+  )}
+</footer>
+
+<style>
+  .article-footer {
+    margin-top: var(--space-8, 2rem);
+    padding-top: var(--space-6, 1.5rem);
+    border-top: 1px solid var(--color-border, #e2d8e3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6, 1.5rem);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .section-heading {
+    font-size: var(--text-small, 0.875rem);
+    font-weight: 650;
+    color: var(--color-text, #524b5a);
+    margin: 0 0 var(--space-3, 0.75rem) 0;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .star-accent {
+    color: var(--color-gold, #d5bf9b);
+  }
+
+  .article-footer__tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .tag-pill {
+    display: inline-flex;
+    align-items: center;
+    font-size: var(--text-small, 0.875rem);
+    color: var(--color-text, #524b5a);
+    background-color: var(--color-surface, #ffffff);
+    border: var(--border-thin, 1px solid var(--color-border, #e2d8e3));
+    border-radius: var(--radius-pill, 9999px);
+    padding: 0.3rem 0.85rem;
+    text-decoration: none;
+    transition: all var(--motion-fast, 140ms) ease;
+  }
+
+  .tag-pill:hover {
+    background-color: var(--color-surface-alt, #edeaf6);
+    border-color: var(--color-accent, #8a83aa);
+    color: var(--color-night, #302b40);
+  }
+
+  .tag-pill:focus-visible {
+    outline: 2px solid var(--color-focus, #524b5a);
+    outline-offset: 2px;
+  }
+
+  .article-nav__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4, 1rem);
+  }
+
+  @media (min-width: 640px) {
+    .article-nav__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .article-nav__card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: var(--space-4, 1rem);
+    background-color: var(--color-surface, #ffffff);
+    border: var(--border-thin, 1px solid var(--color-border, #e2d8e3));
+    border-radius: var(--radius-md, 0.75rem);
+    text-decoration: none;
+    box-shadow: var(--shadow-card, 0 4px 16px rgba(48, 43, 64, 0.04));
+    transition: all var(--motion-normal, 220ms) var(--ease-soft, cubic-bezier(0.22, 1, 0.36, 1));
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .article-nav__card:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-accent, #8a83aa);
+    box-shadow: var(--shadow-card-hover, 0 10px 30px rgba(48, 43, 64, 0.08));
+  }
+
+  .article-nav__card:focus-visible {
+    outline: 2px solid var(--color-focus, #524b5a);
+    outline-offset: 2px;
+  }
+
+  .article-nav__card--next {
+    text-align: right;
+  }
+
+  .article-nav__card--next .article-nav__direction {
+    justify-content: flex-end;
+  }
+
+  .article-nav__direction {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: var(--text-caption, 0.75rem);
+    font-weight: 600;
+    color: var(--color-text-muted, #716a7b);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .article-nav__title {
+    font-size: var(--text-small, 0.9375rem);
+    font-weight: 650;
+    line-height: 1.4;
+    color: var(--color-text, #524b5a);
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .article-nav__card-placeholder {
+    display: none;
+  }
+
+  @media (min-width: 640px) {
+    .article-nav__card-placeholder {
+      display: block;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .article-nav__card {
+      transition: none !important;
+      transform: none !important;
+    }
+  }
+</style>

@@ -1,0 +1,258 @@
+---
+export interface HeadingItem {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings?: HeadingItem[];
+  mode?: 'mobile' | 'desktop' | 'all';
+}
+
+const { headings = [], mode = 'all' } = Astro.props;
+
+// Filter headings to H2 and H3 only
+const filteredHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+
+const showMobile = mode === 'mobile' || mode === 'all';
+const showDesktop = mode === 'desktop' || mode === 'all';
+---
+
+{filteredHeadings.length > 0 && (
+  <div class:list={['toc-wrapper', `toc-mode-${mode}`]}>
+    <!-- Mobile Collapsible TOC (< 1024px) -->
+    {showMobile && (
+      <details class="toc-mobile" open={false}>
+        <summary class="toc-mobile__summary">
+          <span class="toc-mobile__title">
+            <svg class="toc-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="8" y1="6" x2="21" y2="6"></line>
+              <line x1="8" y1="12" x2="21" y2="12"></line>
+              <line x1="8" y1="18" x2="21" y2="18"></line>
+              <line x1="3" y1="6" x2="3.01" y2="6"></line>
+              <line x1="3" y1="12" x2="3.01" y2="12"></line>
+              <line x1="3" y1="18" x2="3.01" y2="18"></line>
+            </svg>
+            本文目錄
+          </span>
+          <span class="toc-mobile__chevron" aria-hidden="true">▾</span>
+        </summary>
+
+        <nav class="toc-nav" aria-label="文章目錄（行動版）">
+          <ul class="toc-list">
+            {filteredHeadings.map((heading) => (
+              <li class={`toc-item toc-item--depth-${heading.depth}`}>
+                <a href={`#${heading.slug}`} class="toc-link">
+                  {heading.text}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </details>
+    )}
+
+    <!-- Desktop TOC Card (>= 1024px) -->
+    {showDesktop && (
+      <div class="toc-desktop" aria-label="文章目錄">
+        <div class="toc-desktop__header">
+          <span class="toc-star" aria-hidden="true">✦</span>
+          <h2 class="toc-desktop__title">本文目錄</h2>
+        </div>
+        <nav class="toc-nav toc-nav--scrollable" aria-label="文章目錄（桌面版）">
+          <ul class="toc-list">
+            {filteredHeadings.map((heading) => (
+              <li class={`toc-item toc-item--depth-${heading.depth}`}>
+                <a href={`#${heading.slug}`} class="toc-link">
+                  {heading.text}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+    )}
+  </div>
+)}
+
+<style>
+  .toc-wrapper {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Mode explicit overrides */
+  .toc-mode-mobile .toc-desktop {
+    display: none !important;
+  }
+  .toc-mode-desktop .toc-mobile {
+    display: none !important;
+  }
+
+  /* Mobile Collapsible TOC (< 1024px) */
+  .toc-mobile {
+    background-color: var(--color-surface-alt, #edeaf6);
+    border: var(--border-thin, 1px solid var(--color-border, #e2d8e3));
+    border-radius: var(--radius-md, 0.75rem);
+    padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .toc-mobile__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    font-size: var(--text-small, 0.875rem);
+    font-weight: 600;
+    color: var(--color-text, #524b5a);
+    list-style: none;
+    user-select: none;
+    padding: 0.25rem 0;
+  }
+
+  .toc-mobile__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .toc-mobile__title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .toc-icon {
+    color: var(--color-night, #302b40);
+  }
+
+  .toc-mobile__chevron {
+    font-size: 0.9rem;
+    color: var(--color-text-muted, #716a7b);
+    transition: transform var(--motion-fast, 140ms) ease;
+  }
+
+  .toc-mobile[open] .toc-mobile__chevron {
+    transform: rotate(180deg);
+  }
+
+  /* Desktop card defaults */
+  .toc-desktop {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: var(--container-toc, 240px);
+    box-sizing: border-box;
+    padding: var(--space-4, 1rem);
+    background-color: var(--color-surface-alt, #edeaf6);
+    border: var(--border-thin, 1px solid var(--color-border, #e2d8e3));
+    border-radius: var(--radius-md, 0.75rem);
+    box-shadow: var(--shadow-card, 0 4px 16px rgba(48, 43, 64, 0.04));
+  }
+
+  .toc-desktop__header {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding-bottom: var(--space-2, 0.5rem);
+    margin-bottom: var(--space-2, 0.5rem);
+    border-bottom: 1px dashed var(--color-border, #e2d8e3);
+    flex-shrink: 0;
+  }
+
+  .toc-star {
+    color: var(--color-gold, #d5bf9b);
+    font-size: 0.85rem;
+  }
+
+  .toc-desktop__title {
+    font-size: var(--text-small, 0.875rem);
+    font-weight: 650;
+    color: var(--color-text, #524b5a);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* Scrollable TOC List */
+  .toc-nav--scrollable {
+    overflow-y: auto;
+    max-height: min(44vh, 320px);
+    overscroll-behavior: contain;
+    padding-right: 0.25rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-lavender, #c8c8d7) transparent;
+  }
+
+  .toc-nav--scrollable::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .toc-nav--scrollable::-webkit-scrollbar-thumb {
+    background-color: var(--color-lavender, #c8c8d7);
+    border-radius: 4px;
+  }
+
+  /* Shared TOC List Styles */
+  .toc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .toc-item {
+    font-size: var(--text-small, 0.875rem);
+    line-height: 1.5;
+  }
+
+  .toc-item--depth-2 {
+    font-weight: 500;
+  }
+
+  .toc-item--depth-3 {
+    padding-left: var(--space-4, 1rem);
+    font-size: var(--text-caption, 0.8125rem);
+    opacity: 0.9;
+  }
+
+  .toc-link {
+    color: var(--color-text-muted, #716a7b);
+    text-decoration: none;
+    display: block;
+    padding: 0.15rem 0.35rem;
+    border-radius: var(--radius-sm, 0.375rem);
+    transition: color var(--motion-fast, 140ms) ease,
+                background-color var(--motion-fast, 140ms) ease;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .toc-link:hover {
+    color: var(--color-night, #302b40);
+    background-color: rgba(200, 200, 215, 0.25);
+    text-decoration: none;
+  }
+
+  .toc-link:focus-visible {
+    outline: 2px solid var(--color-focus, #524b5a);
+    outline-offset: 2px;
+  }
+
+  /* Responsive Display Rules when mode='all' */
+  .toc-mode-all .toc-desktop {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .toc-mode-all .toc-mobile {
+      display: none;
+    }
+    .toc-mode-all .toc-desktop {
+      display: flex;
+    }
+  }
+</style>

@@ -1,0 +1,405 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/blog/PostCard.astro';
+import MascotPortrait from '../../components/mascot/MascotPortrait.astro';
+
+let allPosts: any[] = [];
+let categories: string[] = [];
+
+try {
+  const posts = await getCollection('blog');
+  allPosts = posts
+    .filter((p) => !p.data.draft)
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+  const catSet = new Set<string>();
+  allPosts.forEach((p) => {
+    if (p.data.category) {
+      catSet.add(p.data.category);
+    }
+  });
+  categories = Array.from(catSet);
+} catch (err) {
+  allPosts = [];
+  categories = [];
+}
+---
+
+<BaseLayout
+  title="文章館藏 — Mascot's Library"
+  description="漫步於星空書架間，探索所有發布的技術文章、系統架構與研究筆記。"
+>
+  <div class="articles-page">
+    <header class="articles-header">
+      <div class="header-container">
+        <nav class="breadcrumb-nav" aria-label="路徑導覽">
+          <ol class="breadcrumb-list">
+            <li class="breadcrumb-item"><a href="/" class="breadcrumb-link">首頁</a></li>
+            <li class="breadcrumb-sep" aria-hidden="true">/</li>
+            <li class="breadcrumb-item breadcrumb-current" aria-current="page">文章館藏</li>
+          </ol>
+        </nav>
+
+        <div class="header-badge">
+          <span class="star-icon" aria-hidden="true">✦</span>
+          <span>Library Archives</span>
+        </div>
+        <h1 class="articles-title">文章館藏</h1>
+        <p class="articles-lead">
+          漫步於星空書架間，探索所有發布的技術筆記。共收錄
+          <span class="count-badge" id="total-count">{allPosts.length}</span>
+          篇典藏。
+        </p>
+      </div>
+    </header>
+
+    <main class="articles-content container-site">
+      <!-- Category Filter Bar -->
+      <section class="filter-section" aria-label="分類篩選">
+        <div class="filter-bar">
+          <span class="filter-label">分類篩選：</span>
+          <div class="filter-chips" role="group" aria-label="文章分類切換">
+            <button
+              type="button"
+              class="filter-chip active"
+              data-category="all"
+              aria-pressed="true"
+            >
+              全部文章 ({allPosts.length})
+            </button>
+            {categories.map((cat) => {
+              const count = allPosts.filter((p) => p.data.category === cat).length;
+              return (
+                <button
+                  type="button"
+                  class="filter-chip"
+                  data-category={cat}
+                  aria-pressed="false"
+                >
+                  <span class="chip-dot" aria-hidden="true"></span>
+                  <span>{cat}</span>
+                  <span class="chip-count">({count})</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <!-- Articles Grid -->
+      <section class="articles-grid-section" aria-label="文章列表">
+        <div class="articles-grid" id="articles-container">
+          {allPosts.map((post) => (
+            <div class="article-item" data-category={post.data.category} data-tags={post.data.tags?.join(',') || ''}>
+              <PostCard post={post} />
+            </div>
+          ))}
+        </div>
+
+        <!-- Empty Filter Results -->
+        <div class="articles-empty" id="empty-state" style="display: none;">
+          <MascotPortrait
+            variant="thinking"
+            size="md"
+            message="在這個分類下沒有找到相關藏書呢，請試試其他分類。"
+          />
+        </div>
+      </section>
+    </main>
+  </div>
+</BaseLayout>
+
+<script>
+  function setupCategoryFiltering() {
+    const chips = document.querySelectorAll<HTMLButtonElement>('.filter-chip');
+    const items = document.querySelectorAll<HTMLElement>('.article-item');
+    const emptyState = document.getElementById('empty-state');
+    const countBadge = document.getElementById('total-count');
+
+    function applyFilter(category: string, updateUrl = true) {
+      let visibleCount = 0;
+
+      chips.forEach((chip) => {
+        const chipCat = chip.getAttribute('data-category');
+        const isActive = chipCat === category;
+        chip.classList.toggle('active', isActive);
+        chip.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      });
+
+      items.forEach((item) => {
+        const itemCat = item.getAttribute('data-category');
+        if (category === 'all' || itemCat === category) {
+          item.style.display = '';
+          visibleCount++;
+        } else {
+          item.style.display = 'none';
+        }
+      });
+
+      if (countBadge) {
+        countBadge.textContent = String(visibleCount);
+      }
+
+      if (emptyState) {
+        emptyState.style.display = visibleCount === 0 ? 'flex' : 'none';
+      }
+
+      if (updateUrl) {
+        const url = new URL(window.location.href);
+        if (category === 'all') {
+          url.searchParams.delete('category');
+        } else {
+          url.searchParams.set('category', category);
+        }
+        window.history.pushState({}, '', url.toString());
+      }
+    }
+
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const cat = chip.getAttribute('data-category') || 'all';
+        applyFilter(cat);
+      });
+    });
+
+    // Check URL params on initial load
+    const params = new URLSearchParams(window.location.search);
+    const initialCategory = params.get('category');
+    if (initialCategory) {
+      applyFilter(initialCategory, false);
+    }
+
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', () => {
+      const p = new URLSearchParams(window.location.search);
+      const cat = p.get('category') || 'all';
+      applyFilter(cat, false);
+    });
+  }
+
+  // Initialize on load and on astro:page-load
+  setupCategoryFiltering();
+  document.addEventListener('astro:page-load', setupCategoryFiltering);
+</script>
+
+<style>
+  .articles-page {
+    width: 100%;
+    padding-bottom: var(--space-16);
+  }
+
+  .articles-header {
+    background: var(--color-surface);
+    border-bottom: var(--border-thin);
+    padding: var(--space-10) var(--page-gutter);
+    text-align: center;
+  }
+
+  .header-container {
+    max-width: var(--container-prose);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .breadcrumb-nav {
+    margin-bottom: var(--space-4);
+  }
+
+  .breadcrumb-list {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: var(--text-small);
+    color: var(--color-text-muted);
+  }
+
+  .breadcrumb-link {
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color var(--motion-fast) var(--ease-soft);
+  }
+
+  .breadcrumb-link:hover {
+    color: var(--color-night);
+    text-decoration: underline;
+  }
+
+  .breadcrumb-sep {
+    color: var(--color-lavender);
+    user-select: none;
+  }
+
+  .breadcrumb-current {
+    color: var(--color-text);
+    font-weight: 500;
+  }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-small);
+    color: var(--color-text-muted);
+    font-weight: 500;
+    margin-bottom: var(--space-2);
+  }
+
+  .star-icon {
+    color: var(--color-gold);
+  }
+
+  .articles-title {
+    font-family: var(--font-display);
+    font-size: var(--text-hero);
+    color: var(--color-text);
+    margin: 0 0 var(--space-3) 0;
+    line-height: 1.2;
+  }
+
+  .articles-lead {
+    font-size: var(--text-article);
+    line-height: 1.8;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .count-badge {
+    display: inline-block;
+    padding: 0.1rem 0.5rem;
+    background: var(--color-surface-alt);
+    border-radius: var(--radius-sm);
+    color: var(--color-night);
+    font-weight: 600;
+    font-family: var(--font-code);
+  }
+
+  .articles-content {
+    margin: 0 auto;
+    padding: var(--space-8) var(--page-gutter);
+  }
+
+  .filter-section {
+    margin-bottom: var(--space-8);
+  }
+
+  .filter-bar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    background: var(--color-surface);
+    border: var(--border-thin);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 2px 8px rgba(48, 43, 64, 0.03);
+  }
+
+  @media (min-width: 768px) {
+    .filter-bar {
+      flex-direction: row;
+      align-items: center;
+      gap: var(--space-4);
+    }
+  }
+
+  .filter-label {
+    font-size: var(--text-small);
+    font-weight: 600;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+  }
+
+  .filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: center;
+  }
+
+  .filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    font-size: var(--text-small);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--motion-fast) var(--ease-soft);
+  }
+
+  .filter-chip:hover {
+    background: var(--color-surface);
+    border-color: var(--color-accent);
+    color: var(--color-night);
+    transform: translateY(-1px);
+  }
+
+  .filter-chip:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 3px;
+  }
+
+  .filter-chip.active {
+    background: var(--color-night);
+    color: var(--color-on-dark);
+    border-color: var(--color-night);
+  }
+
+  .chip-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-gold);
+  }
+
+  .chip-count {
+    font-size: 0.8em;
+    opacity: 0.8;
+  }
+
+  /* Articles Grid */
+  .articles-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 768px) {
+    .articles-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .articles-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .article-item {
+    display: flex;
+    height: 100%;
+  }
+
+  .articles-empty {
+    display: flex;
+    justify-content: center;
+    padding: var(--space-12) 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .filter-chip {
+      transition: none !important;
+      transform: none !important;
+    }
+  }
+</style>
