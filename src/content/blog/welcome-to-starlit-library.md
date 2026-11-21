@@ -2,7 +2,7 @@
 title: "星空技術圖書館的漫遊指南：歡迎來到 Starlit Library"
 description: "介紹 Starlit Library Theme 的設計初衷、星空圖書館的閱讀哲學，以及館員如何陪伴你閱讀現代 Web 技術與系統架構筆記。"
 pubDate: 2026-11-15T10:00:00.000Z
-category: "Library Notes"
+category: "Dev Notes"
 tags: ["Starlit Library", "Astro", "Design System", "Mascot"]
 featured: true
 draft: false

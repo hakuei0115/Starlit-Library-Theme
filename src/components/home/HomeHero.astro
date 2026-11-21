@@ -1,15 +1,34 @@
 ---
 import HeroBanner from '../mascot/HeroBanner.astro';
+import heroBanner from '../../assets/hero-banner.png';
+import heroBannerMobile from '../../assets/hero-banner-mobile.png';
 ---
 
-<section class="home-hero-section" aria-label="圖書館首頁橫幅">
+<section class="home-hero-section" aria-labelledby="home-hero-title">
   <div class="hero-container container-site">
-    <!-- Semantic Visually-Hidden H1 per v1.1 Spec -->
-    <h1 class="sr-only">Mascot's Library — 星空技術圖書館</h1>
-    
-    <!-- Full-Width Banner Image Slot -->
-    <div class="hero-banner-wrapper">
-      <HeroBanner />
+    <div class="hero-card">
+      <!-- Banner artwork by Mascot Art Studio -->
+      <HeroBanner src={heroBanner} mobileSrc={heroBannerMobile} />
+
+      <!-- Intro strip: the page's visible h1, one line of positioning, one primary action -->
+      <div class="hero-intro">
+        <div class="hero-copy">
+          <h1 id="home-hero-title" class="hero-title">
+            <span class="hero-title-main">Mascot's Library</span>
+            <span class="hero-title-sub">星空技術圖書館</span>
+          </h1>
+          <p class="hero-tagline">
+            一座星空中的溫柔技術圖書館，館員安靜陪伴讀者閱讀 AI、程式設計與軟體架構研究筆記。
+          </p>
+        </div>
+
+        <a class="hero-cta" href="/articles">
+          <span>開始閱讀</span>
+          <svg class="hero-cta-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </a>
+      </div>
     </div>
   </div>
 </section>
@@ -33,12 +52,130 @@ import HeroBanner from '../mascot/HeroBanner.astro';
     width: 100%;
   }
 
-  .hero-banner-wrapper {
+  /* One card holds banner + intro so they read as a single object. */
+  .hero-card {
     width: 100%;
     border-radius: var(--radius-xl);
     overflow: hidden;
     box-shadow: var(--shadow-card);
     border: var(--border-thin);
     background-color: var(--color-surface);
+  }
+
+  /* The card owns the frame; the banner inside is edge-to-edge. */
+  .hero-card :global(.hero-banner-container) {
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .hero-intro {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-5);
+    padding: var(--space-6) var(--space-5);
+    border-top: var(--border-thin);
+  }
+
+  .hero-copy {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .hero-title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 650;
+    color: var(--color-night);
+    line-height: 1.15;
+    text-wrap: balance;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .hero-title-main {
+    font-size: var(--text-h1);
+    letter-spacing: -0.01em;
+  }
+
+  .hero-title-sub {
+    font-size: var(--text-body);
+    font-weight: 500;
+    color: var(--color-text-muted);
+    letter-spacing: 0.04em;
+  }
+
+  .hero-tagline {
+    margin: 0;
+    max-width: 42em;
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: 1.75;
+    color: var(--color-text);
+    text-wrap: pretty;
+  }
+
+  .hero-cta {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: 2.75rem;
+    padding: 0.75rem 1.5rem;
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    font-weight: 500;
+    line-height: 1.4;
+    text-decoration: none;
+    color: var(--color-on-dark);
+    background: var(--color-night);
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-card);
+    transition:
+      background-color var(--motion-fast) var(--ease-soft),
+      box-shadow var(--motion-fast) var(--ease-soft),
+      transform var(--motion-fast) var(--ease-soft);
+  }
+
+  .hero-cta:hover {
+    color: var(--color-on-dark);
+    background: var(--color-text);
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-2px);
+  }
+
+  .hero-cta-arrow {
+    transition: transform var(--motion-normal) var(--ease-soft);
+  }
+
+  .hero-cta:hover .hero-cta-arrow {
+    transform: translateX(3px);
+  }
+
+  @media (min-width: 768px) {
+    .hero-intro {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-8);
+      padding: var(--space-8) var(--space-10);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-cta,
+    .hero-cta-arrow {
+      transition: none;
+    }
+
+    .hero-cta:hover,
+    .hero-cta:hover .hero-cta-arrow {
+      transform: none;
+    }
   }
 </style>

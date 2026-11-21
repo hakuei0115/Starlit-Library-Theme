@@ -1,0 +1,63 @@
+---
+/**
+ * Post cover, rendered at the right size for its slot.
+ *
+ * - Category / default covers are imported assets, so Astro converts them to WebP and
+ *   emits a srcset sized for where they are shown.
+ * - A post's own `heroImage` is a plain path (served as-is from /public), so it is
+ *   rendered as an ordinary <img>.
+ *
+ * The slot's CSS owns cropping (object-fit / aspect-ratio); the image itself is never stretched.
+ */
+import { Image } from 'astro:assets';
+import { getPostCover, type BlogPost } from '../../utils/posts';
+
+interface Props {
+  post: BlogPost;
+  /** lead: wide featured card · card: regular featured card · thumb: Latest Notes row */
+  variant: 'lead' | 'card' | 'thumb';
+  class?: string;
+}
+
+const { post, variant, class: className } = Astro.props;
+const cover = getPostCover(post);
+
+// Rendered CSS widths per slot (see the grid rules in FeaturedPosts.astro).
+const SIZES = {
+  lead: '(min-width: 1280px) 522px, (min-width: 768px) 46vw, 100vw',
+  card: '(min-width: 1280px) 554px, (min-width: 768px) 45vw, 100vw',
+} as const;
+const WIDTHS = {
+  lead: [480, 720, 1044],
+  card: [400, 640, 960, 1108],
+} as const;
+---
+
+{typeof cover === 'string' ? (
+  <img src={cover} alt="" class={className} loading="lazy" decoding="async" />
+) : variant === 'thumb' ? (
+  <Image
+    src={cover}
+    alt=""
+    class={className}
+    width={96}
+    height={64}
+    densities={[1, 2]}
+    format="webp"
+    quality={75}
+    loading="lazy"
+    decoding="async"
+  />
+) : (
+  <Image
+    src={cover}
+    alt=""
+    class={className}
+    widths={[...WIDTHS[variant]]}
+    sizes={SIZES[variant]}
+    format="webp"
+    quality={78}
+    loading="lazy"
+    decoding="async"
+  />
+)}

@@ -1,5 +1,6 @@
 ---
 import MascotPortrait from '../mascot/MascotPortrait.astro';
+import mascotHuggingBook from '../../assets/petit-hugging-book.png';
 
 interface Props {
   greeting?: string;
@@ -7,7 +8,7 @@ interface Props {
 }
 
 const {
-  greeting = "Welcome to my Starlit Library ✦",
+  greeting = "歡迎來到我的星空圖書館 ✦",
   message = "歡迎來到這座靜謐的技術圖書館。在漫長的思考與探索中，館員會一直陪伴你翻閱每一篇筆記，願微光能為你指引前行的方向。"
 } = Astro.props;
 ---
@@ -17,14 +18,13 @@ const {
   <div class="corner-header">
     <h2 class="corner-title">
       <span class="corner-star" aria-hidden="true">✦</span>
-      <span>Mascot's Corner</span>
+      <span>館員的角落</span>
     </h2>
   </div>
 
   <div class="corner-content-box">
-    <!-- Mascot Neutral Placeholder Slot -->
     <div class="corner-avatar-wrapper">
-      <MascotPortrait variant="reading" size="md" />
+      <MascotPortrait variant="reading" size="md" src={mascotHuggingBook} alt="館員抱著書，安靜地陪你閱讀" />
     </div>
 
     <!-- Dialogue Bubble Card -->
@@ -49,13 +49,19 @@ const {
     border: var(--border-thin);
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-card);
-    padding: var(--space-5);
+    padding: var(--space-4);
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
     min-width: 0;
     width: 100%;
     box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .mascot-corner-card {
+      padding: var(--space-5);
+    }
   }
 
   .corner-header {
@@ -79,9 +85,11 @@ const {
     font-size: 0.9em;
   }
 
+  /* Portrait on the left, speech on the right, at every width (per the approved mockup).
+     The portrait stays within the spec's 120-180px range on phones and ~160-280px on desktop. */
   .corner-content-box {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     gap: var(--space-4);
     min-width: 0;
@@ -90,24 +98,45 @@ const {
   }
 
   .corner-avatar-wrapper {
-    width: 100%;
+    flex: 0 0 clamp(7.5rem, 36%, 11rem);
+    min-width: 0;
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
   .corner-dialogue-card {
-    width: 100%;
+    flex: 1 1 0%;
     min-width: 0;
     box-sizing: border-box;
     background-color: var(--color-surface-alt);
     border: var(--border-thin);
     border-radius: var(--radius-lg);
-    padding: var(--space-4);
+    padding: var(--space-3);
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
     position: relative;
+  }
+
+  @media (min-width: 640px) {
+    .corner-dialogue-card {
+      padding: var(--space-4);
+    }
+  }
+
+  /* Small tail pointing back at Mascot so the card reads as speech. */
+  .corner-dialogue-card::before {
+    content: '';
+    position: absolute;
+    left: -6px;
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    background-color: var(--color-surface-alt);
+    border-left: var(--border-thin);
+    border-bottom: var(--border-thin);
+    transform: translateY(-50%) rotate(45deg);
   }
 
   .dialogue-header {
@@ -147,7 +176,7 @@ const {
 
   .dialogue-curator {
     font-size: 0.725rem;
-    color: var(--color-text-muted);
+    color: var(--color-text);
     font-weight: 500;
   }
 </style>

@@ -5,9 +5,11 @@ interface Props {
   categories?: string[];
   activeCategory?: string;
   showAllOption?: boolean;
+  /** Mark the "all articles" chip as the current page. Only true on the articles index itself. */
+  allActive?: boolean;
 }
 
-const { categories: propCategories, activeCategory, showAllOption = false } = Astro.props;
+const { categories: propCategories, activeCategory, showAllOption = false, allActive = false } = Astro.props;
 
 let displayCategories = propCategories;
 
@@ -28,7 +30,7 @@ if (!displayCategories) {
 ---
 
 {displayCategories && displayCategories.length > 0 && (
-  <div class="topic-chips-container" aria-label="主題分類導覽">
+  <nav class="topic-chips-container" aria-label="主題分類導覽">
     <div class="topic-label">
       <span class="star-icon" aria-hidden="true">✦</span>
       <span>典藏主題</span>
@@ -39,8 +41,8 @@ if (!displayCategories) {
         <div class="chip-item" role="listitem">
           <a
             href="/articles"
-            class:list={['topic-chip', { active: !activeCategory }]}
-            aria-current={!activeCategory ? 'page' : undefined}
+            class:list={['topic-chip', { active: allActive && !activeCategory }]}
+            aria-current={allActive && !activeCategory ? 'page' : undefined}
           >
             全部文章
           </a>
@@ -62,7 +64,7 @@ if (!displayCategories) {
         );
       })}
     </div>
-  </div>
+  </nav>
 )}
 
 <style>

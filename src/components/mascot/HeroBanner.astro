@@ -10,28 +10,58 @@
  * - No hand-drawn character illustrations or status badges
  */
 
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
 interface Props {
-  src?: string;
+  src?: ImageMetadata;
+  /** Optional 16:9 variant served below 768px; falls back to `src`. */
+  mobileSrc?: ImageMetadata;
   alt?: string;
   class?: string;
 }
 
 const {
   src,
+  mobileSrc,
   alt = "Mascot's Library — 星空技術圖書館橫幅",
   class: className = '',
 } = Astro.props;
+
+// The hero is the LCP element: serve WebP at several widths and let the browser pick.
+const build = (img: ImageMetadata, widths: number[]) =>
+  getImage({ src: img, widths, format: 'webp', quality: 80 });
+const desktop = src ? await build(src, [768, 1200, 1600, 1942]) : undefined;
+const mobile = mobileSrc ? await build(mobileSrc, [480, 720, 960, 1280]) : undefined;
+const srcset = (img: Awaited<ReturnType<typeof getImage>>) => img.srcSet.attribute;
 ---
 
 <div class:list={['hero-banner-container', className]}>
-  {src ? (
-    <img
-      src={src}
-      alt={alt}
-      class="hero-banner-img"
-      loading="eager"
-      decoding="async"
-    />
+  {desktop && src ? (
+    <picture>
+      {mobile && mobileSrc && (
+        <source
+          media="(max-width: 767px)"
+          srcset={srcset(mobile)}
+          sizes="100vw"
+          type="image/webp"
+          width={mobileSrc.width}
+          height={mobileSrc.height}
+        />
+      )}
+      <img
+        src={desktop.src}
+        srcset={srcset(desktop)}
+        sizes="(min-width: 1280px) 1200px, 100vw"
+        alt={alt}
+        class="hero-banner-img"
+        width={src.width}
+        height={src.height}
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </picture>
   ) : (
     <div class="hero-banner-placeholder" role="region" aria-label="Hero 橫幅素材佔位區">
       <!-- Subtle Starlit Ambient Decor -->

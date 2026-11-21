@@ -2,7 +2,7 @@
 title: "TypeScript 5.x 類型級元編程：構建靜態驗證的 SQL 查詢解析器"
 description: "運用條件類型、樣板字面量型別與遞迴元組推導，在編譯時期直接驗證 SQL 語法與輸出型別定義。"
 pubDate: 2026-11-17T09:15:00.000Z
-category: "TypeScript"
+category: "Software Engineering"
 tags: ["TypeScript", "Type Systems", "Metaprogramming", "Compiler"]
 featured: true
 draft: false

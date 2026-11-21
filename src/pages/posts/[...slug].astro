@@ -5,6 +5,7 @@ import ArticleHeader from '../../components/blog/ArticleHeader.astro';
 import TableOfContents from '../../components/blog/TableOfContents.astro';
 import ArticleFooter from '../../components/blog/ArticleFooter.astro';
 import ArticleCompanion from '../../components/blog/ArticleCompanion.astro';
+import { getPostCoverUrl } from '../../utils/posts';
 
 export async function getStaticPaths() {
   const allPosts = await getCollection('blog');
@@ -26,6 +27,7 @@ export async function getStaticPaths() {
 
 const { post, prevPost, nextPost } = Astro.props;
 const { Content, headings } = await render(post);
+const cover = await getPostCoverUrl(post);
 ---
 
 <BlogPostLayout
@@ -35,7 +37,7 @@ const { Content, headings } = await render(post);
   updatedDate={post.data.updatedDate}
   category={post.data.category}
   tags={post.data.tags}
-  cover={post.data.heroImage}
+  cover={cover}
   headings={headings}
 >
   <!-- 1. Article Header -->

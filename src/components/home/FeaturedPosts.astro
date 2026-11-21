@@ -1,29 +1,11 @@
 ---
-import { getCollection } from 'astro:content';
+import CoverImage from '../common/CoverImage.astro';
+import { getPublishedPosts, selectFeatured, formatReadingTime } from '../../utils/posts';
 
-let featuredPosts: any[] = [];
+const featuredPosts = selectFeatured(await getPublishedPosts());
 
-try {
-  const allPosts = await getCollection('blog');
-  const published = allPosts.filter(p => !p.data.draft);
-  
-  // Prefer explicitly featured posts, sort by pubDate desc
-  featuredPosts = published
-    .filter(p => p.data.featured === true)
-    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-  
-  // Fallback if fewer than 2 featured posts exist
-  if (featuredPosts.length < 2) {
-    const remaining = published
-      .filter(p => !featuredPosts.some(fp => fp.id === p.id))
-      .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-    featuredPosts = [...featuredPosts, ...remaining].slice(0, 3);
-  } else {
-    featuredPosts = featuredPosts.slice(0, 3);
-  }
-} catch (err) {
-  featuredPosts = [];
-}
+// With 1 or 3 posts the first one leads as a wide card; with exactly 2, two equal cards.
+const hasLead = featuredPosts.length !== 2;
 ---
 
 <section class="featured-posts-section" aria-labelledby="featured-heading">
@@ -31,18 +13,18 @@ try {
     <div class="header-titles">
       <h2 id="featured-heading" class="section-title">
         <span class="star-icon" aria-hidden="true">✦</span>
-        <span>Featured Articles</span>
+        <span>精選文章</span>
       </h2>
     </div>
     <a href="/articles" class="view-all-link">
-      <span>View All</span>
+      <span>查看全部</span>
       <span aria-hidden="true">→</span>
     </a>
   </div>
 
   {featuredPosts.length > 0 ? (
     <div class="featured-grid">
-      {featuredPosts.map((post) => {
+      {featuredPosts.map((post, index) => {
         const postUrl = `/posts/${post.id}/`;
         const pubDateObj = post.data.pubDate ? new Date(post.data.pubDate) : null;
         const displayDate = pubDateObj
@@ -52,25 +34,14 @@ try {
               day: '2-digit',
             }).format(pubDateObj)
           : '';
-        const readingTime = post.data.readingTime || '5 min read';
+        const readingTime = formatReadingTime(post.body);
+        const isLead = hasLead && index === 0;
 
         return (
-          <article class="featured-card">
+          <article class:list={['featured-card', { 'featured-card--lead': isLead }]}>
             <!-- Top Cover Slot -->
             <div class="card-cover">
-              {post.data.heroImage ? (
-                <img src={post.data.heroImage} alt="" class="cover-img" loading="lazy" />
-              ) : (
-                <div class="cover-placeholder" aria-hidden="true">
-                  <svg class="cover-stars" viewBox="0 0 100 60" fill="none">
-                    <circle cx="20" cy="20" r="1" fill="#D5BF9B" opacity="0.7" />
-                    <circle cx="75" cy="15" r="1.5" fill="#D5BF9B" opacity="0.8" />
-                    <circle cx="85" cy="45" r="1" fill="#FFFFFF" opacity="0.6" />
-                    <path d="M50 18L51.5 22L55.5 23.5L51.5 25L50 29L48.5 25L44.5 23.5L48.5 22L50 18Z" fill="#D5BF9B" opacity="0.65" />
-                  </svg>
-                  <span class="cover-symbol">✦</span>
-                </div>
-              )}
+              <CoverImage post={post} variant={isLead ? 'lead' : 'card'} class="cover-img" />
             </div>
 
             <!-- Card Content Body -->
@@ -102,14 +73,16 @@ try {
                     {displayDate}
                   </span>
                 )}
-                <span class="meta-separator" aria-hidden="true">·</span>
-                <span class="meta-reading-time">
-                  <svg class="meta-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <polyline points="12 6 12 12 16 14"></polyline>
-                  </svg>
-                  {readingTime}
-                </span>
+                {displayDate && readingTime && <span class="meta-separator" aria-hidden="true">·</span>}
+                {readingTime && (
+                  <span class="meta-reading-time">
+                    <svg class="meta-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    {readingTime}
+                  </span>
+                )}
               </div>
             </div>
           </article>
@@ -202,14 +175,46 @@ try {
     }
   }
 
-  @media (min-width: 1280px) {
-    .featured-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* The lead card spans the full row and lays cover and text side by side,
+     so the first featured post reads as the one to start with. */
+  @media (min-width: 768px) {
+    .featured-grid .featured-card--lead {
+      grid-column: 1 / -1;
+      flex-direction: row;
+    }
+
+    .featured-grid .featured-card--lead .card-cover {
+      width: 46%;
+      height: auto;
+      min-height: 15rem;
+      flex-shrink: 0;
+    }
+
+    .featured-grid .featured-card--lead .card-body {
+      padding: var(--space-8);
+      justify-content: center;
+    }
+
+    .featured-grid .featured-card--lead .card-title {
+      font-size: var(--text-h2);
+      margin-bottom: var(--space-3);
+      text-wrap: balance;
+    }
+
+    .featured-grid .featured-card--lead .card-excerpt {
+      font-size: var(--text-body);
+      -webkit-line-clamp: 3;
+      flex-grow: 0;
+    }
+
+    .featured-grid .featured-card--lead .card-meta-bottom {
+      margin-top: var(--space-4);
     }
   }
 
   /* Card styling aligning with design mockups */
   .featured-card {
+    position: relative;
     display: flex;
     flex-direction: column;
     min-width: 0;
@@ -244,35 +249,23 @@ try {
     justify-content: center;
   }
 
-  .cover-img {
+  /* The <img> is rendered by CoverImage, so it needs :global to pick up this scope. */
+  .card-cover :global(.cover-img) {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  .cover-placeholder {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  /* Regular cards: cover keeps a fixed ratio (first test value: 2:1). The lead card is unchanged. */
+  .featured-grid {
+    --card-cover-ratio: 2 / 1;
   }
 
-  .cover-stars {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
+  .featured-card:not(.featured-card--lead) .card-cover {
+    height: auto;
+    aspect-ratio: var(--card-cover-ratio);
   }
 
-  .cover-symbol {
-    font-size: 1.5rem;
-    color: var(--color-gold);
-    opacity: 0.8;
-    z-index: 1;
-    filter: drop-shadow(0 0 6px rgba(213, 191, 155, 0.4));
-  }
 
   /* Card Body */
   .card-body {
@@ -316,6 +309,7 @@ try {
     line-height: 1.35;
     margin: 0 0 var(--space-2) 0;
     color: var(--color-text);
+    text-wrap: balance;
   }
 
   .card-title-link {
@@ -331,10 +325,21 @@ try {
     text-underline-offset: 4px;
   }
 
+  /* Stretched link: the whole card is the click target, not just the title. */
+  .card-title-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
   .card-title-link:focus-visible {
+    outline: none;
+  }
+
+  .card-title-link:focus-visible::after {
     outline: 2px solid var(--color-focus);
-    outline-offset: 2px;
-    border-radius: var(--radius-sm);
+    outline-offset: -2px;
+    border-radius: var(--radius-lg);
   }
 
   .card-excerpt {
