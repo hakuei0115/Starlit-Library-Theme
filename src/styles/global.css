@@ -290,6 +290,13 @@ hr {
   -webkit-overflow-scrolling: touch;
 }
 
+/* On narrow screens, keep every column readable and let the table scroll sideways
+   instead of squeezing the last column into one-character-per-line text. */
+.article-prose th,
+.article-prose td {
+  min-width: 7rem;
+}
+
 .article-prose img {
   max-width: 100%;
   height: auto;

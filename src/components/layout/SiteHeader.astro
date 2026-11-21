@@ -76,8 +76,11 @@ const isAbout = currentPath.startsWith('/about');
       </svg>
     </button>
   </div>
+</header>
 
-  <!-- Mobile Drawer Overlay & Panel -->
+<!-- Mobile Drawer Overlay & Panel.
+     Kept outside <header>: the header's backdrop-filter would otherwise become the
+     containing block for these position:fixed elements and clip them to the header box. -->
   <div id="mobile-nav-overlay" class="mobile-nav-overlay" aria-hidden="true"></div>
   <div id="mobile-nav-drawer" class="mobile-nav-drawer" role="dialog" aria-modal="true" aria-label="行動版導覽選單">
     <nav class="mobile-nav" aria-label="行動版導覽">
@@ -124,7 +127,6 @@ const isAbout = currentPath.startsWith('/about');
       </div>
     </nav>
   </div>
-</header>
 
 <style>
   .site-header {
@@ -410,6 +412,7 @@ const isAbout = currentPath.startsWith('/about');
       drawer?.setAttribute('data-open', 'true');
       overlay?.setAttribute('data-open', 'true');
       document.body.style.overflow = 'hidden';
+      drawer?.querySelector<HTMLElement>('a')?.focus();
     }
 
     function closeMenu() {
