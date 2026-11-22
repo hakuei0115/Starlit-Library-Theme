@@ -10,10 +10,7 @@ import { siteConfig } from '../site.config';
 const showCorner = siteConfig.mascot.enabled;
 ---
 
-<BaseLayout
-  title={`${siteConfig.title} — ${siteConfig.subtitle}`}
-  description={siteConfig.description}
->
+<BaseLayout description={siteConfig.description}>
   <div class="homepage-flow">
     <!-- 1. Full-Width Hero Banner -->
     <HomeHero />
