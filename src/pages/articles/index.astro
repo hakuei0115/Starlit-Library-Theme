@@ -3,6 +3,9 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/blog/PostCard.astro';
 import MascotPortrait from '../../components/mascot/MascotPortrait.astro';
+import { siteConfig } from '../../site.config';
+
+const { articles: copy } = siteConfig;
 
 let allPosts: any[] = [];
 let categories: string[] = [];
@@ -27,8 +30,8 @@ try {
 ---
 
 <BaseLayout
-  title="文章館藏 — Mascot's Library"
-  description="漫步於星空書架間，探索所有發布的技術文章、系統架構與研究筆記。"
+  title={copy.title}
+  description={copy.description}
 >
   <div class="articles-page">
     <header class="articles-header">
@@ -37,7 +40,7 @@ try {
           <ol class="breadcrumb-list">
             <li class="breadcrumb-item"><a href="/" class="breadcrumb-link">首頁</a></li>
             <li class="breadcrumb-sep" aria-hidden="true">/</li>
-            <li class="breadcrumb-item breadcrumb-current" aria-current="page">文章館藏</li>
+            <li class="breadcrumb-item breadcrumb-current" aria-current="page">{copy.title}</li>
           </ol>
         </nav>
 
@@ -45,9 +48,9 @@ try {
           <span class="star-icon" aria-hidden="true">✦</span>
           <span>Library Archives</span>
         </div>
-        <h1 class="articles-title">文章館藏</h1>
+        <h1 class="articles-title">{copy.title}</h1>
         <p class="articles-lead">
-          漫步於星空書架間，探索所有發布的技術筆記。共收錄
+          {copy.description}共收錄
           <span class="count-badge" id="total-count">{allPosts.length}</span>
           篇典藏。
         </p>
@@ -102,7 +105,7 @@ try {
           <MascotPortrait
             variant="thinking"
             size="md"
-            message="在這個分類下沒有找到相關藏書呢，請試試其他分類。"
+            message={copy.emptyFilterMessage}
           />
         </div>
       </section>

@@ -4,17 +4,18 @@
  *
  * Mascot reading companion (3:4 portrait artwork) with an optional speech message.
  * Follows docs/design/page-layout-spec.md v1.1 and mascot-spec.md.
- * Until more poses are delivered, every variant uses the "hugging a book" artwork.
+ * Until more poses are provided, every variant uses `siteConfig.art.mascot`.
+ * With `siteConfig.mascot.enabled = false` only the optional message bubble is rendered.
  */
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
-import defaultArt from '../../assets/petit-hugging-book.png';
+import { siteConfig } from '../../site.config';
 
 interface Props {
   variant?: 'reading' | 'thinking';
   size?: 'sm' | 'md' | 'lg';
   message?: string;
-  /** Artwork override (3:4 portrait). Defaults to the hugging-book pose. */
+  /** Artwork override (3:4 portrait). Defaults to `siteConfig.art.mascot`. */
   src?: ImageMetadata;
   alt?: string;
   class?: string;
@@ -24,17 +25,18 @@ const {
   variant = 'reading',
   size = 'md',
   message,
-  src = defaultArt,
-  alt = '館員抱著書的插圖',
+  src = siteConfig.art.mascot,
+  alt = siteConfig.mascot.artAlt,
   class: className = '',
 } = Astro.props;
 
 // Rendered width of the artwork for each size, so the browser downloads no more than needed.
+const showArt = siteConfig.mascot.enabled;
 const SIZE_PX = { sm: 160, md: 240, lg: 320 } as const;
 ---
 
 <div class:list={['mascot-portrait', `size-${size}`, `variant-${variant}`, className]}>
-  <Image
+  {showArt && <Image
     class="mascot-portrait-art"
     src={src}
     alt={alt}
@@ -44,7 +46,7 @@ const SIZE_PX = { sm: 160, md: 240, lg: 320 } as const;
     quality={80}
     loading="lazy"
     decoding="async"
-  />
+  />}
 
   <!-- Optional Speech Message -->
   {message && (

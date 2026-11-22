@@ -1,7 +1,103 @@
 ---
+import { getEntry, render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+// The About page is plain Markdown: edit src/content/pages/about.md.
+const entry = await getEntry('pages', 'about');
+if (!entry) {
+  throw new Error('Missing src/content/pages/about.md');
+}
+const { Content } = await render(entry);
+const { title, description, eyebrow } = entry.data;
 ---
 
-<BaseLayout title="關於">
-  <h1>關於</h1>
+<BaseLayout title={title} description={description}>
+  <div class="about-page">
+    <header class="about-header">
+      <div class="header-container">
+        {eyebrow && (
+          <div class="header-badge">
+            <span class="star-sparkle" aria-hidden="true">✦</span>
+            <span>{eyebrow}</span>
+          </div>
+        )}
+        <h1 class="about-title">{title}</h1>
+        <p class="about-lead">{description}</p>
+      </div>
+    </header>
+
+    <div class="about-content-wrapper">
+      <div class="about-prose article-prose">
+        <Content />
+      </div>
+    </div>
+  </div>
 </BaseLayout>
+
+<style>
+  .about-page {
+    width: 100%;
+    padding-bottom: var(--space-16);
+  }
+
+  .about-header {
+    background: var(--color-surface);
+    border-bottom: var(--border-thin);
+    padding: var(--space-12) var(--page-gutter);
+    text-align: center;
+  }
+
+  .header-container {
+    max-width: var(--container-prose);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-small);
+    color: var(--color-text-muted);
+    font-weight: 500;
+    margin-bottom: var(--space-3);
+  }
+
+  .star-sparkle {
+    color: var(--color-gold);
+  }
+
+  .about-title {
+    font-family: var(--font-display);
+    font-size: var(--text-hero);
+    color: var(--color-text);
+    margin: 0 0 var(--space-4) 0;
+    line-height: 1.2;
+  }
+
+  .about-lead {
+    font-family: var(--font-body);
+    font-size: var(--text-article);
+    color: var(--color-text-muted);
+    line-height: 1.8;
+    margin: 0;
+  }
+
+  .about-content-wrapper {
+    max-width: var(--container-article);
+    margin: 0 auto;
+    padding: var(--space-10) var(--page-gutter);
+  }
+
+  /* Same reading measure and rhythm as an article. */
+  .about-prose {
+    width: 100%;
+    max-width: var(--container-prose);
+    margin-inline: auto;
+    font-size: var(--text-article);
+    line-height: 1.9;
+    color: var(--color-text);
+  }
+</style>

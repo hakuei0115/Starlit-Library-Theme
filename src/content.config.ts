@@ -16,4 +16,15 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { blog };
+// Standalone pages written in Markdown (currently the About page).
+const pages = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/pages' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    /** Small label above the title, e.g. "About". */
+    eyebrow: z.string().optional(),
+  }),
+});
+
+export const collections = { blog, pages };

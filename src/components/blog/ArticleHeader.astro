@@ -1,4 +1,5 @@
 ---
+import { siteConfig } from '../../site.config';
 interface Props {
   title: string;
   pubDate: Date | string;
@@ -22,7 +23,7 @@ const {
 const dateObj = new Date(pubDate);
 const isoDate = !isNaN(dateObj.getTime()) ? dateObj.toISOString() : '';
 const displayDate = !isNaN(dateObj.getTime())
-  ? new Intl.DateTimeFormat('zh-TW', {
+  ? new Intl.DateTimeFormat(siteConfig.lang, {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
@@ -32,7 +33,7 @@ const displayDate = !isNaN(dateObj.getTime())
 const updatedDateObj = updatedDate ? new Date(updatedDate) : null;
 const isoUpdatedDate = updatedDateObj && !isNaN(updatedDateObj.getTime()) ? updatedDateObj.toISOString() : '';
 const displayUpdatedDate = updatedDateObj && !isNaN(updatedDateObj.getTime())
-  ? new Intl.DateTimeFormat('zh-TW', {
+  ? new Intl.DateTimeFormat(siteConfig.lang, {
       year: 'numeric',
       month: 'long',
       day: 'numeric',

@@ -1,30 +1,28 @@
 ---
 import MascotPortrait from '../mascot/MascotPortrait.astro';
-import mascotHuggingBook from '../../assets/petit-hugging-book.png';
+import { siteConfig } from '../../site.config';
 
 interface Props {
   greeting?: string;
   message?: string;
 }
 
-const {
-  greeting = "歡迎來到我的星空圖書館 ✦",
-  message = "歡迎來到這座靜謐的技術圖書館。在漫長的思考與探索中，館員會一直陪伴你翻閱每一篇筆記，願微光能為你指引前行的方向。"
-} = Astro.props;
+const { mascot } = siteConfig;
+const { greeting = mascot.greeting, message = mascot.message } = Astro.props;
 ---
 
-<aside class="mascot-corner-card" aria-label="館員的閱讀角落">
+<aside class="mascot-corner-card" aria-label={mascot.cornerTitle}>
   <!-- Section Header -->
   <div class="corner-header">
     <h2 class="corner-title">
       <span class="corner-star" aria-hidden="true">✦</span>
-      <span>館員的角落</span>
+      <span>{mascot.cornerTitle}</span>
     </h2>
   </div>
 
   <div class="corner-content-box">
     <div class="corner-avatar-wrapper">
-      <MascotPortrait variant="reading" size="md" src={mascotHuggingBook} alt="館員抱著書，安靜地陪你閱讀" />
+      <MascotPortrait variant="reading" size="md" alt={mascot.artAlt} />
     </div>
 
     <!-- Dialogue Bubble Card -->
@@ -37,7 +35,7 @@ const {
       <p class="dialogue-body">{message}</p>
 
       <div class="dialogue-footer">
-        <span class="dialogue-curator">圖書館館員</span>
+        <span class="dialogue-curator">{mascot.signature}</span>
       </div>
     </div>
   </div>

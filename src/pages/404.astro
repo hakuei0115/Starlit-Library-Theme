@@ -1,11 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import MascotPortrait from '../components/mascot/MascotPortrait.astro';
+import { siteConfig } from '../site.config';
+
+const { notFound } = siteConfig;
 ---
 
 <BaseLayout
-  title="404 — 迷失在星空書架間 | Mascot's Library"
-  description="找不到您所請求的頁面。館員在書架間找了又找，似乎沒有這本書呢……"
+  title={`404 — ${notFound.title}`}
+  description={notFound.description}
 >
   <div class="notfound-page">
     <div class="notfound-container">
@@ -13,16 +16,14 @@ import MascotPortrait from '../components/mascot/MascotPortrait.astro';
         <MascotPortrait
           variant="thinking"
           size="lg"
-          message="館員在書架間找了又找，似乎沒有這本書呢……"
+          message={notFound.message}
         />
       </div>
 
       <div class="notfound-content">
         <span class="error-code">404 NOT FOUND</span>
-        <h1 class="notfound-title">迷失在星空書架間</h1>
-        <p class="notfound-desc">
-          這條星光路徑似乎不存在，或者該篇筆記已經移往其他藏書閣。別擔心，館員為你準備了返回的路徑：
-        </p>
+        <h1 class="notfound-title">{notFound.title}</h1>
+        <p class="notfound-desc">{notFound.description}</p>
 
         <div class="notfound-actions">
           <a href="/" class="btn btn-primary">

@@ -1,10 +1,7 @@
 import type { ImageMetadata } from 'astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { getImage } from 'astro:assets';
-import aiSystems from '../assets/covers/ai-systems.png';
-import cssWeb from '../assets/covers/css-web.png';
-import softwareEngineering from '../assets/covers/software-engineering.png';
-import devNotes from '../assets/covers/dev-notes.png';
+import { siteConfig } from '../site.config';
 
 export type BlogPost = CollectionEntry<'blog'>;
 
@@ -48,16 +45,10 @@ export function formatReadingTime(body: string | undefined): string | undefined 
 }
 
 /**
- * Cover strategy: the post's own `heroImage` -> its category cover -> the Dev Notes default.
- * Category covers are the original artwork in src/assets/covers; Astro converts them to WebP.
+ * Cover strategy: the post's own `heroImage` -> the cover mapped to its category
+ * -> the default cover. The mapping lives in `siteConfig.covers` (src/site.config.ts).
  */
-const CATEGORY_COVERS: Record<string, ImageMetadata> = {
-  'AI & Systems': aiSystems,
-  'CSS & Web': cssWeb,
-  'Software Engineering': softwareEngineering,
-  'Dev Notes': devNotes,
-};
-const DEFAULT_COVER = devNotes;
+const { byCategory: CATEGORY_COVERS, defaultCover: DEFAULT_COVER } = siteConfig.covers;
 
 export type PostCover = string | ImageMetadata;
 

@@ -3,6 +3,7 @@ import '../styles/tokens.css';
 import '../styles/global.css';
 import SiteHeader from '../components/layout/SiteHeader.astro';
 import SiteFooter from '../components/layout/SiteFooter.astro';
+import { siteConfig } from '../site.config';
 
 interface Props {
   title?: string;
@@ -14,14 +15,14 @@ interface Props {
 
 const {
   title,
-  description = "一座星空中的溫柔技術圖書館，館員安靜陪伴讀者閱讀 AI、程式設計與研究筆記。",
+  description = siteConfig.description,
   image = "/favicon.svg",
   articleDate,
-  lang = "zh-TW",
+  lang = siteConfig.lang,
 } = Astro.props;
 
-const siteTitle = "Mascot's Library";
-const fullTitle = title ? `${title} — ${siteTitle}` : `${siteTitle} — 星空技術圖書館`;
+const siteTitle = siteConfig.title;
+const fullTitle = title ? `${title} — ${siteTitle}` : `${siteTitle} — ${siteConfig.subtitle}`;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin);
 const imageURL = new URL(image, Astro.site || Astro.url.origin);
 ---
@@ -34,7 +35,7 @@ const imageURL = new URL(image, Astro.site || Astro.url.origin);
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <link rel="canonical" href={canonicalURL} />
-    <link rel="alternate" type="application/rss+xml" title="Mascot's Library RSS Feed" href="/rss.xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${siteTitle} RSS Feed`} href="/rss.xml" />
     <meta name="generator" content={Astro.generator} />
 
     <!-- Primary Meta Tags -->

@@ -5,14 +5,17 @@ import TopicChips from '../components/home/TopicChips.astro';
 import FeaturedPosts from '../components/home/FeaturedPosts.astro';
 import LatestPosts from '../components/home/LatestPosts.astro';
 import MascotCorner from '../components/home/MascotCorner.astro';
+import { siteConfig } from '../site.config';
+
+const showCorner = siteConfig.mascot.enabled;
 ---
 
 <BaseLayout
-  title="Mascot's Library — 星空技術圖書館"
-  description="一座星空中的溫柔技術圖書館，館員安靜陪伴讀者閱讀 AI、程式設計與軟體架構研究筆記。"
+  title={`${siteConfig.title} — ${siteConfig.subtitle}`}
+  description={siteConfig.description}
 >
   <div class="homepage-flow">
-    <!-- 1. Full-Width Hero Banner (Artwork by Mascot Art Studio) -->
+    <!-- 1. Full-Width Hero Banner -->
     <HomeHero />
 
     <!-- 2. Topic Discovery Chips -->
@@ -29,16 +32,18 @@ import MascotCorner from '../components/home/MascotCorner.astro';
       </div>
     </section>
 
-    <!-- 4. Lower Two-Column Region (>=1024px: Latest Notes Left, Mascot Corner Right) -->
-    <section class="home-section lower-grid-section" aria-label="最新筆記與館員角落">
+    <!-- 4. Lower Region (>=1024px: Latest Notes Left, mascot corner Right when enabled) -->
+    <section class="home-section lower-grid-section" aria-label={showCorner ? `最新筆記與${siteConfig.mascot.cornerTitle}` : '最新筆記'}>
       <div class="container-site">
-        <div class="lower-grid">
+        <div class:list={['lower-grid', { 'lower-grid--solo': !showCorner }]}>
           <div class="lower-grid__latest">
             <LatestPosts limit={5} />
           </div>
-          <div class="lower-grid__corner">
-            <MascotCorner />
-          </div>
+          {showCorner && (
+            <div class="lower-grid__corner">
+              <MascotCorner />
+            </div>
+          )}
         </div>
       </div>
     </section>
@@ -84,7 +89,7 @@ import MascotCorner from '../components/home/MascotCorner.astro';
   }
 
   @media (min-width: 1024px) {
-    .lower-grid {
+    .lower-grid:not(.lower-grid--solo) {
       display: grid;
       grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
       gap: var(--space-8);

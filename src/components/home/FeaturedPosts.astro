@@ -1,4 +1,5 @@
 ---
+import { siteConfig } from '../../site.config';
 import CoverImage from '../common/CoverImage.astro';
 import { getPublishedPosts, selectFeatured, formatReadingTime } from '../../utils/posts';
 
@@ -28,7 +29,7 @@ const hasLead = featuredPosts.length !== 2;
         const postUrl = `/posts/${post.id}/`;
         const pubDateObj = post.data.pubDate ? new Date(post.data.pubDate) : null;
         const displayDate = pubDateObj
-          ? new Intl.DateTimeFormat('zh-TW', {
+          ? new Intl.DateTimeFormat(siteConfig.lang, {
               year: 'numeric',
               month: '2-digit',
               day: '2-digit',
@@ -91,7 +92,7 @@ const hasLead = featuredPosts.length !== 2;
     </div>
   ) : (
     <div class="featured-empty">
-      <p>目前尚無精選文章，館員正在星空書架上整理典藏中……</p>
+      <p>目前尚無精選文章，書架上的典藏仍在整理中……</p>
     </div>
   )}
 </section>

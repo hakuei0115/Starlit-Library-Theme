@@ -6,23 +6,23 @@
  * and article end (mobile), per docs/design/page-layout-spec.md v1.2.
  * - Compact Mascot portrait
  * - Gold star accent
- * - Companion quotation: 「今天也一起學到了新知識呢。」
+ * - Companion quotation (configurable in siteConfig.mascot)
+ * - Rendered only when `siteConfig.mascot.enabled` is true
  * - Subdued, compact card styling using design tokens
  */
 import { Image } from 'astro:assets';
-import petitArt from '../../assets/petit-hugging-book.png';
+import { siteConfig } from '../../site.config';
 
 interface Props {
   message?: string;
   class?: string;
 }
 
-const {
-  message = "今天也一起學到了新知識呢。",
-  class: className = '',
-} = Astro.props;
+const { mascot, art } = siteConfig;
+const { message = mascot.articleQuote, class: className = '' } = Astro.props;
 ---
 
+{mascot.enabled && (
 <aside class:list={['article-companion-card', className]} aria-label="閱讀陪伴">
   <div class="companion-header">
     <svg class="companion-star" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -34,16 +34,17 @@ const {
   <div class="companion-body">
     <!-- Compact Mascot portrait (decorative; the quote carries the meaning) -->
     <div class="companion-portrait" aria-hidden="true">
-      <Image src={petitArt} alt="" width={60} height={80} densities={[1, 2]} format="webp" quality={75} loading="lazy" decoding="async" />
+      <Image src={art.mascot} alt="" width={60} height={80} densities={[1, 2]} format="webp" quality={75} loading="lazy" decoding="async" />
     </div>
 
     <!-- Companion Dialogue / Quote -->
     <div class="companion-quote-box">
       <p class="companion-quote-text">{message}</p>
-      <span class="companion-curator">— 館員 · 館員筆記</span>
+      <span class="companion-curator">{mascot.articleSignature}</span>
     </div>
   </div>
 </aside>
+)}
 
 <style>
   .article-companion-card {

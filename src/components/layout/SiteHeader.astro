@@ -1,57 +1,46 @@
 ---
+import { siteConfig } from '../../site.config';
+
 interface Props {
   currentPath?: string;
 }
 
 const { currentPath = Astro.url.pathname } = Astro.props;
 
-// Determine active link helpers
-const isHome = currentPath === '/';
-const isArticles = currentPath.startsWith('/articles') || currentPath.startsWith('/posts');
-const isAbout = currentPath.startsWith('/about');
+// A nav item is active on its own page; "Articles" also covers individual posts.
+const isActive = (href: string) => {
+  if (href === '/') return currentPath === '/';
+  if (href === '/articles') return currentPath.startsWith('/articles') || currentPath.startsWith('/posts');
+  return currentPath.startsWith(href);
+};
+const navItems = siteConfig.nav.map((item) => ({ ...item, active: isActive(item.href) }));
 ---
 
 <header class="site-header">
   <div class="site-header-inner container-site">
     <!-- Brand / Wordmark -->
-    <a href="/" class="brand-link" aria-label="Mascot's Library 首頁">
+    <a href="/" class="brand-link" aria-label={`${siteConfig.title} 首頁`}>
       <svg class="brand-star" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" fill="var(--color-gold)" />
       </svg>
-      <span class="brand-title">Mascot's Library</span>
-      <span class="brand-sub">星空技術圖書館</span>
+      <span class="brand-title">{siteConfig.title}</span>
+      {siteConfig.subtitle && <span class="brand-sub">{siteConfig.subtitle}</span>}
     </a>
 
     <!-- Desktop Navigation (>= 1024px) -->
     <nav class="desktop-nav" aria-label="主要導覽">
       <ul class="nav-list">
-        <li>
-          <a
-            href="/"
-            class:list={['nav-link', { 'nav-link-active': isHome }]}
-            aria-current={isHome ? 'page' : undefined}
-          >
-            首頁
-          </a>
-        </li>
-        <li>
-          <a
-            href="/articles"
-            class:list={['nav-link', { 'nav-link-active': isArticles }]}
-            aria-current={isArticles ? 'page' : undefined}
-          >
-            文章
-          </a>
-        </li>
-        <li>
-          <a
-            href="/about"
-            class:list={['nav-link', { 'nav-link-active': isAbout }]}
-            aria-current={isAbout ? 'page' : undefined}
-          >
-            關於
-          </a>
-        </li>
+        {navItems.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class:list={['nav-link', { 'nav-link-active': item.active }]}
+              aria-current={item.active ? 'page' : undefined}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
       </ul>
     </nav>
 
@@ -85,46 +74,30 @@ const isAbout = currentPath.startsWith('/about');
   <div id="mobile-nav-drawer" class="mobile-nav-drawer" role="dialog" aria-modal="true" aria-label="行動版導覽選單">
     <nav class="mobile-nav" aria-label="行動版導覽">
       <ul class="mobile-nav-list">
-        <li>
-          <a
-            href="/"
-            class:list={['mobile-nav-link', { 'mobile-nav-link-active': isHome }]}
-            aria-current={isHome ? 'page' : undefined}
-          >
-            <span>首頁</span>
-            <span class="mobile-link-sub">Home</span>
-          </a>
-        </li>
-        <li>
-          <a
-            href="/articles"
-            class:list={['mobile-nav-link', { 'mobile-nav-link-active': isArticles }]}
-            aria-current={isArticles ? 'page' : undefined}
-          >
-            <span>文章</span>
-            <span class="mobile-link-sub">Articles</span>
-          </a>
-        </li>
-        <li>
-          <a
-            href="/about"
-            class:list={['mobile-nav-link', { 'mobile-nav-link-active': isAbout }]}
-            aria-current={isAbout ? 'page' : undefined}
-          >
-            <span>關於</span>
-            <span class="mobile-link-sub">About</span>
-          </a>
-        </li>
+        {navItems.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class:list={['mobile-nav-link', { 'mobile-nav-link-active': item.active }]}
+              aria-current={item.active ? 'page' : undefined}
+            >
+              <span>{item.label}</span>
+              <span class="mobile-link-sub">{item.sub}</span>
+            </a>
+          </li>
+        ))}
       </ul>
 
-      <div class="mobile-nav-footer">
-        <div class="mobile-mascot-hint">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" fill="var(--color-gold)" />
-          </svg>
-          <span>館員陪伴你的每一次學習</span>
+      {siteConfig.mascot.enabled && siteConfig.mascot.drawerNote && (
+        <div class="mobile-nav-footer">
+          <div class="mobile-mascot-hint">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" fill="var(--color-gold)" />
+            </svg>
+            <span>{siteConfig.mascot.drawerNote}</span>
+          </div>
         </div>
-      </div>
+      )}
     </nav>
   </div>
 

@@ -1,4 +1,5 @@
 ---
+import { siteConfig } from '../../site.config';
 import CoverImage from '../common/CoverImage.astro';
 import { getPublishedPosts, selectFeatured } from '../../utils/posts';
 
@@ -36,7 +37,7 @@ const latestPosts = published.filter((p) => !shownAbove.has(p.id)).slice(0, limi
         const postUrl = `/posts/${post.id}/`;
         const pubDateObj = post.data.pubDate ? new Date(post.data.pubDate) : null;
         const displayDate = pubDateObj
-          ? new Intl.DateTimeFormat('zh-TW', {
+          ? new Intl.DateTimeFormat(siteConfig.lang, {
               year: 'numeric',
               month: '2-digit',
               day: '2-digit',
