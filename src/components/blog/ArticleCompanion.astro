@@ -4,7 +4,7 @@
  *
  * Compact reading companion card for the article sidebar (desktop)
  * and article end (mobile).
- * - Compact Mascot portrait
+ * - Compact mascot portrait
  * - Gold star accent
  * - Companion quotation (configurable in siteConfig.mascot)
  * - Rendered only when `siteConfig.mascot.enabled` is true
@@ -32,7 +32,7 @@ const { message = mascot.articleQuote, class: className = '' } = Astro.props;
   </div>
 
   <div class="companion-body">
-    <!-- Compact Mascot portrait (decorative; the quote carries the meaning) -->
+    <!-- Compact mascot portrait (decorative; the quote carries the meaning) -->
     <div class="companion-portrait" aria-hidden="true">
       <Image src={art.mascot} alt="" width={60} height={80} densities={[1, 2]} format="webp" quality={75} loading="lazy" decoding="async" />
     </div>

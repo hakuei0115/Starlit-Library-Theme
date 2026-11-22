@@ -130,9 +130,9 @@ covers: {
 
 > 佔位圖是 SVG，因此 `astro.config.mjs` 開啟了 `image.dangerouslyProcessSVG`。這個選項只適用於你自己專案內、可信任的 SVG。
 
-## 吉祥物（Mascot）
+## 吉祥物（圖書館館員）
 
-主題附一個可選的小吉祥物：首頁的「角落」卡片、文章旁的陪讀卡片，以及 404 與空狀態的插圖。名字、台詞與圖片都在 `site.config.ts` 的 `mascot` 與 `art.mascot`。
+主題附一個可選的小吉祥物（預設是一位圖書館館員）：首頁的「角落」卡片、文章旁的陪讀卡片，以及 404 與空狀態的插圖。標題、台詞與圖片都在 `site.config.ts` 的 `mascot` 與 `art.mascot`。
 
 不想要？設 `mascot.enabled: false`，所有相關元素（含首頁版面）都會自動調整。
 

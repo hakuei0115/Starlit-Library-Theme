@@ -103,7 +103,7 @@ type QueryResult<AST, S extends Record<string, any>> = AST extends {
 | `SELECT id, username FROM users` | `{ id: number; username: string; }` | 🟢 通過 |
 | `SELECT * FROM posts` | `{ id: number; title: string; ... }` | 🟢 通過 |
 | `SELECT invalid_col FROM users` | `{}` (欄位名稱不匹配) | 🟡 型別防護 |
-| `UPDATE users SET name = 'Mascot'` | `Syntax Error` | 🔴 靜態拒絕 |
+| `UPDATE users SET name = 'Alice'` | `Syntax Error` | 🔴 靜態拒絕 |
 
 ---
 

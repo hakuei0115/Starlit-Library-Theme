@@ -31,9 +31,9 @@ export interface NavItem {
 
 export const siteConfig = {
   /** Site name, used in the header, footer, page titles and RSS. */
-  title: "Mascot's Library",
+  title: '星空圖書館',
   /** Short descriptor next to the site name. */
-  subtitle: '星空技術圖書館',
+  subtitle: 'Starlit Library',
   /** Default meta description (also used by RSS and the home page). */
   description: '一座星空中的溫柔技術圖書館，安靜陪伴讀者閱讀 AI、程式設計與軟體架構研究筆記。',
   /** HTML lang attribute and date formatting locale. */
@@ -63,25 +63,24 @@ export const siteConfig = {
     tagline: '一座星空中的溫柔技術圖書館，安靜陪伴讀者閱讀 AI、程式設計與軟體架構研究筆記。',
     ctaLabel: '開始閱讀',
     ctaHref: '/articles',
-    bannerAlt: "Mascot's Library — 星空技術圖書館橫幅",
+    bannerAlt: '星空圖書館橫幅',
   },
 
   /**
-   * The optional mascot ("Mascot"): a corner card on the home page, a small companion
+   * The optional mascot (a friendly librarian): a corner card on the home page, a small companion
    * card beside articles, and the artwork on the 404 / empty states.
    * Set `enabled: false` to remove all of it.
    */
   mascot: {
     enabled: true,
-    name: '館員',
     cornerTitle: '館員的角落',
     greeting: '歡迎來到我的星空圖書館 ✦',
     message:
       '歡迎來到這座靜謐的技術圖書館。在漫長的思考與探索中，館員會一直陪伴你翻閱每一篇筆記，願微光能為你指引前行的方向。',
     signature: '圖書館館員',
-    artAlt: '館員抱著書，安靜地陪你閱讀',
+    artAlt: '圖書館館員抱著書，安靜地陪你閱讀',
     articleQuote: '今天也一起學到了新知識呢。',
-    articleSignature: '— 館員 · 館員筆記',
+    articleSignature: '— 圖書館館員 · 館員筆記',
     drawerNote: '館員陪伴你的每一次學習',
   },
 
