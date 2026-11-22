@@ -1,7 +1,9 @@
 {
   "name": "starlit-library-theme",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "description": "A calm, reading-first Astro blog theme with a starlit-library mood and an optional mascot.",
+  "license": "MIT",
   "engines": {
     "node": ">=22.16.0"
   },
