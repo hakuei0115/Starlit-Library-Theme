@@ -159,11 +159,8 @@ const hasLead = featuredPosts.length !== 2;
     border-radius: var(--radius-sm);
   }
 
-  /* Responsive grid per spec 3.5 & design-tokens.md:
-     1 column <768px
-     2 columns 768px - 1279px
-     3 columns >=1280px
-  */
+  /* Responsive grid: 1 column below 768px, 2 columns from 768px up.
+     The lead card (below) spans the full row. */
   .featured-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr);

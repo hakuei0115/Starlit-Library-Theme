@@ -167,7 +167,6 @@ src/
 ├── pages/               # 路由：首頁、文章、關於、404、RSS
 ├── styles/              # tokens.css（設計變數）、global.css
 └── utils/posts.ts       # 文章篩選、精選、閱讀時間、封面選擇
-docs/design/             # 設計規格（版面、設計變數、角色使用準則）
 ```
 
 視覺上的顏色、間距、圓角都集中在 `src/styles/tokens.css`，想換主題色從那裡開始。
