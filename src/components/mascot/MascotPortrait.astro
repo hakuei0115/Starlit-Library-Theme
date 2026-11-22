@@ -2,21 +2,19 @@
 /**
  * MascotPortrait.astro
  *
- * Neutral Mascot placeholder slot for Starlit Library Theme v1.1.
- * Follows docs/design/page-layout-spec.md v1.1 and mascot-spec.md:
- * - Neutral placeholder slot for Mascot reading companion
- * - Neutral prompt: 「Mascot · 素材待提供 · Mascot Art Studio」
- * - Completely removes hand-drawn SVG character graphics and review badges
- * - Clean, accessible placeholder supporting optional speech message
+ * Mascot reading companion (3:4 portrait artwork) with an optional speech message.
+ * Follows docs/design/page-layout-spec.md v1.1 and mascot-spec.md.
+ * Until more poses are delivered, every variant uses the "hugging a book" artwork.
  */
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
+import defaultArt from '../../assets/petit-hugging-book.png';
 
 interface Props {
   variant?: 'reading' | 'thinking';
   size?: 'sm' | 'md' | 'lg';
   message?: string;
-  /** Finished artwork (3:4 portrait). When omitted, the neutral placeholder renders. */
+  /** Artwork override (3:4 portrait). Defaults to the hugging-book pose. */
   src?: ImageMetadata;
   alt?: string;
   class?: string;
@@ -26,57 +24,27 @@ const {
   variant = 'reading',
   size = 'md',
   message,
-  src,
-  alt,
+  src = defaultArt,
+  alt = '館員抱著書的插圖',
   class: className = '',
 } = Astro.props;
 
-const altText = `Mascot (${variant}) — 素材待提供 · Mascot Art Studio`;
+// Rendered width of the artwork for each size, so the browser downloads no more than needed.
+const SIZE_PX = { sm: 160, md: 240, lg: 320 } as const;
 ---
 
-<div class:list={['mascot-portrait-placeholder', `size-${size}`, className]}>
-  {src ? (
-    <Image
-      class="mascot-portrait-art"
-      src={src}
-      alt={alt ?? '館員抱著書的插圖'}
-      widths={[176, 264, 352, 528]}
-      sizes="176px"
-      format="webp"
-      quality={80}
-      loading="lazy"
-      decoding="async"
-    />
-  ) : (
-  <div class="placeholder-card" role="region" aria-label={altText}>
-    <!-- Subtle Starlit Ambient Decor -->
-    <div class="card-ambient" aria-hidden="true">
-      <svg class="ambient-stars" viewBox="0 0 100 100" fill="none">
-        <circle cx="20" cy="25" r="1" fill="var(--color-gold)" opacity="0.6" />
-        <circle cx="82" cy="22" r="1.2" fill="var(--color-gold)" opacity="0.8" />
-        <circle cx="75" cy="78" r="1" fill="var(--color-gold)" opacity="0.5" />
-        <circle cx="22" cy="75" r="1.2" fill="var(--color-gold)" opacity="0.6" />
-        <path d="M50 18L51.5 22L56 23.5L51.5 25L50 29L48.5 25L44 23.5L48.5 22L50 18Z" fill="var(--color-gold)" opacity="0.7" />
-      </svg>
-    </div>
-
-    <!-- Center Icon: Starlit Book & Star Motif -->
-    <div class="placeholder-icon-slot" aria-hidden="true">
-      <svg class="placeholder-book-icon" width="44" height="44" viewBox="0 0 48 48" fill="none">
-        <rect x="8" y="10" width="32" height="28" rx="4" fill="var(--color-surface)" stroke="var(--color-border)" stroke-width="1.5" />
-        <path d="M24 12V36" stroke="var(--color-border)" stroke-width="1.5" stroke-dasharray="2 2" />
-        <path d="M14 18H20M14 24H20M28 18H34M28 24H34" stroke="var(--color-lavender)" stroke-width="1.5" stroke-linecap="round" />
-        <path d="M24 6L25.5 10L30 11.5L25.5 13L24 17L22.5 13L18 11.5L22.5 10L24 6Z" fill="var(--color-gold)" />
-      </svg>
-    </div>
-
-    <!-- Neutral Label -->
-    <div class="placeholder-label">
-      <span class="label-primary">Mascot</span>
-      <span class="label-sub">素材待提供 · Mascot Art Studio</span>
-    </div>
-  </div>
-  )}
+<div class:list={['mascot-portrait', `size-${size}`, `variant-${variant}`, className]}>
+  <Image
+    class="mascot-portrait-art"
+    src={src}
+    alt={alt}
+    widths={[160, 240, 320, 480, 640]}
+    sizes={`(min-width: 640px) ${SIZE_PX[size]}px, min(${SIZE_PX[size]}px, 100vw)`}
+    format="webp"
+    quality={80}
+    loading="lazy"
+    decoding="async"
+  />
 
   <!-- Optional Speech Message -->
   {message && (
@@ -90,7 +58,7 @@ const altText = `Mascot (${variant}) — 素材待提供 · Mascot Art Studio`;
 </div>
 
 <style>
-  .mascot-portrait-placeholder {
+  .mascot-portrait {
     display: inline-flex;
     flex-direction: column;
     align-items: center;
@@ -119,72 +87,6 @@ const altText = `Mascot (${variant}) — 素材待提供 · Mascot Art Studio`;
     aspect-ratio: 3 / 4;
     object-fit: contain;
     border-radius: var(--radius-lg);
-  }
-
-  .placeholder-card {
-    position: relative;
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    box-sizing: border-box;
-    aspect-ratio: 4 / 3;
-    background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-surface-alt) 100%);
-    border: var(--border-thin);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-card);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-2);
-    padding: var(--space-3);
-    overflow: hidden;
-    text-align: center;
-  }
-
-  .card-ambient {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-
-  .ambient-stars {
-    width: 100%;
-    height: 100%;
-  }
-
-  .placeholder-icon-slot {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .placeholder-label {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    max-width: 100%;
-    overflow-wrap: break-word;
-  }
-
-  .label-primary {
-    font-family: var(--font-display);
-    font-size: var(--text-small);
-    font-weight: 650;
-    color: var(--color-text);
-  }
-
-  .label-sub {
-    font-size: var(--text-caption);
-    color: var(--color-text-muted);
-    overflow-wrap: break-word;
-    word-break: break-word;
-    text-align: center;
   }
 
   /* Optional Companion Bubble */

@@ -74,6 +74,17 @@ import MascotPortrait from '../components/mascot/MascotPortrait.astro';
     align-items: center;
   }
 
+  /* Keep the artwork from pushing the heading below the fold on phones. */
+  .notfound-visual :global(.mascot-portrait) {
+    max-width: 200px;
+  }
+
+  @media (min-width: 640px) {
+    .notfound-visual :global(.mascot-portrait) {
+      max-width: 320px;
+    }
+  }
+
   .notfound-content {
     display: flex;
     flex-direction: column;
