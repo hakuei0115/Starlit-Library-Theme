@@ -1,35 +1,35 @@
 # Starlit Library Theme
 
-一套為「長文閱讀」設計的 [Astro](https://astro.build) 技術部落格主題：安靜的星空氛圍、清楚的閱讀節奏，以及一位可以開關的小吉祥物。
+**English** | [繁體中文](README.zh-TW.md)
 
-A calm, reading-first Astro blog theme with a starlit-library mood and an optional mascot.
+A calm, reading-first [Astro](https://astro.build) blog theme for long-form technical writing: a quiet starlit-library mood, a clear reading rhythm, and an optional little mascot you can switch off.
 
-## 預覽
+## Preview
 
-| 首頁 | 文章頁 |
+| Home | Article |
 |---|---|
-| ![首頁（桌面）](docs/screenshots/home-desktop.png) | ![文章頁（桌面）](docs/screenshots/article-desktop.png) |
+| ![Home page (desktop)](docs/screenshots/home-desktop.png) | ![Article page (desktop)](docs/screenshots/article-desktop.png) |
 
-| 首頁（手機） | 文章頁（手機） |
+| Home (mobile) | Article (mobile) |
 |---|---|
-| <img src="docs/screenshots/home-mobile.png" alt="首頁（手機）" width="260"> | <img src="docs/screenshots/article-mobile.png" alt="文章頁（手機）" width="260"> |
+| <img src="docs/screenshots/home-mobile.png" alt="Home page (mobile)" width="260"> | <img src="docs/screenshots/article-mobile.png" alt="Article page (mobile)" width="260"> |
 
-> 截圖為主題預設內容（含中性佔位圖與範例文章）。
+> Screenshots show the theme's default content (neutral placeholder artwork and sample posts). The sample posts and interface text are in Traditional Chinese; see [Interface text and language](#interface-text-and-language) to change that.
 
-## 特色
+## Features
 
-- 首頁：Hero 橫幅、精選文章、最新筆記、主題分類、吉祥物角落
-- 文章頁：目錄（TOC）、上一篇／下一篇、閱讀時間、程式碼區塊與表格的行動版處理
-- 文章列表：分類篩選
-- 關於頁：直接用 Markdown 寫（`src/content/pages/about.md`）
-- RSS（`/rss.xml`）、Open Graph / canonical meta、404 頁
-- 圖片自動轉成 WebP 並依版位出多種尺寸（Astro 內建，不需額外套件）
-- 行動版導覽抽屜、鍵盤焦點樣式、`prefers-reduced-motion` 支援
-- 沒有任何前端 UI 框架：純 Astro 元件與 CSS
+- Home page: hero banner, featured posts, latest notes, topic chips, mascot corner
+- Article page: table of contents, previous / next links, reading time, mobile-friendly code blocks and tables
+- Article list with category filtering
+- About page written in plain Markdown (`src/content/pages/about.md`)
+- RSS (`/rss.xml`), Open Graph / canonical meta, 404 page
+- Images are converted to WebP in several sizes automatically (built into Astro, no extra packages)
+- Mobile navigation drawer, visible keyboard focus styles, `prefers-reduced-motion` support
+- No front-end UI framework: plain Astro components and CSS
 
-## 快速開始
+## Quick start
 
-需要 Node.js `>= 22.23.4`（Astro 7 的要求）。
+Requires Node.js `>= 22.23.4` (an Astro 7 requirement).
 
 ```sh
 git clone https://github.com/hakuei0115/Starlit-Library-Theme.git my-blog
@@ -38,36 +38,36 @@ npm install
 npm run dev        # http://localhost:4321
 ```
 
-其他指令：
+Other commands:
 
-| 指令 | 用途 |
+| Command | Purpose |
 |---|---|
-| `npm run dev` | 開發伺服器 |
-| `npm run build` | 建置到 `dist/` |
-| `npm run preview` | 預覽建置結果 |
-| `npx astro check` | 型別檢查 |
+| `npm run dev` | Start the dev server |
+| `npm run build` | Build to `dist/` |
+| `npm run preview` | Preview the production build |
+| `npx astro check` | Type check |
 
-> clone 後 `.github/`（CI 與 Dependabot 設定）會一起帶走，不需要的話可以直接刪除。
+> `.github/` (CI and Dependabot configuration) comes along when you clone. Delete it if you don't need it.
 
-## 設定
+## Configuration
 
-所有「屬於你的網站」的資訊都集中在 [`src/site.config.ts`](src/site.config.ts)：
+Everything that is specific to *your* site lives in [`src/site.config.ts`](src/site.config.ts):
 
-| 區塊 | 內容 |
+| Section | What it controls |
 |---|---|
-| `title` / `subtitle` / `description` | 站名、副標、預設 meta 描述 |
-| `lang` | HTML `lang` 與日期格式（預設 `zh-TW`） |
-| `author` | 頁尾版權的名稱 |
-| `nav` | 導覽項目（標籤、英文小標、連結） |
-| `links` | 頁尾的 GitHub、RSS 連結（`github: ''` 可隱藏） |
-| `footer` | 頁尾說明與備註 |
-| `hero` | Hero 文案、按鈕、橫幅替代文字 |
-| `mascot` | 吉祥物的名字與所有台詞；`enabled: false` 會整個移除 |
-| `notFound` / `articles` | 404 頁與文章列表頁的文案 |
-| `art` | Hero 橫幅與吉祥物圖片 |
-| `covers` | 分類封面對應與預設封面 |
+| `title` / `subtitle` / `description` | Site name, tagline, default meta description |
+| `lang` | HTML `lang` attribute and date format (default `zh-TW`) |
+| `author` | Name in the footer copyright line |
+| `nav` | Navigation items (label, secondary label, link) |
+| `links` | Footer GitHub and RSS links (`github: ''` hides the GitHub link) |
+| `footer` | Footer tagline and note |
+| `hero` | Hero copy, button, banner alt text |
+| `mascot` | Mascot name and every line it says; `enabled: false` removes it entirely |
+| `notFound` / `articles` | Copy for the 404 page and the article list page |
+| `art` | Hero banner and mascot images |
+| `covers` | Category-to-cover mapping and the default cover |
 
-另外請在 [`astro.config.mjs`](astro.config.mjs) 設定 `site`（你的正式網址）。canonical 連結、Open Graph 圖片與 RSS 都會用到它。
+Also set `site` (your production URL) in [`astro.config.mjs`](astro.config.mjs). Canonical links, Open Graph images and the RSS feed all depend on it. `astro build` prints a warning if it is missing.
 
 ```js
 export default defineConfig({
@@ -75,59 +75,59 @@ export default defineConfig({
 });
 ```
 
-### 文字語言
+### Interface text and language
 
-各區塊的小標題（例如「精選文章」「最新筆記」）目前直接寫在元件裡，預設為繁體中文。要換語言，請搜尋並修改 `src/components/` 與 `src/pages/` 裡的字串。
+Section headings (for example "Featured" and "Latest notes") are currently written directly in the components and default to Traditional Chinese. To change the language, search for and edit the strings in `src/components/` and `src/pages/`. Text covered by `site.config.ts` (site name, navigation, hero, footer, mascot lines, 404) is changed there, and `lang` sets the HTML `lang` attribute and date formatting.
 
-## 寫文章
+## Writing posts
 
-文章放在 `src/content/blog/`，一篇一個 `.md`（或 `.mdx`）檔，檔名就是網址（`/posts/<檔名>/`）。
+Posts live in `src/content/blog/`, one `.md` (or `.mdx`) file per post. The file name becomes the URL (`/posts/<file-name>/`).
 
 ```md
 ---
-title: "文章標題"
-description: "一兩句話的摘要（用在卡片、meta 與 RSS）"
+title: "Post title"
+description: "One or two sentences (used on cards, in meta tags and in RSS)"
 pubDate: 2026-11-15
 category: "Dev Notes"
 tags: ["Astro", "Notes"]
-featured: false      # true 會出現在首頁「精選文章」
-draft: false         # true 不會發布
+featured: false      # true shows it in the home page "Featured" section
+draft: false         # true keeps it unpublished
 # updatedDate: 2026-11-20
-# heroImage: "/images/my-cover.jpg"   # 自訂封面（放在 public/ 下）
+# heroImage: "/images/my-cover.jpg"   # custom cover (placed under public/)
 ---
 
-內文……
+Content...
 ```
 
-| 欄位 | 必填 | 說明 |
+| Field | Required | Description |
 |---|---|---|
-| `title` | ✓ | 標題 |
-| `description` | ✓ | 摘要 |
-| `pubDate` | ✓ | 發布日期 |
-| `category` | ✓ | 分類（單一值） |
-| `tags` | | 標籤陣列 |
-| `featured` | | 首頁精選 |
-| `draft` | | 草稿不發布 |
-| `updatedDate` | | 更新日期 |
-| `heroImage` | | 這篇文章專屬的封面路徑 |
+| `title` | ✓ | Title |
+| `description` | ✓ | Summary |
+| `pubDate` | ✓ | Publication date |
+| `category` | ✓ | Category (a single value) |
+| `tags` | | Array of tags |
+| `featured` | | Show in the home page featured section |
+| `draft` | | Drafts are not published |
+| `updatedDate` | | Last updated date |
+| `heroImage` | | Cover image path for this post only |
 
-## 圖片與封面
+## Images and covers
 
-**內建的圖片都是中性的佔位圖**（`src/assets/brand/`，SVG）。換成你自己的圖有兩種方式：
+**All bundled images are neutral placeholders** (`src/assets/brand/`, SVG). There are two ways to replace them with your own:
 
-1. **覆蓋同名檔案：** 把你的圖放進 `src/assets/brand/`，改成 `.png`／`.jpg`／`.webp` 後，同步修改 `src/site.config.ts` 最上方的 `import` 路徑。
-2. **新增圖片後在設定檔 import：** 在 `site.config.ts` 匯入新圖，再指定給 `art` 或 `covers`。
+1. **Overwrite the files:** put your images in `src/assets/brand/` (as `.png`, `.jpg` or `.webp`) and update the `import` paths at the top of `src/site.config.ts` to match.
+2. **Add new images and import them in the config:** import the new image in `site.config.ts`, then assign it to `art` or `covers`.
 
-建議尺寸：
+Recommended sizes:
 
-| 用途 | 比例／尺寸 |
+| Use | Ratio / size |
 |---|---|
-| `art.heroBanner` | 約 2.4:1（例如 1942×809） |
-| `art.heroBannerMobile` | 16:9（例如 1672×941），選填 |
-| `art.mascot` | 3:4 直式（例如 1086×1448） |
-| 分類封面 | 約 3:2（例如 1536×1024） |
+| `art.heroBanner` | About 2.4:1 (e.g. 1942×809) |
+| `art.heroBannerMobile` | 16:9 (e.g. 1672×941), optional |
+| `art.mascot` | 3:4 portrait (e.g. 1086×1448) |
+| Category covers | About 3:2 (e.g. 1536×1024) |
 
-文章封面的選擇順序是：**文章 front matter 的 `heroImage` → `covers.byCategory[分類]` → `covers.defaultCover`**。沒有列在 `byCategory` 的分類會自動用預設封面，所以新增分類不需要改其他地方。
+A post's cover is chosen in this order: **the post's `heroImage` front matter → `covers.byCategory[category]` → `covers.defaultCover`**. Categories not listed in `byCategory` fall back to the default cover, so adding a category never requires changes elsewhere.
 
 ```ts
 // src/site.config.ts
@@ -141,51 +141,51 @@ covers: {
 },
 ```
 
-所有透過設定檔載入的圖片（SVG、PNG、JPG）都會自動轉成 WebP 並產生多種尺寸。
+Every image loaded through the config (SVG, PNG, JPG) is converted to WebP in several sizes automatically.
 
-> 佔位圖是 SVG，因此 `astro.config.mjs` 開啟了 `image.dangerouslyProcessSVG`。這個選項只適用於你自己專案內、可信任的 SVG。
+> The placeholders are SVG, so `astro.config.mjs` enables `image.dangerouslyProcessSVG`. Only use that option for SVGs that live in your own project and that you trust.
 
-## 吉祥物（圖書館館員）
+## Mascot (the librarian)
 
-主題附一個可選的小吉祥物（預設是一位圖書館館員）：首頁的「角落」卡片、文章旁的陪讀卡片，以及 404 與空狀態的插圖。標題、台詞與圖片都在 `site.config.ts` 的 `mascot` 與 `art.mascot`。
+The theme includes an optional small mascot (by default, a librarian): the corner card on the home page, the reading companion beside articles, and the illustrations on the 404 page and empty states. Its name, lines and image are set in `mascot` and `art.mascot` in `site.config.ts`.
 
-不想要？設 `mascot.enabled: false`，所有相關元素（含首頁版面）都會自動調整。
+Don't want it? Set `mascot.enabled: false` and every related element, including the home page layout, adjusts automatically.
 
-## 關於頁
+## About page
 
-直接編輯 [`src/content/pages/about.md`](src/content/pages/about.md)。檔案最上方的 front matter 控制標題、說明與頁首小標；底下就是一般的 Markdown。
+Edit [`src/content/pages/about.md`](src/content/pages/about.md). The front matter at the top controls the title, description and eyebrow label; everything below it is ordinary Markdown.
 
-## 部署
+## Deployment
 
-這是純靜態網站，`npm run build` 會輸出到 `dist/`。
+This is a fully static site. `npm run build` writes the output to `dist/`.
 
-部署到任何靜態主機（Cloudflare Pages、Vercel、Netlify、GitHub Pages 等）時：
+On any static host (Cloudflare Pages, Vercel, Netlify, GitHub Pages and so on):
 
-- Build command：`npm run build`，Output directory：`dist`。
-- 主機的 Node.js 版本需為 `>= 22.23.4`（可在主機設定中指定，例如環境變數 `NODE_VERSION`）。
-- 部署前先把正式網址填進 `astro.config.mjs` 的 `site`。
-- GitHub Pages 的專案頁面需要另外設定 `base`。
+- Build command: `npm run build`. Output directory: `dist`.
+- The host's Node.js version must be `>= 22.23.4` (set it in the host's settings, for example with a `NODE_VERSION` environment variable).
+- Set `site` in `astro.config.mjs` to your production URL before deploying.
+- GitHub Pages project sites need `base` to be configured separately.
 
-## 專案結構
+## Project structure
 
 ```text
 src/
-├── site.config.ts       # 站台設定（改這裡）
+├── site.config.ts       # Site settings (edit this)
 ├── content/
-│   ├── blog/            # 文章
-│   └── pages/about.md   # 關於頁
-├── assets/brand/        # 佔位圖（換成你自己的）
+│   ├── blog/            # Posts
+│   └── pages/about.md   # About page
+├── assets/brand/        # Placeholder images (replace with your own)
 ├── components/          # blog / home / layout / mascot / common
 ├── layouts/
-├── pages/               # 路由：首頁、文章、關於、404、RSS
-├── styles/              # tokens.css（設計變數）、global.css
-└── utils/posts.ts       # 文章篩選、精選、閱讀時間、封面選擇
+├── pages/               # Routes: home, articles, about, 404, RSS
+├── styles/              # tokens.css (design variables), global.css
+└── utils/posts.ts       # Post filtering, featured posts, reading time, cover selection
 ```
 
-視覺上的顏色、間距、圓角都集中在 `src/styles/tokens.css`，想換主題色從那裡開始。
+Colors, spacing and radii are all defined in `src/styles/tokens.css`. Start there if you want to change the theme colors.
 
-## 授權
+## License
 
-程式碼以 [MIT License](LICENSE) 授權。
+The code is released under the [MIT License](LICENSE).
 
-主題附的圖片都是中性佔位圖，可自由使用或替換。**主題作者的角色美術不包含在這個 repository 中，也不在此授權範圍內。**
+The images bundled with the theme are neutral placeholders you may use or replace freely. **The theme author's character artwork is not part of this repository and is not covered by this license.**
