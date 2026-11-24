@@ -4,6 +4,18 @@
 
 A calm, reading-first Astro blog theme with a starlit-library mood and an optional mascot.
 
+## 預覽
+
+| 首頁 | 文章頁 |
+|---|---|
+| ![首頁（桌面）](docs/screenshots/home-desktop.png) | ![文章頁（桌面）](docs/screenshots/article-desktop.png) |
+
+| 首頁（手機） | 文章頁（手機） |
+|---|---|
+| <img src="docs/screenshots/home-mobile.png" alt="首頁（手機）" width="260"> | <img src="docs/screenshots/article-mobile.png" alt="文章頁（手機）" width="260"> |
+
+> 截圖為主題預設內容（含中性佔位圖與範例文章）。
+
 ## 特色
 
 - 首頁：Hero 橫幅、精選文章、最新筆記、主題分類、吉祥物角落
