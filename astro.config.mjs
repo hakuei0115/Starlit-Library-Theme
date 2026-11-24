@@ -10,8 +10,8 @@ import { defineConfig } from 'astro/config';
 const requireSite = {
   name: 'starlit-require-site',
   hooks: {
-    'astro:config:done': ({ config, logger }) => {
-      if (process.argv.includes('build') && !config.site) {
+    'astro:config:setup': ({ command, config, logger }) => {
+      if (command === 'build' && !config.site) {
         logger.warn(
           "`site` is not set in astro.config.mjs. Canonical links, Open Graph images and the RSS feed need your production URL (e.g. site: 'https://example.com').",
         );
