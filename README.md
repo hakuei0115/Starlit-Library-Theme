@@ -17,7 +17,7 @@ A calm, reading-first Astro blog theme with a starlit-library mood and an option
 
 ## 快速開始
 
-需要 Node.js `>= 22.16`。
+需要 Node.js `>= 22.23.4`（Astro 7 的要求）。
 
 ```sh
 git clone https://github.com/hakuei0115/Starlit-Library-Theme.git my-blog
@@ -33,6 +33,9 @@ npm run dev        # http://localhost:4321
 | `npm run dev` | 開發伺服器 |
 | `npm run build` | 建置到 `dist/` |
 | `npm run preview` | 預覽建置結果 |
+| `npx astro check` | 型別檢查 |
+
+> clone 後 `.github/`（CI 與 Dependabot 設定）會一起帶走，不需要的話可以直接刪除。
 
 ## 設定
 
@@ -144,14 +147,12 @@ covers: {
 
 這是純靜態網站，`npm run build` 會輸出到 `dist/`。
 
-**Cloudflare Pages**
+部署到任何靜態主機（Cloudflare Pages、Vercel、Netlify、GitHub Pages 等）時：
 
-1. 連接你的 Git repository。
-2. Framework preset 選 `Astro`（或手動填：Build command `npm run build`、Output directory `dist`）。
-3. 在環境變數設定 `NODE_VERSION` 為 `22`（本主題需要 Node `>= 22.16`）。
-4. 部署完成後，記得把正式網址填進 `astro.config.mjs` 的 `site`。
-
-Vercel、Netlify、GitHub Pages 等任何靜態主機也都可以；GitHub Pages 的專案頁面需要另外設定 `base`。
+- Build command：`npm run build`，Output directory：`dist`。
+- 主機的 Node.js 版本需為 `>= 22.23.4`（可在主機設定中指定，例如環境變數 `NODE_VERSION`）。
+- 部署前先把正式網址填進 `astro.config.mjs` 的 `site`。
+- GitHub Pages 的專案頁面需要另外設定 `base`。
 
 ## 專案結構
 

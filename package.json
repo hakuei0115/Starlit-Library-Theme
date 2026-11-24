@@ -4,8 +4,26 @@
   "version": "0.1.0",
   "description": "A calm, reading-first Astro blog theme with a starlit-library mood and an optional mascot.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hakuei0115/Starlit-Library-Theme.git"
+  },
+  "homepage": "https://github.com/hakuei0115/Starlit-Library-Theme#readme",
+  "bugs": {
+    "url": "https://github.com/hakuei0115/Starlit-Library-Theme/issues"
+  },
+  "keywords": [
+    "astro",
+    "astro-theme",
+    "withastro",
+    "blog",
+    "theme",
+    "markdown",
+    "rss",
+    "technical-blog"
+  ],
   "engines": {
-    "node": ">=22.16.0"
+    "node": ">=22.23.4"
   },
   "scripts": {
     "dev": "astro dev",
@@ -15,5 +33,9 @@
   },
   "dependencies": {
     "astro": "^7.4.12"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "typescript": "^6.0.3"
   }
 }
