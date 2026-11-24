@@ -6,22 +6,14 @@ interface Props {
   title: string;
   description?: string;
   pubDate?: Date | string;
-  updatedDate?: Date | string;
-  category?: string;
-  tags?: string[];
   cover?: string;
-  headings?: Array<{ depth: number; slug: string; text: string }>;
 }
 
 const {
   title,
   description,
   pubDate,
-  updatedDate,
-  category,
-  tags,
-  cover,
-  headings = []
+  cover
 } = Astro.props;
 
 const formattedDate = pubDate ? new Date(pubDate).toISOString() : undefined;
