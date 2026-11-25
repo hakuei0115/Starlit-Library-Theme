@@ -67,7 +67,15 @@ Everything that is specific to *your* site lives in [`src/site.config.ts`](src/s
 | `art` | Hero banner and mascot images |
 | `covers` | Category-to-cover mapping and the default cover |
 
-Also set `site` (your production URL) in [`astro.config.mjs`](astro.config.mjs). Canonical links, Open Graph images and the RSS feed all depend on it. `astro build` prints a warning if it is missing.
+You also need to tell the theme your production URL. Canonical links, Open Graph images and the RSS feed all depend on it, and `astro build` prints a warning if it is missing.
+
+The easiest way is the `SITE_URL` environment variable, which [`astro.config.mjs`](astro.config.mjs) reads. Set it in your host's settings, or when building:
+
+```sh
+SITE_URL=https://example.com npm run build
+```
+
+If you prefer a fixed value, replace the `site` line in `astro.config.mjs` instead:
 
 ```js
 export default defineConfig({
@@ -163,7 +171,7 @@ On any static host (Cloudflare Pages, Vercel, Netlify, GitHub Pages and so on):
 
 - Build command: `npm run build`. Output directory: `dist`.
 - The host's Node.js version must be `>= 22.23.4` (set it in the host's settings, for example with a `NODE_VERSION` environment variable).
-- Set `site` in `astro.config.mjs` to your production URL before deploying.
+- Set the `SITE_URL` environment variable to your production URL (or set `site` in `astro.config.mjs`) before deploying.
 - GitHub Pages project sites need `base` to be configured separately.
 
 ## Project structure

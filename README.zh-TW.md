@@ -69,7 +69,15 @@ npm run dev        # http://localhost:4321
 | `art` | Hero 橫幅與吉祥物圖片 |
 | `covers` | 分類封面對應與預設封面 |
 
-另外請在 [`astro.config.mjs`](astro.config.mjs) 設定 `site`（你的正式網址）。canonical 連結、Open Graph 圖片與 RSS 都會用到它。
+你還需要告訴主題你的正式網址。canonical 連結、Open Graph 圖片與 RSS 都會用到它，沒設的話 `astro build` 會印出警告。
+
+最簡單的方式是設環境變數 `SITE_URL`，[`astro.config.mjs`](astro.config.mjs) 會讀取它。可以設在主機的設定裡，或建置時指定：
+
+```sh
+SITE_URL=https://example.com npm run build
+```
+
+如果想直接寫死，改成修改 `astro.config.mjs` 裡的 `site` 那一行：
 
 ```js
 export default defineConfig({
@@ -165,7 +173,7 @@ covers: {
 
 - Build command：`npm run build`，Output directory：`dist`。
 - 主機的 Node.js 版本需為 `>= 22.23.4`（可在主機設定中指定，例如環境變數 `NODE_VERSION`）。
-- 部署前先把正式網址填進 `astro.config.mjs` 的 `site`。
+- 部署前先設好環境變數 `SITE_URL`（你的正式網址），或直接填進 `astro.config.mjs` 的 `site`。
 - GitHub Pages 的專案頁面需要另外設定 `base`。
 
 ## 專案結構
