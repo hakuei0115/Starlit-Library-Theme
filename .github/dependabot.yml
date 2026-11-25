@@ -8,9 +8,9 @@ updates:
       npm-dependencies:
         patterns: ["*"]
     ignore:
-      # @astrojs/check only supports TypeScript 5 and 6. Remove this rule once it
-      # accepts TypeScript 7.
-      - dependency-name: typescript
+      # Major updates often include breaking changes (for example, @astrojs/check only
+      # supports TypeScript 5 and 6). Upgrade majors by hand when you are ready.
+      - dependency-name: "*"
         update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
