@@ -5,8 +5,13 @@ import { getPublishedPosts, selectFeatured, formatReadingTime } from '../../util
 
 const featuredPosts = selectFeatured(await getPublishedPosts());
 
-// With 1 or 3 posts the first one leads as a wide card; with exactly 2, two equal cards.
-const hasLead = featuredPosts.length !== 2;
+// Layout by width (see the styles below):
+//   <768px       swipeable row, one card at a time
+//   768–899px    with 3 posts: a wide lead card above two stacked cards
+//   900–1279px   with 3 posts: a wide lead card above two short horizontal cards
+//   >=1280px     with 3 posts: three equal columns
+// Two posts are always equal cards; a single post is a wide card from 768px.
+const count = featuredPosts.length;
 ---
 
 <section class="featured-posts-section" aria-labelledby="featured-heading">
@@ -24,7 +29,7 @@ const hasLead = featuredPosts.length !== 2;
   </div>
 
   {featuredPosts.length > 0 ? (
-    <div class="featured-grid">
+    <div class:list={['featured-grid', `featured-grid--${count}`]}>
       {featuredPosts.map((post, index) => {
         const postUrl = `/posts/${post.id}/`;
         const pubDateObj = post.data.pubDate ? new Date(post.data.pubDate) : null;
@@ -36,10 +41,10 @@ const hasLead = featuredPosts.length !== 2;
             }).format(pubDateObj)
           : '';
         const readingTime = formatReadingTime(post.body);
-        const isLead = hasLead && index === 0;
+        const isLead = count !== 2 && index === 0;
 
         return (
-          <article class:list={['featured-card', { 'featured-card--lead': isLead }]}>
+          <article class="featured-card">
             <!-- Top Cover Slot -->
             <div class="card-cover">
               <CoverImage post={post} variant={isLead ? 'lead' : 'card'} class="cover-img" />
@@ -95,7 +100,62 @@ const hasLead = featuredPosts.length !== 2;
       <p>目前尚無精選文章，書架上的典藏仍在整理中……</p>
     </div>
   )}
+
+  {count > 1 && (
+    <div class="featured-dots" hidden>
+      {featuredPosts.map((post, index) => (
+        <button
+          type="button"
+          class="featured-dot"
+          aria-label={`顯示第 ${index + 1} 篇精選文章：${post.data.title}`}
+          aria-current={index === 0 ? 'true' : undefined}
+        />
+      ))}
+    </div>
+  )}
 </section>
+
+<script>
+  // Swiping works with CSS alone; this keeps the dots in step and lets them be pressed.
+  function setupFeaturedCarousel() {
+    const grid = document.querySelector<HTMLElement>('.featured-grid');
+    const dotList = document.querySelector<HTMLElement>('.featured-dots');
+    if (!grid || !dotList) return;
+
+    const cards = [...grid.querySelectorAll<HTMLElement>('.featured-card')];
+    const dots = [...dotList.querySelectorAll<HTMLButtonElement>('.featured-dot')];
+
+    // Scroll position that shows a card; the last one stops at the end of the row.
+    const target = (card: HTMLElement) =>
+      Math.min(card.offsetLeft - cards[0].offsetLeft, grid.scrollWidth - grid.clientWidth);
+
+    const show = (index: number) => {
+      const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      grid.scrollTo({ left: target(cards[index]), behavior: calm ? 'auto' : 'smooth' });
+    };
+
+    const update = () => {
+      const distances = cards.map((card) => Math.abs(target(card) - grid.scrollLeft));
+      const current = distances.indexOf(Math.min(...distances));
+      dots.forEach((dot, i) => {
+        if (i === current) dot.setAttribute('aria-current', 'true');
+        else dot.removeAttribute('aria-current');
+      });
+    };
+
+    dots.forEach((dot, i) => dot.addEventListener('click', () => show(i)));
+    // A keyboard user tabbing into a half-visible card gets the whole card.
+    cards.forEach((card, i) => card.addEventListener('focusin', () => {
+      if (grid.scrollWidth > grid.clientWidth) show(i);
+    }));
+    grid.addEventListener('scroll', () => requestAnimationFrame(update), { passive: true });
+
+    dotList.hidden = false;
+  }
+
+  setupFeaturedCarousel();
+  document.addEventListener('astro:after-swap', setupFeaturedCarousel);
+</script>
 
 <style>
   .featured-posts-section {
@@ -159,57 +219,6 @@ const hasLead = featuredPosts.length !== 2;
     border-radius: var(--radius-sm);
   }
 
-  /* Responsive grid: 1 column below 768px, 2 columns from 768px up.
-     The lead card (below) spans the full row. */
-  .featured-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-6);
-  }
-
-  @media (min-width: 768px) {
-    .featured-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  /* The lead card spans the full row and lays cover and text side by side,
-     so the first featured post reads as the one to start with. */
-  @media (min-width: 768px) {
-    .featured-grid .featured-card--lead {
-      grid-column: 1 / -1;
-      flex-direction: row;
-    }
-
-    .featured-grid .featured-card--lead .card-cover {
-      width: 46%;
-      height: auto;
-      min-height: 15rem;
-      flex-shrink: 0;
-    }
-
-    .featured-grid .featured-card--lead .card-body {
-      padding: var(--space-8);
-      justify-content: center;
-    }
-
-    .featured-grid .featured-card--lead .card-title {
-      font-size: var(--text-h2);
-      margin-bottom: var(--space-3);
-      text-wrap: balance;
-    }
-
-    .featured-grid .featured-card--lead .card-excerpt {
-      font-size: var(--text-body);
-      -webkit-line-clamp: 3;
-      flex-grow: 0;
-    }
-
-    .featured-grid .featured-card--lead .card-meta-bottom {
-      margin-top: var(--space-4);
-    }
-  }
-
   /* Card styling aligning with design mockups */
   .featured-card {
     position: relative;
@@ -238,7 +247,7 @@ const hasLead = featuredPosts.length !== 2;
   /* Cover Slot */
   .card-cover {
     width: 100%;
-    height: 140px;
+    aspect-ratio: 2 / 1;
     background: linear-gradient(135deg, #2D273B 0%, #3B334D 60%, #4D4464 100%);
     position: relative;
     overflow: hidden;
@@ -253,17 +262,6 @@ const hasLead = featuredPosts.length !== 2;
     height: 100%;
     object-fit: cover;
   }
-
-  /* Regular cards: cover keeps a fixed ratio (first test value: 2:1). The lead card is unchanged. */
-  .featured-grid {
-    --card-cover-ratio: 2 / 1;
-  }
-
-  .featured-card:not(.featured-card--lead) .card-cover {
-    height: auto;
-    aspect-ratio: var(--card-cover-ratio);
-  }
-
 
   /* Card Body */
   .card-body {
@@ -386,6 +384,189 @@ const hasLead = featuredPosts.length !== 2;
     border-radius: var(--radius-lg);
     text-align: center;
     color: var(--color-text-muted);
+  }
+
+  /* Narrow screens: a swipeable row, with part of the next card showing. */
+  .featured-grid {
+    display: flex;
+    gap: var(--space-3);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    /* Room for the card's hover lift inside the scrolling box. */
+    padding-block: var(--space-1);
+  }
+
+  .featured-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .featured-grid > .featured-card {
+    flex: 0 0 86%;
+    height: auto;
+    scroll-snap-align: start;
+  }
+
+  .featured-grid > .featured-card:last-child {
+    scroll-snap-align: end;
+  }
+
+  .featured-grid--1 > .featured-card {
+    flex-basis: 100%;
+  }
+
+  .featured-dots {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--space-2);
+  }
+
+  .featured-dots[hidden] {
+    display: none;
+  }
+
+  /* A small dot inside a comfortably sized button. */
+  .featured-dot {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2rem;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+
+  .featured-dot::before {
+    content: '';
+    width: 0.5rem;
+    height: 0.5rem;
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-pill);
+  }
+
+  .featured-dot[aria-current='true']::before {
+    background: var(--color-night);
+    border-color: var(--color-night);
+  }
+
+  @media (min-width: 768px) {
+    .featured-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-6);
+      overflow: visible;
+      padding-block: 0;
+    }
+
+    .featured-grid--1 {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .featured-grid > .featured-card {
+      height: 100%;
+    }
+
+    .featured-dots,
+    .featured-dots:not([hidden]) {
+      display: none;
+    }
+
+    /* A single post: cover and text side by side. */
+    .featured-grid--1 > .featured-card {
+      flex-direction: row;
+    }
+
+    .featured-grid--1 .card-cover {
+      width: 46%;
+      aspect-ratio: auto;
+      min-height: 15rem;
+      flex-shrink: 0;
+    }
+
+    .featured-grid--1 .card-body {
+      justify-content: center;
+      padding: var(--space-8);
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1279.98px) {
+    /* Lead card: spans the row, so the first featured post reads as the one to start with. */
+    .featured-grid--3 > .featured-card:first-child {
+      grid-column: 1 / -1;
+      flex-direction: row;
+    }
+
+    .featured-grid--3 > .featured-card:first-child .card-cover {
+      width: 46%;
+      aspect-ratio: auto;
+      min-height: 15rem;
+      flex-shrink: 0;
+    }
+
+    .featured-grid--3 > .featured-card:first-child .card-body {
+      justify-content: center;
+      padding: var(--space-8);
+    }
+
+    .featured-grid--3 > .featured-card:first-child .card-title {
+      font-size: var(--text-h2);
+      margin-bottom: var(--space-3);
+    }
+
+    .featured-grid--3 > .featured-card:first-child .card-excerpt {
+      font-size: var(--text-body);
+      -webkit-line-clamp: 3;
+      flex-grow: 0;
+    }
+
+    .featured-grid--3 > .featured-card:first-child .card-meta-bottom {
+      margin-top: var(--space-4);
+    }
+
+    /* The other two: compact cards without the excerpt. */
+    .featured-grid--3 > .featured-card:not(:first-child) .card-body {
+      padding: var(--space-4);
+    }
+
+    .featured-grid--3 > .featured-card:not(:first-child) .card-title {
+      font-size: var(--text-article);
+    }
+
+    .featured-grid--3 > .featured-card:not(:first-child) .card-excerpt {
+      display: none;
+    }
+  }
+
+  /* Wide enough for the compact cards to put the cover beside the text. */
+  @media (min-width: 900px) and (max-width: 1279.98px) {
+    .featured-grid--3 > .featured-card:not(:first-child) {
+      flex-direction: row;
+    }
+
+    .featured-grid--3 > .featured-card:not(:first-child) .card-cover {
+      width: 34%;
+      aspect-ratio: auto;
+      flex-shrink: 0;
+    }
+
+    /* Out of flow, so the text decides the card height rather than the image. */
+    .featured-grid--3 > .featured-card:not(:first-child) .card-cover :global(.cover-img) {
+      position: absolute;
+      inset: 0;
+    }
+
+    .featured-grid--3 > .featured-card:not(:first-child) .card-body {
+      flex: 1 1 0;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .featured-grid--3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
