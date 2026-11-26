@@ -160,6 +160,14 @@ Every image loaded through the config (SVG, PNG, JPG) is converted to WebP in se
 
 Posts are rendered with the remark pipeline plus [`remark-cjk-friendly`](https://github.com/tats-u/markdown-cjk-friendly), so bold and italic work next to Chinese, Japanese and Korean punctuation. Add other remark or rehype plugins to `markdown.processor` in `astro.config.mjs`.
 
+`.mdx` files are supported through [`@astrojs/mdx`](https://docs.astro.build/en/guides/integrations-guide/mdx/) and share these settings. Use them when a post needs to import components:
+
+```mdx
+import MyChart from '../../components/MyChart.astro';
+
+<MyChart />
+```
+
 ## Mascot (the librarian)
 
 The theme includes an optional small mascot (by default, a librarian): the corner card on the home page, the reading companion beside articles, and the illustrations on the 404 page and empty states. Its name, lines and image are set in `mascot` and `art.mascot` in `site.config.ts`.

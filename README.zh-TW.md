@@ -162,6 +162,14 @@ covers: {
 
 文章使用 remark 流程加上 [`remark-cjk-friendly`](https://github.com/tats-u/markdown-cjk-friendly)，讓粗體與斜體在中日韓標點旁也能正常運作。其他 remark／rehype 外掛可加在 `astro.config.mjs` 的 `markdown.processor`。
 
+`.mdx` 檔透過 [`@astrojs/mdx`](https://docs.astro.build/en/guides/integrations-guide/mdx/) 支援，並沿用上述設定。文章需要匯入元件時使用：
+
+```mdx
+import MyChart from '../../components/MyChart.astro';
+
+<MyChart />
+```
+
 ## 吉祥物（圖書館館員）
 
 主題附一個可選的小吉祥物（預設是一位圖書館館員）：首頁的「角落」卡片、文章旁的陪讀卡片，以及 404 與空狀態的插圖。標題、台詞與圖片都在 `site.config.ts` 的 `mascot` 與 `art.mascot`。

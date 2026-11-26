@@ -1,5 +1,6 @@
 // @ts-check
 import { unified } from '@astrojs/markdown-remark';
+import mdx from '@astrojs/mdx';
 import { defineConfig } from 'astro/config';
 import remarkCjkFriendly from 'remark-cjk-friendly';
 
@@ -29,7 +30,8 @@ export default defineConfig({
   // this line with a fixed value such as site: 'https://example.com'.
   site: process.env.SITE_URL || undefined,
 
-  integrations: [requireSite],
+  // mdx() reuses the `markdown` settings below for .mdx files.
+  integrations: [mdx(), requireSite],
 
   markdown: {
     // Lets **bold** and *italic* work next to Chinese, Japanese and Korean punctuation.
