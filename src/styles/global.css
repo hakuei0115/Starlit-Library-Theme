@@ -189,6 +189,11 @@ img, svg, video, canvas, audio, iframe, embed, object {
   height: auto;
 }
 
+/* KaTeX draws accents such as ec with SVGs inside zero-width boxes. */
+.katex svg {
+  max-width: none;
+}
+
 /* Dividers */
 hr {
   border: none;

@@ -12,7 +12,8 @@ updates:
       # supports TypeScript 5 and 6). Upgrade majors by hand when you are ready.
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
-      # The KaTeX stylesheet must match the version rehype-katex renders with.
+      # package.json "overrides" forces rehype-katex onto this KaTeX version, which is newer
+      # than it declares. Upgrade KaTeX by hand and check that formulas still look right.
       - dependency-name: katex
         update-types: ["version-update:semver-minor"]
 
