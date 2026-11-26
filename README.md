@@ -49,7 +49,7 @@ Other commands:
 | `npm run preview` | Preview the production build |
 | `npx astro check` | Type check |
 
-> `.github/` (CI and Dependabot configuration) comes along when you clone. Delete it if you don't need it.
+> `.github/` (CI, Dependabot, and issue and pull request templates) and `CONTRIBUTING.md` come along when you clone. Delete them if you don't need them.
 
 ## Configuration
 
@@ -206,6 +206,10 @@ src/
 ```
 
 Colors, spacing and radii are all defined in `src/styles/tokens.css`. Start there if you want to change the theme colors.
+
+## Contributing
+
+Bug reports, ideas and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 

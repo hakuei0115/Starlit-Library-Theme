@@ -1,0 +1,30 @@
+name: Feature request
+description: Suggest a feature or a design change
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: English or Traditional Chinese are both fine（中英文皆可）.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would you like to see?
+      description: Sketches, screenshots or links to examples help.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Workarounds or alternatives you considered
+  - type: checkboxes
+    id: contribute
+    attributes:
+      label: Contribution
+      options:
+        - label: I am willing to open a pull request for this

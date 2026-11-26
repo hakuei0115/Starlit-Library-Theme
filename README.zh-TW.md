@@ -51,7 +51,7 @@ npm run dev        # http://localhost:4321
 | `npm run preview` | 預覽建置結果 |
 | `npx astro check` | 型別檢查 |
 
-> clone 後 `.github/`（CI 與 Dependabot 設定）會一起帶走，不需要的話可以直接刪除。
+> clone 後 `.github/`（CI、Dependabot、issue 與 PR 模板）和 `CONTRIBUTING.md` 會一起帶走，不需要的話可以直接刪除。
 
 ## 設定
 
@@ -208,6 +208,10 @@ src/
 ```
 
 視覺上的顏色、間距、圓角都集中在 `src/styles/tokens.css`，想換主題色從那裡開始。
+
+## 參與貢獻
+
+歡迎回報問題、提出想法或送 PR，請見 [CONTRIBUTING.md](CONTRIBUTING.md)（英文，issue 與 PR 可以用中文撰寫）。
 
 ## 授權
 

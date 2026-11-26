@@ -1,0 +1,41 @@
+name: Bug report
+description: Something in the theme does not work as expected
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: English or Traditional Chinese are both fine（中英文皆可）.
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: What you saw, and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Include the page, and the Markdown or settings involved if relevant.
+      placeholder: |
+        1. ...
+        2. ...
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Node.js version, operating system, and browser or device.
+      placeholder: Node 22.23.5, Windows 11, Chrome
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: Link
+      description: A public page or repository that shows the problem (optional).
+  - type: textarea
+    id: extra
+    attributes:
+      label: Screenshots or logs
