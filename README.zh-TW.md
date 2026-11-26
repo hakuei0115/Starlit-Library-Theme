@@ -26,7 +26,7 @@ A calm, reading-first Astro blog theme with a starlit-library mood and an option
 - 文章頁：目錄（TOC）、上一篇／下一篇、閱讀時間、程式碼區塊與表格的行動版處理
 - 文章列表：分類篩選
 - 關於頁：直接用 Markdown 寫（`src/content/pages/about.md`）
-- RSS（`/rss.xml`）、Open Graph / canonical meta、404 頁
+- RSS（`/rss.xml`）、sitemap 與 `robots.txt`、Open Graph / canonical meta、404 頁
 - 圖片自動轉成 WebP 並依版位出多種尺寸（Astro 內建，不需額外套件）
 - 行動版導覽抽屜、鍵盤焦點樣式、`prefers-reduced-motion` 支援
 - 沒有任何前端 UI 框架：純 Astro 元件與 CSS
@@ -71,7 +71,7 @@ npm run dev        # http://localhost:4321
 | `art` | Hero 橫幅、吉祥物與社群分享圖 |
 | `covers` | 分類封面對應與預設封面 |
 
-你還需要告訴主題你的正式網址。canonical 連結、Open Graph 圖片與 RSS 都會用到它，沒設的話 `astro build` 會印出警告。
+你還需要告訴主題你的正式網址。canonical 連結、Open Graph 圖片、RSS 與 sitemap（`/sitemap-index.xml`）都會用到它，沒設的話 `astro build` 會印出警告。
 
 最簡單的方式是設環境變數 `SITE_URL`，[`astro.config.mjs`](astro.config.mjs) 會讀取它。可以設在主機的設定裡，或建置時指定：
 
@@ -202,7 +202,7 @@ src/
 ├── assets/brand/        # 佔位圖（換成你自己的）
 ├── components/          # blog / home / layout / mascot / common
 ├── layouts/
-├── pages/               # 路由：首頁、文章、關於、404、RSS
+├── pages/               # 路由：首頁、文章、關於、404、RSS、robots.txt
 ├── styles/              # tokens.css（設計變數）、global.css
 └── utils/posts.ts       # 文章篩選、精選、閱讀時間、封面選擇
 ```

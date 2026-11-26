@@ -24,7 +24,7 @@ A calm, reading-first [Astro](https://astro.build) blog theme for long-form tech
 - Article page: table of contents, previous / next links, reading time, mobile-friendly code blocks and tables
 - Article list with category filtering
 - About page written in plain Markdown (`src/content/pages/about.md`)
-- RSS (`/rss.xml`), Open Graph / canonical meta, 404 page
+- RSS (`/rss.xml`), sitemap and `robots.txt`, Open Graph / canonical meta, 404 page
 - Images are converted to WebP in several sizes automatically (built into Astro, no extra packages)
 - Mobile navigation drawer, visible keyboard focus styles, `prefers-reduced-motion` support
 - No front-end UI framework: plain Astro components and CSS
@@ -69,7 +69,7 @@ Everything that is specific to *your* site lives in [`src/site.config.ts`](src/s
 | `art` | Hero banner, mascot and social share images |
 | `covers` | Category-to-cover mapping and the default cover |
 
-You also need to tell the theme your production URL. Canonical links, Open Graph images and the RSS feed all depend on it, and `astro build` prints a warning if it is missing.
+You also need to tell the theme your production URL. Canonical links, Open Graph images, the RSS feed and the sitemap (`/sitemap-index.xml`) all depend on it, and `astro build` prints a warning if it is missing.
 
 The easiest way is the `SITE_URL` environment variable, which [`astro.config.mjs`](astro.config.mjs) reads. Set it in your host's settings, or when building:
 
@@ -200,7 +200,7 @@ src/
 ├── assets/brand/        # Placeholder images (replace with your own)
 ├── components/          # blog / home / layout / mascot / common
 ├── layouts/
-├── pages/               # Routes: home, articles, about, 404, RSS
+├── pages/               # Routes: home, articles, about, 404, RSS, robots.txt
 ├── styles/              # tokens.css (design variables), global.css
 └── utils/posts.ts       # Post filtering, featured posts, reading time, cover selection
 ```
