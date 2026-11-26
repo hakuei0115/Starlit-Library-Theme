@@ -57,9 +57,9 @@ export function getPostCover(post: BlogPost): PostCover {
   return own || CATEGORY_COVERS[post.data.category] || DEFAULT_COVER;
 }
 
-/** A URL for the cover (used for og:image): a 1200px-wide WebP for the built-in covers. */
+/** A URL for the cover (used for og:image): a 1200px-wide JPG for the built-in covers. */
 export async function getPostCoverUrl(post: BlogPost): Promise<string> {
   const cover = getPostCover(post);
   if (typeof cover === 'string') return cover;
-  return (await getImage({ src: cover, width: 1200, format: 'webp' })).src;
+  return (await getImage({ src: cover, width: 1200, format: 'jpg' })).src;
 }

@@ -66,7 +66,7 @@ npm run dev        # http://localhost:4321
 | `hero` | Hero 文案、按鈕、橫幅替代文字 |
 | `mascot` | 吉祥物的名字與所有台詞；`enabled: false` 會整個移除 |
 | `notFound` / `articles` | 404 頁與文章列表頁的文案 |
-| `art` | Hero 橫幅與吉祥物圖片 |
+| `art` | Hero 橫幅、吉祥物與社群分享圖 |
 | `covers` | 分類封面對應與預設封面 |
 
 你還需要告訴主題你的正式網址。canonical 連結、Open Graph 圖片與 RSS 都會用到它，沒設的話 `astro build` 會印出警告。
@@ -136,6 +136,7 @@ draft: false         # true 不會發布
 | `art.heroBannerMobile` | 16:9（例如 1672×941），選填 |
 | `art.mascot` | 3:4 直式（例如 1086×1448） |
 | 分類封面 | 約 3:2（例如 1536×1024） |
+| `art.ogImage` | 1200×630，選填（未設定時裁切 Hero 橫幅） |
 
 文章封面的選擇順序是：**文章 front matter 的 `heroImage` → `covers.byCategory[分類]` → `covers.defaultCover`**。沒有列在 `byCategory` 的分類會自動用預設封面，所以新增分類不需要改其他地方。
 

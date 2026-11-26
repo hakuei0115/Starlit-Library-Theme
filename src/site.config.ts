@@ -102,6 +102,8 @@ export const siteConfig = {
     heroBannerMobile: heroBannerMobile as ImageMetadata | undefined,
     /** 3:4 portrait used by the mascot corner, 404 and article companion. */
     mascot: mascotArt,
+    /** Social share image (cropped to 1200×630); leave undefined to use `heroBanner`. */
+    ogImage: undefined as ImageMetadata | undefined,
   },
 
   /**

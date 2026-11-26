@@ -64,7 +64,7 @@ Everything that is specific to *your* site lives in [`src/site.config.ts`](src/s
 | `hero` | Hero copy, button, banner alt text |
 | `mascot` | Mascot name and every line it says; `enabled: false` removes it entirely |
 | `notFound` / `articles` | Copy for the 404 page and the article list page |
-| `art` | Hero banner and mascot images |
+| `art` | Hero banner, mascot and social share images |
 | `covers` | Category-to-cover mapping and the default cover |
 
 You also need to tell the theme your production URL. Canonical links, Open Graph images and the RSS feed all depend on it, and `astro build` prints a warning if it is missing.
@@ -134,6 +134,7 @@ Recommended sizes:
 | `art.heroBannerMobile` | 16:9 (e.g. 1672×941), optional |
 | `art.mascot` | 3:4 portrait (e.g. 1086×1448) |
 | Category covers | About 3:2 (e.g. 1536×1024) |
+| `art.ogImage` | 1200×630, optional (the hero banner is cropped when unset) |
 
 A post's cover is chosen in this order: **the post's `heroImage` front matter → `covers.byCategory[category]` → `covers.defaultCover`**. Categories not listed in `byCategory` fall back to the default cover, so adding a category never requires changes elsewhere.
 

@@ -1,4 +1,5 @@
 ---
+import { getImage } from 'astro:assets';
 import '../styles/tokens.css';
 import '../styles/global.css';
 import SiteHeader from '../components/layout/SiteHeader.astro';
@@ -16,7 +17,7 @@ interface Props {
 const {
   title,
   description = siteConfig.description,
-  image = "/favicon.svg",
+  image,
   articleDate,
   lang = siteConfig.lang,
 } = Astro.props;
@@ -24,7 +25,18 @@ const {
 const siteTitle = siteConfig.title;
 const fullTitle = title ? `${title} — ${siteTitle}` : `${siteTitle} — ${siteConfig.subtitle}`;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin);
-const imageURL = new URL(image, Astro.site || Astro.url.origin);
+// Share image: the page's own image, otherwise a 1200×630 JPG made from the site artwork
+// (many social platforms do not show SVG previews).
+const shareImage =
+  image ??
+  (await getImage({
+    src: siteConfig.art.ogImage ?? siteConfig.art.heroBanner,
+    width: 1200,
+    height: 630,
+    fit: 'cover',
+    format: 'jpg',
+  })).src;
+const imageURL = new URL(shareImage, Astro.site || Astro.url.origin);
 ---
 
 <!doctype html>
