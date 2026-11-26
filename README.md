@@ -153,6 +153,10 @@ Every image loaded through the config (SVG, PNG, JPG) is converted to WebP in se
 
 > The placeholders are SVG, so `astro.config.mjs` enables `image.dangerouslyProcessSVG`. Only use that option for SVGs that live in your own project and that you trust.
 
+## Markdown
+
+Posts are rendered with the remark pipeline plus [`remark-cjk-friendly`](https://github.com/tats-u/markdown-cjk-friendly), so bold and italic work next to Chinese, Japanese and Korean punctuation. Add other remark or rehype plugins to `markdown.processor` in `astro.config.mjs`.
+
 ## Mascot (the librarian)
 
 The theme includes an optional small mascot (by default, a librarian): the corner card on the home page, the reading companion beside articles, and the illustrations on the 404 page and empty states. Its name, lines and image are set in `mascot` and `art.mascot` in `site.config.ts`.

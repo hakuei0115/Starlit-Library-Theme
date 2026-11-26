@@ -155,6 +155,10 @@ covers: {
 
 > 佔位圖是 SVG，因此 `astro.config.mjs` 開啟了 `image.dangerouslyProcessSVG`。這個選項只適用於你自己專案內、可信任的 SVG。
 
+## Markdown
+
+文章使用 remark 流程加上 [`remark-cjk-friendly`](https://github.com/tats-u/markdown-cjk-friendly)，讓粗體與斜體在中日韓標點旁也能正常運作。其他 remark／rehype 外掛可加在 `astro.config.mjs` 的 `markdown.processor`。
+
 ## 吉祥物（圖書館館員）
 
 主題附一個可選的小吉祥物（預設是一位圖書館館員）：首頁的「角落」卡片、文章旁的陪讀卡片，以及 404 與空狀態的插圖。標題、台詞與圖片都在 `site.config.ts` 的 `mascot` 與 `art.mascot`。

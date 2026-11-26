@@ -1,5 +1,7 @@
 // @ts-check
+import { unified } from '@astrojs/markdown-remark';
 import { defineConfig } from 'astro/config';
+import remarkCjkFriendly from 'remark-cjk-friendly';
 
 /**
  * Warns during `astro build` when `site` is not set. Without it, canonical links,
@@ -28,6 +30,12 @@ export default defineConfig({
   site: process.env.SITE_URL || undefined,
 
   integrations: [requireSite],
+
+  markdown: {
+    // Lets **bold** and *italic* work next to Chinese, Japanese and Korean punctuation.
+    // Standard Markdown leaves the asterisks visible in text such as **粗體（Bold）**文字.
+    processor: unified({ remarkPlugins: [remarkCjkFriendly] }),
+  },
 
   image: {
     // The default artwork in src/assets/brand/ is SVG; this lets it go through the same
