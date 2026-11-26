@@ -1,0 +1,97 @@
+---
+// Adds a "copy" button to every code block inside `.article-prose`.
+// Without JavaScript no button is shown and the code stays selectable as usual.
+---
+
+<span id="code-copy-status" class="sr-only" role="status" aria-live="polite"></span>
+
+<script>
+  const LABEL = '複製';
+  const COPIED = '已複製';
+  const FAILED = '複製失敗';
+  const RESET_AFTER_MS = 2000;
+
+  function setupCodeCopy() {
+    const status = document.getElementById('code-copy-status');
+
+    document.querySelectorAll<HTMLPreElement>('.article-prose pre').forEach((pre) => {
+      if (pre.parentElement?.classList.contains('code-block')) return;
+
+      // The button sits outside <pre>, so it stays put when long lines scroll sideways.
+      const wrapper = document.createElement('div');
+      wrapper.className = 'code-block';
+      pre.replaceWith(wrapper);
+
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'code-copy-button';
+      button.textContent = LABEL;
+      wrapper.append(button, pre);
+
+      let timer: number | undefined;
+      button.addEventListener('click', async () => {
+        const code = (pre.querySelector('code') ?? pre).textContent ?? '';
+        let copied = true;
+        try {
+          await navigator.clipboard.writeText(code.replace(/\n$/, ''));
+        } catch {
+          // Clipboard access can be refused, and is unavailable on plain http.
+          copied = false;
+        }
+
+        button.textContent = copied ? COPIED : FAILED;
+        if (status) status.textContent = copied ? '程式碼已複製' : '無法複製程式碼，請手動選取';
+
+        window.clearTimeout(timer);
+        timer = window.setTimeout(() => {
+          button.textContent = LABEL;
+          if (status) status.textContent = '';
+        }, RESET_AFTER_MS);
+      });
+    });
+  }
+
+  setupCodeCopy();
+  document.addEventListener('astro:page-load', setupCodeCopy);
+</script>
+
+<style is:global>
+  .code-block {
+    position: relative;
+    margin-bottom: var(--space-6);
+  }
+
+  /* Extra top padding keeps the button clear of the first line of code. */
+  .article-prose .code-block > pre {
+    margin-bottom: 0;
+    padding-top: var(--space-12);
+  }
+
+  .code-copy-button {
+    position: absolute;
+    top: var(--space-2);
+    right: var(--space-2);
+    min-width: 4rem;
+    min-height: 2rem;
+    padding: var(--space-1) var(--space-3);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    line-height: 1.4;
+    color: var(--color-code-text);
+    background: var(--color-code-bg);
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: border-color var(--motion-fast) var(--ease-soft);
+  }
+
+  .code-copy-button:hover {
+    border-color: var(--color-gold);
+  }
+
+  /* The default focus color is too dark to see on the code background. */
+  .code-copy-button:focus-visible {
+    outline-color: var(--color-gold);
+    outline-offset: 2px;
+  }
+</style>

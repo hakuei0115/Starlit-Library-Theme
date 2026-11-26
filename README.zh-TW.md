@@ -23,7 +23,7 @@ A calm, reading-first Astro blog theme with a starlit-library mood and an option
 ## 特色
 
 - 首頁：Hero 橫幅、精選文章、最新筆記、主題分類、吉祥物角落
-- 文章頁：目錄（TOC）、上一篇／下一篇、閱讀時間、程式碼區塊與表格的行動版處理
+- 文章頁：目錄（TOC）、上一篇／下一篇、閱讀時間、程式碼區塊（含複製按鈕）與表格的行動版處理
 - 文章列表：分類篩選
 - 關於頁：直接用 Markdown 寫（`src/content/pages/about.md`）
 - RSS（`/rss.xml`）、sitemap 與 `robots.txt`、canonical、Open Graph、Twitter 卡片與文章結構化資料（JSON-LD）、404 頁

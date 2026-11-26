@@ -21,7 +21,7 @@ A calm, reading-first [Astro](https://astro.build) blog theme for long-form tech
 ## Features
 
 - Home page: hero banner, featured posts, latest notes, topic chips, mascot corner
-- Article page: table of contents, previous / next links, reading time, mobile-friendly code blocks and tables
+- Article page: table of contents, previous / next links, reading time, mobile-friendly code blocks (with a copy button) and tables
 - Article list with category filtering
 - About page written in plain Markdown (`src/content/pages/about.md`)
 - RSS (`/rss.xml`), sitemap and `robots.txt`, canonical, Open Graph, Twitter card and article structured data (JSON-LD), 404 page
