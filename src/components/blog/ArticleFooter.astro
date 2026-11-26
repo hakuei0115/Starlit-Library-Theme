@@ -1,4 +1,6 @@
 ---
+import { tagUrl } from '../../utils/tags';
+
 interface PostLink {
   id?: string;
   slug?: string;
@@ -29,7 +31,7 @@ const getLinkTitle = (post: PostLink) => post.title || post.data?.title || 'ç›¸é
       <ul class="article-footer__tags-list">
         {tags.map((tag) => (
           <li>
-            <a href={`/articles?tag=${encodeURIComponent(tag)}`} class="tag-pill">
+            <a href={tagUrl(tag)} class="tag-pill">
               #{tag}
             </a>
           </li>

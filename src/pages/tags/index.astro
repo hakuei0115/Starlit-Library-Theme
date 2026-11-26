@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TagPageHeader from '../../components/blog/TagPageHeader.astro';
+import { siteConfig } from '../../site.config';
+import { getPublishedPosts } from '../../utils/posts';
+import { collectTags } from '../../utils/tags';
+
+const { tags: copy } = siteConfig;
+const tags = collectTags(await getPublishedPosts());
+---
+
+<BaseLayout title={copy.title} description={copy.description}>
+  <TagPageHeader title={copy.title} description={copy.description} />
+
+  <div class="container-site tag-index">
+    {tags.length > 0 ? (
+      <ul>
+        {tags.map((tag) => (
+          <li>
+            <a href={`/tags/${tag.slug}/`}>
+              <span>#{tag.name}</span>
+              <span class="count">{tag.posts.length}<span class="sr-only"> 篇文章</span></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="empty">{copy.emptyMessage}</p>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .tag-index {
+    padding-block: var(--space-10) var(--space-16);
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    margin: 0;
+    max-width: 100%;
+  }
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 2.75rem;
+    padding: var(--space-2) var(--space-4);
+    overflow-wrap: anywhere;
+    color: var(--color-text);
+    background: var(--color-surface);
+    border: var(--border-thin);
+    border-radius: var(--radius-pill);
+    text-decoration: none;
+    transition: border-color var(--motion-fast) var(--ease-soft);
+  }
+
+  a:hover {
+    color: var(--color-night);
+    border-color: var(--color-accent);
+  }
+
+  .count {
+    min-width: 1.5rem;
+    padding: 0 var(--space-2);
+    font-size: var(--text-caption);
+    text-align: center;
+    background: var(--color-surface-alt);
+    border-radius: var(--radius-pill);
+  }
+
+  .empty {
+    text-align: center;
+    color: var(--color-text-muted);
+  }
+</style>

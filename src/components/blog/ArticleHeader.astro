@@ -1,5 +1,6 @@
 ---
 import { siteConfig } from '../../site.config';
+import { tagUrl } from '../../utils/tags';
 interface Props {
   title: string;
   pubDate: Date | string;
@@ -108,7 +109,7 @@ const displayUpdatedDate = updatedDateObj && !isNaN(updatedDateObj.getTime())
         <ul class="article-tags-list">
           {tags.map((tag) => (
             <li class="article-tag-item">
-              <span class="article-tag">#{tag}</span>
+              <a href={tagUrl(tag)} class="article-tag">#{tag}</a>
             </li>
           ))}
         </ul>
@@ -249,5 +250,11 @@ const displayUpdatedDate = updatedDateObj && !isNaN(updatedDateObj.getTime())
     border: 1px solid var(--color-border, #e2d8e3);
     padding: 0.2rem 0.55rem;
     border-radius: var(--radius-sm, 0.375rem);
+    text-decoration: none;
+  }
+
+  .article-tag:hover {
+    color: var(--color-night);
+    border-color: var(--color-accent);
   }
 </style>

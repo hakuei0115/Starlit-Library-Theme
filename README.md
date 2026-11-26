@@ -23,6 +23,7 @@ A calm, reading-first [Astro](https://astro.build) blog theme for long-form tech
 - Home page: hero banner, featured posts, latest notes, topic chips, mascot corner
 - Article page: table of contents, previous / next links, reading time, mobile-friendly code blocks (with a copy button) and tables
 - Article list with category filtering
+- Tag index (`/tags/`) and one page per tag
 - About page written in plain Markdown (`src/content/pages/about.md`)
 - RSS (`/rss.xml`), sitemap and `robots.txt`, canonical, Open Graph, Twitter card and article structured data (JSON-LD), 404 page
 - Images are converted to WebP in several sizes automatically (built into Astro, no extra packages)
@@ -65,7 +66,7 @@ Everything that is specific to *your* site lives in [`src/site.config.ts`](src/s
 | `footer` | Footer tagline and note |
 | `hero` | Hero copy, button, banner alt text |
 | `mascot` | Mascot name and every line it says; `enabled: false` removes it entirely |
-| `notFound` / `articles` | Copy for the 404 page and the article list page |
+| `notFound` / `articles` / `tags` | Copy for the 404 page, the article list and the tag pages |
 | `art` | Hero banner, mascot and social share images |
 | `covers` | Category-to-cover mapping and the default cover |
 
@@ -115,7 +116,7 @@ Content...
 | `description` | ✓ | Summary |
 | `pubDate` | ✓ | Publication date |
 | `category` | ✓ | Category (a single value) |
-| `tags` | | Array of tags |
+| `tags` | | Array of tags. Each gets a page at `/tags/<tag>/`; tags differing only in case, spacing or punctuation share one |
 | `featured` | | Show in the home page featured section |
 | `draft` | | Drafts are not published |
 | `updatedDate` | | Last updated date |

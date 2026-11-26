@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/blog/PostCard.astro';
+import TagPageHeader from '../../components/blog/TagPageHeader.astro';
+import { getPublishedPosts } from '../../utils/posts';
+import { collectTags } from '../../utils/tags';
+
+export async function getStaticPaths() {
+  return collectTags(await getPublishedPosts()).map((tag) => ({
+    params: { tag: tag.slug },
+    props: { tag },
+  }));
+}
+
+const { tag } = Astro.props;
+const title = `#${tag.name}`;
+const description = `共 ${tag.posts.length} 篇標記為「${tag.name}」的文章。`;
+---
+
+<BaseLayout title={title} description={description}>
+  <TagPageHeader title={title} description={description} showIndexCrumb />
+
+  <div class="container-site tag-posts">
+    <div class="grid">
+      {tag.posts.map((post) => <PostCard post={post} />)}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .tag-posts {
+    padding-block: var(--space-8) var(--space-16);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 768px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

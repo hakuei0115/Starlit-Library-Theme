@@ -25,6 +25,7 @@ A calm, reading-first Astro blog theme with a starlit-library mood and an option
 - 首頁：Hero 橫幅、精選文章、最新筆記、主題分類、吉祥物角落
 - 文章頁：目錄（TOC）、上一篇／下一篇、閱讀時間、程式碼區塊（含複製按鈕）與表格的行動版處理
 - 文章列表：分類篩選
+- 標籤總覽（`/tags/`）與各標籤的文章列表
 - 關於頁：直接用 Markdown 寫（`src/content/pages/about.md`）
 - RSS（`/rss.xml`）、sitemap 與 `robots.txt`、canonical、Open Graph、Twitter 卡片與文章結構化資料（JSON-LD）、404 頁
 - 圖片自動轉成 WebP 並依版位出多種尺寸（Astro 內建，不需額外套件）
@@ -67,7 +68,7 @@ npm run dev        # http://localhost:4321
 | `footer` | 頁尾說明與備註 |
 | `hero` | Hero 文案、按鈕、橫幅替代文字 |
 | `mascot` | 吉祥物的名字與所有台詞；`enabled: false` 會整個移除 |
-| `notFound` / `articles` | 404 頁與文章列表頁的文案 |
+| `notFound` / `articles` / `tags` | 404 頁、文章列表頁與標籤頁的文案 |
 | `art` | Hero 橫幅、吉祥物與社群分享圖 |
 | `covers` | 分類封面對應與預設封面 |
 
@@ -117,7 +118,7 @@ draft: false         # true 不會發布
 | `description` | ✓ | 摘要 |
 | `pubDate` | ✓ | 發布日期 |
 | `category` | ✓ | 分類（單一值） |
-| `tags` | | 標籤陣列 |
+| `tags` | | 標籤陣列。每個標籤有一頁 `/tags/<標籤>/`；只差大小寫、空格或標點的標籤共用一頁 |
 | `featured` | | 首頁精選 |
 | `draft` | | 草稿不發布 |
 | `updatedDate` | | 更新日期 |

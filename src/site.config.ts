@@ -96,6 +96,12 @@ export const siteConfig = {
     emptyFilterMessage: '在這個分類下沒有找到相關藏書呢，請試試其他分類。',
   },
 
+  tags: {
+    title: '文章標籤',
+    description: '依標籤瀏覽所有筆記。',
+    emptyMessage: '目前還沒有任何標籤。',
+  },
+
   art: {
     heroBanner,
     /** 16:9 variant served below 768px; leave undefined to reuse `heroBanner`. */
