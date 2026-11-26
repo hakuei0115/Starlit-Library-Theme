@@ -24,7 +24,7 @@ A calm, reading-first Astro blog theme with a starlit-library mood and an option
 
 - 首頁：Hero 橫幅、精選文章、最新筆記、主題分類、吉祥物角落
 - 文章頁：目錄（TOC）、上一篇／下一篇、閱讀時間、程式碼區塊（含複製按鈕）與表格的行動版處理
-- 文章列表：分類篩選
+- 文章列表分頁，各分類也有自己的分頁列表
 - 標籤總覽（`/tags/`）與各標籤的文章列表
 - 關於頁：直接用 Markdown 寫（`src/content/pages/about.md`）
 - RSS（`/rss.xml`）、sitemap 與 `robots.txt`、canonical、Open Graph、Twitter 卡片與文章結構化資料（JSON-LD）、404 頁
@@ -88,6 +88,8 @@ export default defineConfig({
 });
 ```
 
+文章列表每頁 10 篇，可在 `site.config.ts` 的 `articles.pageSize` 調整。
+
 ### 文字語言
 
 各區塊的小標題（例如「精選文章」「最新筆記」）目前直接寫在元件裡，預設為繁體中文。要換語言，請搜尋並修改 `src/components/` 與 `src/pages/` 裡的字串。
@@ -117,7 +119,7 @@ draft: false         # true 不會發布
 | `title` | ✓ | 標題 |
 | `description` | ✓ | 摘要 |
 | `pubDate` | ✓ | 發布日期 |
-| `category` | ✓ | 分類（單一值） |
+| `category` | ✓ | 分類（單一值），列表網址為 `/articles/category/<分類>/` |
 | `tags` | | 標籤陣列。每個標籤有一頁 `/tags/<標籤>/`；只差大小寫、空格或標點的標籤共用一頁 |
 | `featured` | | 首頁精選 |
 | `draft` | | 草稿不發布 |

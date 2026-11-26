@@ -22,7 +22,7 @@ A calm, reading-first [Astro](https://astro.build) blog theme for long-form tech
 
 - Home page: hero banner, featured posts, latest notes, topic chips, mascot corner
 - Article page: table of contents, previous / next links, reading time, mobile-friendly code blocks (with a copy button) and tables
-- Article list with category filtering
+- Paginated article list, with a paginated page per category
 - Tag index (`/tags/`) and one page per tag
 - About page written in plain Markdown (`src/content/pages/about.md`)
 - RSS (`/rss.xml`), sitemap and `robots.txt`, canonical, Open Graph, Twitter card and article structured data (JSON-LD), 404 page
@@ -86,6 +86,8 @@ export default defineConfig({
 });
 ```
 
+The article list shows 10 posts per page. Change `articles.pageSize` in `site.config.ts` to adjust it.
+
 ### Interface text and language
 
 Section headings (for example "Featured" and "Latest notes") are currently written directly in the components and default to Traditional Chinese. To change the language, search for and edit the strings in `src/components/` and `src/pages/`. Text covered by `site.config.ts` (site name, navigation, hero, footer, mascot lines, 404) is changed there, and `lang` sets the HTML `lang` attribute and date formatting.
@@ -115,7 +117,7 @@ Content...
 | `title` | ✓ | Title |
 | `description` | ✓ | Summary |
 | `pubDate` | ✓ | Publication date |
-| `category` | ✓ | Category (a single value) |
+| `category` | ✓ | Category (a single value). Listed at `/articles/category/<category>/` |
 | `tags` | | Array of tags. Each gets a page at `/tags/<tag>/`; tags differing only in case, spacing or punctuation share one |
 | `featured` | | Show in the home page featured section |
 | `draft` | | Drafts are not published |

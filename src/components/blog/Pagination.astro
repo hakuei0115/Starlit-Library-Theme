@@ -1,0 +1,100 @@
+---
+interface Props {
+  currentPage: number;
+  lastPage: number;
+  /** URL of page 1, ending with "/". Later pages are `${baseUrl}2/` and so on. */
+  baseUrl: string;
+}
+
+const { currentPage, lastPage, baseUrl } = Astro.props;
+const pageUrl = (n: number) => (n === 1 ? baseUrl : `${baseUrl}${n}/`);
+
+// First, last, and the pages around the current one. `null` marks a gap.
+const wanted = [1, currentPage - 1, currentPage, currentPage + 1, lastPage];
+const shown = [...new Set(wanted)].filter((n) => n >= 1 && n <= lastPage).sort((a, b) => a - b);
+const items = shown.flatMap((n, i) => {
+  const gap = n - (shown[i - 1] ?? 0);
+  if (gap === 2) return [n - 1, n]; // A single hidden page is shown rather than "…".
+  return gap > 2 ? [null, n] : [n];
+});
+---
+
+{lastPage > 1 && (
+  <nav class="pagination" aria-label="文章分頁">
+    <ul>
+      {currentPage > 1 && (
+        <li><a href={pageUrl(currentPage - 1)} rel="prev">← 上一頁</a></li>
+      )}
+      {items.map((n) =>
+        n === null ? (
+          <li class="gap" aria-hidden="true">…</li>
+        ) : (
+          <li>
+            <a
+              href={pageUrl(n)}
+              aria-label={`第 ${n} 頁`}
+              aria-current={n === currentPage ? 'page' : undefined}
+            >
+              {n}
+            </a>
+          </li>
+        ),
+      )}
+      {currentPage < lastPage && (
+        <li><a href={pageUrl(currentPage + 1)} rel="next">下一頁 →</a></li>
+      )}
+    </ul>
+  </nav>
+)}
+
+<style>
+  .pagination {
+    margin-top: var(--space-10);
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    margin: 0;
+  }
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    padding: var(--space-1) var(--space-3);
+    font-size: var(--text-small);
+    color: var(--color-text);
+    background: var(--color-surface);
+    border: var(--border-thin);
+    border-radius: var(--radius-pill);
+    text-decoration: none;
+    transition: border-color var(--motion-fast) var(--ease-soft);
+  }
+
+  a:hover {
+    color: var(--color-night);
+    border-color: var(--color-accent);
+  }
+
+  a[aria-current='page'] {
+    color: var(--color-on-dark);
+    background: var(--color-night);
+    border-color: var(--color-night);
+  }
+
+  .gap {
+    color: var(--color-text-muted);
+  }
+</style>

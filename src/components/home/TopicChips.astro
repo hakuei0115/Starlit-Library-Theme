@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { categoryUrl } from '../../utils/categories';
 
 interface Props {
   categories?: string[];
@@ -53,7 +54,7 @@ if (!displayCategories) {
         return (
           <div class="chip-item" role="listitem">
             <a
-              href={`/articles?category=${encodeURIComponent(cat)}`}
+              href={categoryUrl(cat)}
               class:list={['topic-chip', { active: isActive }]}
               aria-current={isActive ? 'page' : undefined}
             >

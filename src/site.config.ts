@@ -93,7 +93,9 @@ export const siteConfig = {
   articles: {
     title: '文章館藏',
     description: '漫步於星空書架間，探索所有發布的技術筆記。',
-    emptyFilterMessage: '在這個分類下沒有找到相關藏書呢，請試試其他分類。',
+    emptyMessage: '目前還沒有任何藏書呢。',
+    /** Number of posts per page in the article list and category pages. */
+    pageSize: 10,
   },
 
   tags: {

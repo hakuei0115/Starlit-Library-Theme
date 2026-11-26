@@ -1,38 +1,35 @@
 ---
-import { getCollection } from 'astro:content';
+import type { Page } from 'astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import PostCard from '../../components/blog/PostCard.astro';
-import MascotPortrait from '../../components/mascot/MascotPortrait.astro';
+import PostCard from './PostCard.astro';
+import Pagination from './Pagination.astro';
+import MascotPortrait from '../mascot/MascotPortrait.astro';
 import { siteConfig } from '../../site.config';
+import { getPublishedPosts, type BlogPost } from '../../utils/posts';
+import { categoryUrl, collectCategories } from '../../utils/categories';
+import { slugify } from '../../utils/slug';
 
+interface Props {
+  page: Page<BlogPost>;
+  /** Set on category pages. */
+  category?: string;
+}
+
+const { page, category } = Astro.props;
 const { articles: copy } = siteConfig;
 
-let allPosts: any[] = [];
-let categories: string[] = [];
+const allPosts = await getPublishedPosts();
+const categories = collectCategories(allPosts);
+const activeSlug = category ? slugify(category) : null;
 
-try {
-  const posts = await getCollection('blog');
-  allPosts = posts
-    .filter((p) => !p.data.draft)
-    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-
-  const catSet = new Set<string>();
-  allPosts.forEach((p) => {
-    if (p.data.category) {
-      catSet.add(p.data.category);
-    }
-  });
-  categories = Array.from(catSet);
-} catch (err) {
-  allPosts = [];
-  categories = [];
-}
+const heading = category ?? copy.title;
+const pageSuffix = page.currentPage > 1 ? `（第 ${page.currentPage} 頁）` : '';
+const title = category ? `${category}｜${copy.title}${pageSuffix}` : `${copy.title}${pageSuffix}`;
+const description = category ? `「${category}」分類的所有筆記。` : copy.description;
+const baseUrl = category ? categoryUrl(category) : '/articles/';
 ---
 
-<BaseLayout
-  title={copy.title}
-  description={copy.description}
->
+<BaseLayout title={title} description={description}>
   <div class="articles-page">
     <header class="articles-header">
       <div class="header-container">
@@ -40,7 +37,15 @@ try {
           <ol class="breadcrumb-list">
             <li class="breadcrumb-item"><a href="/" class="breadcrumb-link">首頁</a></li>
             <li class="breadcrumb-sep" aria-hidden="true">/</li>
-            <li class="breadcrumb-item breadcrumb-current" aria-current="page">{copy.title}</li>
+            {category ? (
+              <>
+                <li class="breadcrumb-item"><a href="/articles/" class="breadcrumb-link">{copy.title}</a></li>
+                <li class="breadcrumb-sep" aria-hidden="true">/</li>
+                <li class="breadcrumb-item breadcrumb-current" aria-current="page">{category}</li>
+              </>
+            ) : (
+              <li class="breadcrumb-item breadcrumb-current" aria-current="page">{copy.title}</li>
+            )}
           </ol>
         </nav>
 
@@ -48,44 +53,40 @@ try {
           <span class="star-icon" aria-hidden="true">✦</span>
           <span>Library Archives</span>
         </div>
-        <h1 class="articles-title">{copy.title}</h1>
+        <h1 class="articles-title">{heading}</h1>
         <p class="articles-lead">
-          {copy.description}共收錄
-          <span class="count-badge" id="total-count">{allPosts.length}</span>
+          {description}共收錄
+          <span class="count-badge">{page.total}</span>
           篇典藏。
         </p>
       </div>
     </header>
 
-    <main class="articles-content container-site">
+    <div class="articles-content container-site">
       <!-- Category Filter Bar -->
       <section class="filter-section" aria-label="分類篩選">
         <div class="filter-bar">
           <span class="filter-label">分類篩選：</span>
-          <div class="filter-chips" role="group" aria-label="文章分類切換">
-            <button
-              type="button"
-              class="filter-chip active"
-              data-category="all"
-              aria-pressed="true"
+          <div class="filter-chips">
+            <a
+              href="/articles/"
+              class:list={['filter-chip', { active: !category }]}
+              aria-current={!category && page.currentPage === 1 ? 'page' : undefined}
             >
               全部文章 ({allPosts.length})
-            </button>
-            {categories.map((cat) => {
-              const count = allPosts.filter((p) => p.data.category === cat).length;
-              return (
-                <button
-                  type="button"
-                  class="filter-chip"
-                  data-category={cat}
-                  aria-pressed="false"
-                >
-                  <span class="chip-dot" aria-hidden="true"></span>
-                  <span>{cat}</span>
-                  <span class="chip-count">({count})</span>
-                </button>
-              );
-            })}
+            </a>
+            {categories.map((cat) => (
+              <a
+                href={categoryUrl(cat.name)}
+                class:list={['filter-chip', { active: cat.slug === activeSlug }]}
+                aria-current={cat.slug === activeSlug && page.currentPage === 1 ? 'page' : undefined}
+                data-category={cat.name}
+              >
+                <span class="chip-dot" aria-hidden="true"></span>
+                <span>{cat.name}</span>
+                <span class="chip-count">({cat.posts.length})</span>
+              </a>
+            ))}
           </div>
         </div>
         <a href="/tags/" class="all-tags-link">瀏覽所有標籤 →</a>
@@ -93,98 +94,35 @@ try {
 
       <!-- Articles Grid -->
       <section class="articles-grid-section" aria-label="文章列表">
-        <div class="articles-grid" id="articles-container">
-          {allPosts.map((post) => (
-            <div class="article-item" data-category={post.data.category} data-tags={post.data.tags?.join(',') || ''}>
+        <div class="articles-grid">
+          {page.data.map((post) => (
+            <div class="article-item">
               <PostCard post={post} />
             </div>
           ))}
         </div>
 
-        <!-- Empty Filter Results -->
-        <div class="articles-empty" id="empty-state" style="display: none;">
-          <MascotPortrait
-            variant="thinking"
-            size="md"
-            message={copy.emptyFilterMessage}
-          />
-        </div>
+        {page.total === 0 && (
+          <div class="articles-empty">
+            <MascotPortrait variant="thinking" size="md" message={copy.emptyMessage} />
+          </div>
+        )}
+
+        <Pagination currentPage={page.currentPage} lastPage={page.lastPage} baseUrl={baseUrl} />
       </section>
-    </main>
+    </div>
   </div>
 </BaseLayout>
 
 <script>
-  function setupCategoryFiltering() {
-    const chips = document.querySelectorAll<HTMLButtonElement>('.filter-chip');
-    const items = document.querySelectorAll<HTMLElement>('.article-item');
-    const emptyState = document.getElementById('empty-state');
-    const countBadge = document.getElementById('total-count');
-
-    function applyFilter(category: string, updateUrl = true) {
-      let visibleCount = 0;
-
-      chips.forEach((chip) => {
-        const chipCat = chip.getAttribute('data-category');
-        const isActive = chipCat === category;
-        chip.classList.toggle('active', isActive);
-        chip.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-      });
-
-      items.forEach((item) => {
-        const itemCat = item.getAttribute('data-category');
-        if (category === 'all' || itemCat === category) {
-          item.style.display = '';
-          visibleCount++;
-        } else {
-          item.style.display = 'none';
-        }
-      });
-
-      if (countBadge) {
-        countBadge.textContent = String(visibleCount);
-      }
-
-      if (emptyState) {
-        emptyState.style.display = visibleCount === 0 ? 'flex' : 'none';
-      }
-
-      if (updateUrl) {
-        const url = new URL(window.location.href);
-        if (category === 'all') {
-          url.searchParams.delete('category');
-        } else {
-          url.searchParams.set('category', category);
-        }
-        window.history.pushState({}, '', url.toString());
-      }
-    }
-
-    chips.forEach((chip) => {
-      chip.addEventListener('click', () => {
-        const cat = chip.getAttribute('data-category') || 'all';
-        applyFilter(cat);
-      });
-    });
-
-    // Check URL params on initial load
-    const params = new URLSearchParams(window.location.search);
-    const initialCategory = params.get('category');
-    if (initialCategory) {
-      applyFilter(initialCategory, false);
-    }
-
-    // Handle browser back/forward buttons
-    window.addEventListener('popstate', () => {
-      const p = new URLSearchParams(window.location.search);
-      const cat = p.get('category') || 'all';
-      applyFilter(cat, false);
-    });
+  // Old links used /articles?category=Name; send them to the category page.
+  const wanted = new URLSearchParams(window.location.search).get('category');
+  if (wanted) {
+    const link = [...document.querySelectorAll<HTMLAnchorElement>('.filter-chip[data-category]')].find(
+      (chip) => chip.dataset.category === wanted,
+    );
+    if (link) window.location.replace(link.href);
   }
-
-  // Initialize on load and on astro:page-load
-  setupCategoryFiltering();
-  document.addEventListener('astro:page-load', setupCategoryFiltering);
 </script>
 
 <style>
@@ -336,7 +274,7 @@ try {
     color: var(--color-text);
     font-size: var(--text-small);
     font-weight: 500;
-    cursor: pointer;
+    text-decoration: none;
     transition: all var(--motion-fast) var(--ease-soft);
   }
 
@@ -403,6 +341,11 @@ try {
   .article-item {
     display: flex;
     height: 100%;
+  }
+
+  /* Fill the column even when a card has very little text. */
+  .article-item :global(.post-card) {
+    width: 100%;
   }
 
   .articles-empty {

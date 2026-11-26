@@ -1,0 +1,22 @@
+---
+import type { GetStaticPaths, Page } from 'astro';
+import ArticleList from '../../../../components/blog/ArticleList.astro';
+import { siteConfig } from '../../../../site.config';
+import { getPublishedPosts, type BlogPost } from '../../../../utils/posts';
+import { collectCategories } from '../../../../utils/categories';
+
+// /articles/category/<category>/, /articles/category/<category>/2/, ...
+export const getStaticPaths = (async ({ paginate }) =>
+  collectCategories(await getPublishedPosts()).flatMap((category) =>
+    paginate(category.posts, {
+      params: { category: category.slug },
+      props: { categoryName: category.name },
+      pageSize: siteConfig.articles.pageSize,
+    }),
+  )) satisfies GetStaticPaths;
+
+const page = Astro.props.page as Page<BlogPost>;
+const { categoryName } = Astro.props;
+---
+
+<ArticleList page={page} category={categoryName} />
