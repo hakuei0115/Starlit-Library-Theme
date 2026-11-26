@@ -21,6 +21,7 @@ const description = `共 ${tag.posts.length} 篇標記為「${tag.name}」的文
   <TagPageHeader title={title} description={description} showIndexCrumb />
 
   <div class="container-site tag-posts">
+    <h2 class="sr-only">文章</h2>
     <div class="grid">
       {tag.posts.map((post) => <PostCard post={post} />)}
     </div>

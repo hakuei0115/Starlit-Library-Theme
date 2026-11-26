@@ -39,6 +39,10 @@ export default defineConfig({
   integrations: [mdx(), sitemap(), requireSite],
 
   markdown: {
+    // High-contrast syntax colors stay readable (WCAG AA) on --color-code-bg, which
+    // global.css applies to code blocks. Check contrast again if you change either.
+    shikiConfig: { theme: 'github-dark-high-contrast' },
+
     // Lets **bold** and *italic* work next to Chinese, Japanese and Korean punctuation.
     // Standard Markdown leaves the asterisks visible in text such as **粗體（Bold）**文字.
     // remark-math and rehype-katex render $inline$ and $$block$$ formulas at build time.

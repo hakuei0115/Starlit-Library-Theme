@@ -96,6 +96,8 @@ const displayDate = dateObj
 <style>
   .post-card {
     display: flex;
+    min-width: 0;
+    overflow-wrap: anywhere;
     flex-direction: column;
     background-color: var(--color-surface, #ffffff);
     border: var(--border-thin, 1px solid var(--color-border, #e2d8e3));
@@ -121,6 +123,7 @@ const displayDate = dateObj
 
   .post-card__header {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: var(--space-2, 0.5rem);

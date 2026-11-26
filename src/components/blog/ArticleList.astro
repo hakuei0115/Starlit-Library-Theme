@@ -94,6 +94,7 @@ const baseUrl = category ? categoryUrl(category) : '/articles/';
 
       <!-- Articles Grid -->
       <section class="articles-grid-section" aria-label="文章列表">
+        <h2 class="sr-only">文章</h2>
         <div class="articles-grid">
           {page.data.map((post) => (
             <div class="article-item">
@@ -305,7 +306,6 @@ const baseUrl = category ? categoryUrl(category) : '/articles/';
 
   .chip-count {
     font-size: 0.8em;
-    opacity: 0.8;
   }
 
   .all-tags-link {
@@ -322,24 +322,25 @@ const baseUrl = category ? categoryUrl(category) : '/articles/';
   /* Articles Grid */
   .articles-grid {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--space-6);
   }
 
   @media (min-width: 768px) {
     .articles-grid {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
   @media (min-width: 1280px) {
     .articles-grid {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 
   .article-item {
     display: flex;
+    min-width: 0;
     height: 100%;
   }
 

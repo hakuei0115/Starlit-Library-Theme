@@ -3,6 +3,7 @@ import 'katex/dist/katex.min.css';
 import { getEntry, render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CodeCopy from '../components/common/CodeCopy.astro';
+import ScrollableFocus from '../components/common/ScrollableFocus.astro';
 
 // The About page is plain Markdown: edit src/content/pages/about.md.
 const entry = await getEntry('pages', 'about');
@@ -36,6 +37,7 @@ const { title, description, eyebrow } = entry.data;
   </div>
 
   <CodeCopy />
+  <ScrollableFocus />
 </BaseLayout>
 
 <style>

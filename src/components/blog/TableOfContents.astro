@@ -137,10 +137,18 @@ const showDesktop = mode === 'desktop' || mode === 'all';
     transform: rotate(180deg);
   }
 
+  /* Pass the sidebar height budget down to the scrollable list. */
+  .toc-mode-desktop {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
   /* Desktop card defaults */
   .toc-desktop {
     display: flex;
     flex-direction: column;
+    min-height: 0;
     width: 100%;
     max-width: var(--container-toc, 240px);
     box-sizing: border-box;
@@ -177,10 +185,11 @@ const showDesktop = mode === 'desktop' || mode === 'all';
 
   /* Scrollable TOC List */
   .toc-nav--scrollable {
+    flex: 0 1 auto;
+    min-height: 0;
     overflow-y: auto;
-    max-height: min(44vh, 320px);
     overscroll-behavior: contain;
-    padding-right: 0.25rem;
+    padding: var(--space-1);
     scrollbar-width: thin;
     scrollbar-color: var(--color-lavender, #c8c8d7) transparent;
   }
@@ -216,11 +225,10 @@ const showDesktop = mode === 'desktop' || mode === 'all';
   .toc-item--depth-3 {
     padding-left: var(--space-4, 1rem);
     font-size: var(--text-caption, 0.8125rem);
-    opacity: 0.9;
   }
 
   .toc-link {
-    color: var(--color-text-muted, #716a7b);
+    color: var(--color-text);
     text-decoration: none;
     display: block;
     padding: 0.15rem 0.35rem;

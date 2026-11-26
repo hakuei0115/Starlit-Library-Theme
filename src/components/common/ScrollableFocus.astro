@@ -1,0 +1,17 @@
+---
+// Wide tables and formulas scroll sideways inside their own box. While they overflow,
+// make them focusable so keyboard users can scroll them too. (Code blocks already are.)
+---
+
+<script>
+  const boxes = document.querySelectorAll<HTMLElement>('.article-prose table, .article-prose .katex-display');
+
+  const observer = new ResizeObserver((entries) => {
+    for (const { target } of entries) {
+      if (target.scrollWidth > target.clientWidth) target.setAttribute('tabindex', '0');
+      else target.removeAttribute('tabindex');
+    }
+  });
+
+  boxes.forEach((box) => observer.observe(box));
+</script>

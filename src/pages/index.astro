@@ -23,11 +23,11 @@ const showCorner = siteConfig.mascot.enabled;
     </section>
 
     <!-- 3. Full-Width Featured Articles Region -->
-    <section class="home-section featured-section" aria-label="精選文章">
+    <div class="home-section featured-section">
       <div class="container-site">
         <FeaturedPosts />
       </div>
-    </section>
+    </div>
 
     <!-- 4. Lower Region (>=1024px: Latest Notes Left, mascot corner Right when enabled) -->
     <section class="home-section lower-grid-section" aria-label={showCorner ? `最新筆記與${siteConfig.mascot.cornerTitle}` : '最新筆記'}>

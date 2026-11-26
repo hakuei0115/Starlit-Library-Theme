@@ -88,6 +88,8 @@ const { greeting = mascot.greeting, message = mascot.message } = Astro.props;
   .corner-content-box {
     display: flex;
     flex-direction: row;
+    /* With very large text the speech card moves below the portrait. */
+    flex-wrap: wrap;
     align-items: center;
     gap: var(--space-4);
     min-width: 0;
@@ -104,7 +106,7 @@ const { greeting = mascot.greeting, message = mascot.message } = Astro.props;
   }
 
   .corner-dialogue-card {
-    flex: 1 1 0%;
+    flex: 1 1 9rem;
     min-width: 0;
     box-sizing: border-box;
     background-color: var(--color-surface-alt);
@@ -149,6 +151,8 @@ const { greeting = mascot.greeting, message = mascot.message } = Astro.props;
   }
 
   .dialogue-greeting {
+    min-width: 0;
+    overflow-wrap: anywhere;
     font-family: var(--font-display);
     font-size: var(--text-small);
     font-weight: 650;

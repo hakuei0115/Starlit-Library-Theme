@@ -3,6 +3,7 @@ import 'katex/dist/katex.min.css';
 import BaseLayout from './BaseLayout.astro';
 import ArticleCompanion from '../components/blog/ArticleCompanion.astro';
 import CodeCopy from '../components/common/CodeCopy.astro';
+import ScrollableFocus from '../components/common/ScrollableFocus.astro';
 
 interface Props {
   title: string;
@@ -86,7 +87,40 @@ const modifiedDate = updatedDate ? new Date(updatedDate).toISOString() : undefin
   </div>
 
   <CodeCopy />
+  <ScrollableFocus />
 </BaseLayout>
+
+<script>
+  // Sticky only while the companion plus a usable part of the TOC fit below the header.
+  function setupSidebar() {
+    const wrapper = document.querySelector<HTMLElement>('.sidebar-sticky-wrapper');
+    const companion = wrapper?.querySelector<HTMLElement>('.sidebar-companion-container');
+    const toc = wrapper?.querySelector<HTMLElement>('.sidebar-toc-container');
+    const header = document.querySelector<HTMLElement>('.site-header');
+    if (!wrapper || !companion || !toc || !header) return;
+
+    function update() {
+      if (!wrapper || !companion || !toc || !header || !wrapper.offsetParent) return;
+      const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+      const available = window.innerHeight - header.offsetHeight - 2 * rem;
+      const nav = toc.querySelector<HTMLElement>('.toc-nav');
+      const list = nav?.querySelector<HTMLElement>('.toc-list');
+      // TOC card without its list, plus at least 8rem of the list (or all of a shorter one).
+      const tocNeeded = nav && list ? toc.offsetHeight - nav.offsetHeight + Math.min(list.scrollHeight, 8 * rem) : 0;
+      wrapper.classList.toggle('is-static', tocNeeded + rem + companion.offsetHeight > available);
+    }
+
+    const observer = new ResizeObserver(update);
+    observer.observe(companion);
+    observer.observe(header);
+    observer.observe(document.documentElement);
+    window.addEventListener('resize', update);
+    update();
+  }
+
+  setupSidebar();
+  document.addEventListener('astro:after-swap', setupSidebar);
+</script>
 
 <style>
   .article-layout {
@@ -188,17 +222,18 @@ const modifiedDate = updatedDate ? new Date(updatedDate).toISOString() : undefin
     /* Sticky Wrapper with Height Budget for TOC and Companion */
     .sidebar-sticky-wrapper {
       position: sticky;
-      top: 5.5rem;
-      max-height: calc(100vh - 6.5rem);
+      top: calc(var(--header-height) + var(--space-4));
+      max-height: calc(100vh - var(--header-height) - var(--space-8));
+      max-height: calc(100dvh - var(--header-height) - var(--space-8));
       display: flex;
       flex-direction: column;
       gap: var(--space-4);
       box-sizing: border-box;
     }
 
-    /* TOC container flexes and allows independent scrolling */
+    /* The TOC takes what the companion leaves; only its list scrolls. */
     .sidebar-toc-container {
-      flex: 1 1 auto;
+      flex: 0 1 auto;
       min-height: 0;
       display: flex;
       flex-direction: column;
@@ -208,8 +243,14 @@ const modifiedDate = updatedDate ? new Date(updatedDate).toISOString() : undefin
       flex-shrink: 0;
     }
 
-    /* Extreme Short Viewport Fallback (<= 450px): Revert to normal document flow */
-    @media (max-height: 450px) {
+    /* When both cards cannot fit, they stay in normal document flow. The class is set by
+       the script above; the media query covers short windows without JavaScript. */
+    .sidebar-sticky-wrapper.is-static {
+      position: static;
+      max-height: none;
+    }
+
+    @media (max-height: 32rem) {
       .sidebar-sticky-wrapper {
         position: static;
         max-height: none;
