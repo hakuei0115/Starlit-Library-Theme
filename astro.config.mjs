@@ -3,7 +3,9 @@ import { unified } from '@astrojs/markdown-remark';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
+import rehypeKatex from 'rehype-katex';
 import remarkCjkFriendly from 'remark-cjk-friendly';
+import remarkMath from 'remark-math';
 
 /**
  * Warns during `astro build` when `site` is not set. Without it, canonical links,
@@ -39,7 +41,11 @@ export default defineConfig({
   markdown: {
     // Lets **bold** and *italic* work next to Chinese, Japanese and Korean punctuation.
     // Standard Markdown leaves the asterisks visible in text such as **粗體（Bold）**文字.
-    processor: unified({ remarkPlugins: [remarkCjkFriendly] }),
+    // remark-math and rehype-katex render $inline$ and $$block$$ formulas at build time.
+    processor: unified({
+      remarkPlugins: [remarkCjkFriendly, remarkMath],
+      rehypePlugins: [rehypeKatex],
+    }),
   },
 
   image: {

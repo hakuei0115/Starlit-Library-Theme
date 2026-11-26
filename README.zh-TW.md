@@ -162,6 +162,22 @@ covers: {
 
 文章使用 remark 流程加上 [`remark-cjk-friendly`](https://github.com/tats-u/markdown-cjk-friendly)，讓粗體與斜體在中日韓標點旁也能正常運作。其他 remark／rehype 外掛可加在 `astro.config.mjs` 的 `markdown.processor`。
 
+數學公式使用 [`remark-math`](https://github.com/remarkjs/remark-math) 與 KaTeX 在建置時渲染：行內寫 `$E = mc^2$`，區塊公式則讓 `$$` 單獨成行。內文要顯示錢字號時寫成 `\$`。
+
+公式使用 [KaTeX](https://katex.org/docs/supported.html) 支援的 **LaTeX 數學語法**，但它不是完整的 LaTeX 系統：
+
+- 支援：分數、積分、矩陣，以及 `aligned`、`cases` 等環境，寫在 `$` 或 `$$` 內。公式編號用 `\tag{1}` 手動指定。
+- 不支援：`\( ... \)` 與 `\[ ... \]` 分隔符號、`\label`／`\ref`、`\usepackage`、TikZ 與整份 `.tex` 文件。圖請先輸出成 SVG 或圖片，文件請先轉成 Markdown（例如用 [Pandoc](https://pandoc.org/)）。
+- 用到不支援的指令時，通常只會在頁面上顯示紅字，build 不會失敗，發布前請先預覽。
+
+要定義自己的巨集，在 `astro.config.mjs` 傳選項給 `rehype-katex`：
+
+```js
+rehypePlugins: [[rehypeKatex, { macros: { '\\R': '\\mathbb{R}' } }]],
+```
+
+要寫 `$\ce{H2O}$` 這類化學式，另外在 `astro.config.mjs` 加上 `import 'katex/contrib/mhchem';`。
+
 `.mdx` 檔透過 [`@astrojs/mdx`](https://docs.astro.build/en/guides/integrations-guide/mdx/) 支援，並沿用上述設定。文章需要匯入元件時使用：
 
 ```mdx

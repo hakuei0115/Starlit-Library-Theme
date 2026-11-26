@@ -160,6 +160,22 @@ Every image loaded through the config (SVG, PNG, JPG) is converted to WebP in se
 
 Posts are rendered with the remark pipeline plus [`remark-cjk-friendly`](https://github.com/tats-u/markdown-cjk-friendly), so bold and italic work next to Chinese, Japanese and Korean punctuation. Add other remark or rehype plugins to `markdown.processor` in `astro.config.mjs`.
 
+Math is rendered at build time with [`remark-math`](https://github.com/remarkjs/remark-math) and KaTeX: write `$E = mc^2$` inline, or put `$$` on its own lines for a block formula. To write a literal dollar sign in text, escape it as `\$`.
+
+Formulas use **LaTeX math syntax** as supported by [KaTeX](https://katex.org/docs/supported.html). This is not a full LaTeX system:
+
+- Supported: fractions, integrals, matrices and environments such as `aligned` and `cases`, inside `$` or `$$`. Number equations by hand with `\tag{1}`.
+- Not supported: `\( ... \)` and `\[ ... \]` delimiters, `\label` / `\ref`, `\usepackage`, TikZ and whole `.tex` documents. Export diagrams as SVG or images, and convert documents to Markdown first (for example with [Pandoc](https://pandoc.org/)).
+- An unsupported command usually shows up in red on the page without failing the build, so preview your post before publishing.
+
+To define your own macros, pass options to `rehype-katex` in `astro.config.mjs`:
+
+```js
+rehypePlugins: [[rehypeKatex, { macros: { '\\R': '\\mathbb{R}' } }]],
+```
+
+For chemical formulas such as `$\ce{H2O}$`, also add `import 'katex/contrib/mhchem';` to `astro.config.mjs`.
+
 `.mdx` files are supported through [`@astrojs/mdx`](https://docs.astro.build/en/guides/integrations-guide/mdx/) and share these settings. Use them when a post needs to import components:
 
 ```mdx
