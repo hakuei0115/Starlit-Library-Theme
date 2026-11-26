@@ -8,6 +8,8 @@ A calm, reading-first Astro blog theme with a starlit-library mood and an option
 
 ## 預覽
 
+**線上 Demo：** <https://starlit-library-theme.pages.dev>
+
 | 首頁 | 文章頁 |
 |---|---|
 | ![首頁（桌面）](docs/screenshots/home-desktop.png) | ![文章頁（桌面）](docs/screenshots/article-desktop.png) |

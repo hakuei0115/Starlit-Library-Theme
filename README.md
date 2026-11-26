@@ -6,6 +6,8 @@ A calm, reading-first [Astro](https://astro.build) blog theme for long-form tech
 
 ## Preview
 
+**Live demo:** <https://starlit-library-theme.pages.dev>
+
 | Home | Article |
 |---|---|
 | ![Home page (desktop)](docs/screenshots/home-desktop.png) | ![Article page (desktop)](docs/screenshots/article-desktop.png) |
