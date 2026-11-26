@@ -44,7 +44,8 @@ Starlit Library 基於最新版的 **Astro 7** 構建，擁抱極致的零 JavaS
 
 ```typescript
 // src/content.config.ts 核心集合定義
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
 export const collections = {
@@ -71,7 +72,7 @@ export const collections = {
 | 設計令牌 (Tokens) | `src/styles/tokens.css` | 單一真理來源，嚴格禁止組件內硬編碼數值 |
 | 全域樣式 (Global) | `src/styles/global.css` | 現代 CSS Reset、流體字級與無障礙焦點樣式 |
 | 文章目錄 (TOC) | `TableOfContents.astro` | 桌面端黏性吸附，行動端可折疊原生 `<details>` |
-| 陪伴卡片 (Companion) | `ArticleFooter.astro` | 閱讀完畢後的靜態收尾，無多餘動畫侵擾 |
+| 陪伴卡片 (Companion) | `ArticleCompanion.astro` | 閱讀完畢後的靜態收尾，無多餘動畫侵擾 |
 
 ---
 
@@ -83,7 +84,9 @@ export const collections = {
 - **文字寬度控制**：採用 `--container-prose: 736px`，將每行字元數維持在最舒適的 60～75 個字元（或約 35～40 個全形中文字）。
 - **數學公式支援**：
 
-$$\mathcal{H}(\text{Readability}) = - \sum_{i=1}^{n} P(c_i) \log_2 P(c_i) + \lambda \cdot \text{Simplicity}$$
+$$
+\mathcal{H}(\text{Readability}) = - \sum_{i=1}^{n} P(c_i) \log_2 P(c_i) + \lambda \cdot \text{Simplicity}
+$$
 
 ---
 

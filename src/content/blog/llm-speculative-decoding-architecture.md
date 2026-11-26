@@ -21,7 +21,9 @@ draft: false
 
 自回歸推論在批次大小（Batch Size）較小時，其運算強度（Arithmetic Intensity, FLOPs/Byte）極低：
 
-$$\text{Intensity} \approx \frac{2 \times P \times \text{tokens}}{2 \times P \times \text{bytes/param}} \approx 1 \text{ FLOP/Byte}$$
+$$
+\text{Intensity} \approx \frac{2 \times P \times \text{tokens}}{2 \times P \times \text{bytes/param}} \approx 1 \text{ FLOP/Byte}
+$$
 
 對於 A100 GPU（運算力 312 TFLOPS，記憶體頻寬 2.0 TB/s），需要達到約 156 FLOP/Byte 才能飽和運算核心。投機解碼的核心思想是在一次記憶體權重讀取中，並行驗證多個候選 Token，大幅提升計算強度。
 
@@ -32,12 +34,18 @@ $$\text{Intensity} \approx \frac{2 \times P \times \text{tokens}}{2 \times P \ti
 投機解碼的完整演算法步驟如下：
 
 1. **草稿生成階段**：小模型（例如 1B 參數）以標準自回歸方式快速產生 $K$ 個候選 Token：
-   $$\hat{x}_{1}, \hat{x}_{2}, \dots, \hat{x}_{K} \sim M_{\text{draft}}$$
+   $$
+   \hat{x}_{1}, \hat{x}_{2}, \dots, \hat{x}_{K} \sim M_{\text{draft}}
+   $$
 2. **並行驗證階段**：目標模型（例如 70B 參數）僅需單次 Forward Pass，即可同時取得這 $K$ 個 Token 的真實機率分佈：
-   $$P(x_i \mid x_{<i})$$
+   $$
+   P(x_i \mid x_{<i})
+   $$
 3. **接受-拒絕採樣（Acceptance Rejection Sampling）**：
    依據機率比率決定是否接受該 Token：
-   $$\alpha_i = \min\left(1, \frac{P(x_i)}{Q(x_i)}\right)$$
+   $$
+   \alpha_i = \min\left(1, \frac{P(x_i)}{Q(x_i)}\right)
+   $$
 
 ```python
 import torch
@@ -80,14 +88,15 @@ def speculative_step(draft_model, target_model, prefix, gamma=4):
 
 ## 3. 效能評測與加速比分析
 
-下表總結了在 NVIDIA H100 80GB 環境下，針對不同草稿長度 $K$ 與不同溫度參數的加速比表現：
+下表以**示意數字**（非實測結果）說明不同草稿長度 $K$ 與加速比的關係，實際表現取決於硬體、模型與工作負載：
 
 | 草稿模型 / 目標模型 | 步數 $K$ | 驗證接受率 $\bar{\alpha}$ | 吞吐量 (tokens/s) | 實際加速比 |
 |---|---|---|---|---|
-| LLaMA-3-8B (標準自回歸) | — | — | 34.2 | 1.00× (基準) |
-| LLaMA-3-1B + LLaMA-3-8B | 3 | 78.4% | 68.9 | 2.01× |
-| LLaMA-3-1B + LLaMA-3-8B | 5 | 71.2% | 82.5 | 2.41× |
-| Eagle-Draft + LLaMA-3-70B | 4 | 82.1% | 51.4 | 2.76× |
+| 8B（標準自回歸） | — | — | 34.2 | 1.00×（8B 基準） |
+| 1B + 8B | 3 | 78.4% | 68.9 | 2.01× |
+| 1B + 8B | 5 | 71.2% | 82.5 | 2.41× |
+| 70B（標準自回歸） | — | — | 18.6 | 1.00×（70B 基準） |
+| 草稿頭 + 70B | 4 | 82.1% | 51.4 | 2.76× |
 
 ### 3.1 關鍵權衡點
 
