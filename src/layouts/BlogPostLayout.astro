@@ -6,6 +6,7 @@ interface Props {
   title: string;
   description?: string;
   pubDate?: Date | string;
+  updatedDate?: Date | string;
   cover?: string;
 }
 
@@ -13,10 +14,12 @@ const {
   title,
   description,
   pubDate,
+  updatedDate,
   cover
 } = Astro.props;
 
 const formattedDate = pubDate ? new Date(pubDate).toISOString() : undefined;
+const modifiedDate = updatedDate ? new Date(updatedDate).toISOString() : undefined;
 ---
 
 <BaseLayout
@@ -24,6 +27,7 @@ const formattedDate = pubDate ? new Date(pubDate).toISOString() : undefined;
   description={description}
   image={cover}
   articleDate={formattedDate}
+  modifiedDate={modifiedDate}
 >
   <div class="article-layout container-site">
     <div class="article-grid">

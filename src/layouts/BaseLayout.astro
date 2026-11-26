@@ -11,6 +11,7 @@ interface Props {
   description?: string;
   image?: string;
   articleDate?: string;
+  modifiedDate?: string;
   lang?: string;
 }
 
@@ -19,6 +20,7 @@ const {
   description = siteConfig.description,
   image,
   articleDate,
+  modifiedDate,
   lang = siteConfig.lang,
 } = Astro.props;
 
@@ -37,6 +39,23 @@ const shareImage =
     format: 'jpg',
   })).src;
 const imageURL = new URL(shareImage, Astro.site || Astro.url.origin);
+
+// Structured data for articles (pages that pass `articleDate`).
+// "<" is escaped so that text in a post cannot close the <script> element.
+const jsonLd =
+  articleDate &&
+  JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: title,
+    description,
+    image: imageURL.href,
+    datePublished: articleDate,
+    dateModified: modifiedDate ?? articleDate,
+    inLanguage: lang,
+    mainEntityOfPage: canonicalURL.href,
+    author: siteConfig.author ? { '@type': 'Person', name: siteConfig.author } : undefined,
+  }).replace(/</g, '\\u003c');
 ---
 
 <!doctype html>
@@ -64,13 +83,16 @@ const imageURL = new URL(shareImage, Astro.site || Astro.url.origin);
     <meta property="og:description" content={description} />
     <meta property="og:image" content={imageURL} />
     {articleDate && <meta property="article:published_time" content={articleDate} />}
+    {modifiedDate && <meta property="article:modified_time" content={modifiedDate} />}
 
     <!-- Twitter Card -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={canonicalURL} />
-    <meta property="twitter:title" content={fullTitle} />
-    <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={imageURL} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageURL} />
+
+    {jsonLd && <script is:inline type="application/ld+json" set:html={jsonLd} />}
 
     <slot name="head" />
   </head>

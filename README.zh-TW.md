@@ -26,7 +26,7 @@ A calm, reading-first Astro blog theme with a starlit-library mood and an option
 - 文章頁：目錄（TOC）、上一篇／下一篇、閱讀時間、程式碼區塊與表格的行動版處理
 - 文章列表：分類篩選
 - 關於頁：直接用 Markdown 寫（`src/content/pages/about.md`）
-- RSS（`/rss.xml`）、sitemap 與 `robots.txt`、Open Graph / canonical meta、404 頁
+- RSS（`/rss.xml`）、sitemap 與 `robots.txt`、canonical、Open Graph、Twitter 卡片與文章結構化資料（JSON-LD）、404 頁
 - 圖片自動轉成 WebP 並依版位出多種尺寸（Astro 內建，不需額外套件）
 - 行動版導覽抽屜、鍵盤焦點樣式、`prefers-reduced-motion` 支援
 - 沒有任何前端 UI 框架：純 Astro 元件與 CSS
@@ -61,7 +61,7 @@ npm run dev        # http://localhost:4321
 |---|---|
 | `title` / `subtitle` / `description` | 站名、副標、預設 meta 描述 |
 | `lang` | HTML `lang` 與日期格式（預設 `zh-TW`） |
-| `author` | 頁尾版權的名稱 |
+| `author` | 頁尾版權與文章結構化資料的作者名稱 |
 | `nav` | 導覽項目（標籤、英文小標、連結） |
 | `links` | 頁尾的 GitHub、RSS 連結（`github: ''` 可隱藏） |
 | `footer` | 頁尾說明與備註 |

@@ -24,7 +24,7 @@ A calm, reading-first [Astro](https://astro.build) blog theme for long-form tech
 - Article page: table of contents, previous / next links, reading time, mobile-friendly code blocks and tables
 - Article list with category filtering
 - About page written in plain Markdown (`src/content/pages/about.md`)
-- RSS (`/rss.xml`), sitemap and `robots.txt`, Open Graph / canonical meta, 404 page
+- RSS (`/rss.xml`), sitemap and `robots.txt`, canonical, Open Graph, Twitter card and article structured data (JSON-LD), 404 page
 - Images are converted to WebP in several sizes automatically (built into Astro, no extra packages)
 - Mobile navigation drawer, visible keyboard focus styles, `prefers-reduced-motion` support
 - No front-end UI framework: plain Astro components and CSS
@@ -59,7 +59,7 @@ Everything that is specific to *your* site lives in [`src/site.config.ts`](src/s
 |---|---|
 | `title` / `subtitle` / `description` | Site name, tagline, default meta description |
 | `lang` | HTML `lang` attribute and date format (default `zh-TW`) |
-| `author` | Name in the footer copyright line |
+| `author` | Name in the footer copyright line and in article structured data |
 | `nav` | Navigation items (label, secondary label, link) |
 | `links` | Footer GitHub and RSS links (`github: ''` hides the GitHub link) |
 | `footer` | Footer tagline and note |
