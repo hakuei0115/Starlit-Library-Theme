@@ -30,6 +30,7 @@ A calm, reading-first Astro blog theme with a starlit-library mood and an option
 - RSS（`/rss.xml`）、sitemap 與 `robots.txt`、canonical、Open Graph、Twitter 卡片與文章結構化資料（JSON-LD）、404 頁
 - 圖片自動轉成 WebP 並依版位出多種尺寸（Astro 內建，不需額外套件）
 - 行動版導覽抽屜、鍵盤焦點樣式、`prefers-reduced-motion` 支援
+- 介面文字支援繁體中文與英文，改一個設定即可切換
 - 沒有任何前端 UI 框架：純 Astro 元件與 CSS
 
 ## 快速開始
@@ -61,7 +62,8 @@ npm run dev        # http://localhost:4321
 | 區塊 | 內容 |
 |---|---|
 | `title` / `subtitle` / `description` | 站名、副標、預設 meta 描述 |
-| `lang` | HTML `lang` 與日期格式（預設 `zh-TW`） |
+| `lang` | HTML `lang`、日期格式與介面語言（預設 `zh-TW`） |
+| `ui` | 改寫個別介面文字 |
 | `author` | 頁尾版權與文章結構化資料的作者名稱 |
 | `nav` | 導覽項目（標籤、英文小標、連結） |
 | `links` | 頁尾的 GitHub、RSS 連結（`github: ''` 可隱藏） |
@@ -95,7 +97,24 @@ export default defineConfig({
 
 ### 文字語言
 
-各區塊的小標題（例如「精選文章」「最新筆記」）目前直接寫在元件裡，預設為繁體中文。要換語言，請搜尋並修改 `src/components/` 與 `src/pages/` 裡的字串。
+小標題、按鈕與報讀器用的文字來自 [`src/i18n/ui.ts`](src/i18n/ui.ts)。語言由 `site.config.ts` 的 `lang` 決定：以 `zh` 開頭顯示繁體中文，其他值一律顯示英文。日期格式與 HTML `lang` 也跟著這個設定。
+
+```ts
+// src/site.config.ts
+lang: 'en',
+```
+
+只想改寫其中幾條、不想動字典時，用 `ui` 覆寫。分區與鍵名同 `src/i18n/ui.ts`：
+
+```ts
+ui: {
+  home: { featured: '編輯精選' },
+} as UiOverrides,
+```
+
+`lang` 不會翻譯你自己寫的文字。站名、導覽、Hero、頁尾、吉祥物台詞、404 與列表頁文案仍照 `site.config.ts` 顯示，範例文章與關於頁也一樣，需要一併修改。
+
+要新增其他語言，在 `src/i18n/ui.ts` 加一份型別為 `UiStrings` 的字典，並在檔案下方選用它；漏掉的字串 `npx astro check` 會指出。一個網站同一時間只顯示一種語言，沒有各語言的獨立網址。
 
 ## 寫文章
 
@@ -223,6 +242,7 @@ src/
 │   └── pages/about.md   # 關於頁
 ├── assets/brand/        # 佔位圖（換成你自己的）
 ├── components/          # blog / home / layout / mascot / common
+├── i18n/ui.ts           # 介面文字（繁體中文與英文）
 ├── layouts/
 ├── pages/               # 路由：首頁、文章、關於、404、RSS、robots.txt
 ├── styles/              # tokens.css（設計變數）、global.css

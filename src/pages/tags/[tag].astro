@@ -1,4 +1,5 @@
 ---
+import { t } from '../../i18n/ui';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/blog/PostCard.astro';
 import TagPageHeader from '../../components/blog/TagPageHeader.astro';
@@ -14,14 +15,14 @@ export async function getStaticPaths() {
 
 const { tag } = Astro.props;
 const title = `#${tag.name}`;
-const description = `共 ${tag.posts.length} 篇標記為「${tag.name}」的文章。`;
+const description = t.tags.description(tag.name, tag.posts.length);
 ---
 
 <BaseLayout title={title} description={description}>
   <TagPageHeader title={title} description={description} showIndexCrumb />
 
   <div class="container-site tag-posts">
-    <h2 class="sr-only">文章</h2>
+    <h2 class="sr-only">{t.common.articles}</h2>
     <div class="grid">
       {tag.posts.map((post) => <PostCard post={post} />)}
     </div>

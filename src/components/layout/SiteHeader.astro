@@ -1,4 +1,5 @@
 ---
+import { t } from '../../i18n/ui';
 import { siteConfig } from '../../site.config';
 
 interface Props {
@@ -28,7 +29,7 @@ const navItems = siteConfig.nav.map((item) => ({ ...item, active: isActive(item.
     </a>
 
     <!-- Desktop Navigation (>= 1024px) -->
-    <nav class="desktop-nav" aria-label="主要導覽">
+    <nav class="desktop-nav" aria-label={t.header.mainNav}>
       <ul class="nav-list">
         {navItems.map((item) => (
           <li>
@@ -51,9 +52,11 @@ const navItems = siteConfig.nav.map((item) => ({ ...item, active: isActive(item.
       type="button"
       aria-expanded="false"
       aria-controls="mobile-nav-drawer"
-      aria-label="開啟導覽選單"
+      aria-label={t.header.openMenu}
+      data-label-open={t.header.openMenu}
+      data-label-close={t.header.closeMenu}
     >
-      <span class="sr-only">選單</span>
+      <span class="sr-only">{t.header.menu}</span>
       <svg class="icon-menu" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <line x1="3" y1="12" x2="21" y2="12"></line>
         <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -71,8 +74,8 @@ const navItems = siteConfig.nav.map((item) => ({ ...item, active: isActive(item.
      Kept outside <header>: the header's backdrop-filter would otherwise become the
      containing block for these position:fixed elements and clip them to the header box. -->
   <div id="mobile-nav-overlay" class="mobile-nav-overlay" aria-hidden="true"></div>
-  <div id="mobile-nav-drawer" class="mobile-nav-drawer" role="dialog" aria-modal="true" aria-label="行動版導覽選單">
-    <nav class="mobile-nav" aria-label="行動版導覽">
+  <div id="mobile-nav-drawer" class="mobile-nav-drawer" role="dialog" aria-modal="true" aria-label={t.header.mobileMenu}>
+    <nav class="mobile-nav" aria-label={t.header.mobileNav}>
       <ul class="mobile-nav-list">
         {navItems.map((item) => (
           <li>
@@ -400,7 +403,7 @@ const navItems = siteConfig.nav.map((item) => ({ ...item, active: isActive(item.
     function openMenu() {
       setBackgroundInert(true);
       toggleBtn?.setAttribute('aria-expanded', 'true');
-      toggleBtn?.setAttribute('aria-label', '關閉導覽選單');
+      toggleBtn?.setAttribute('aria-label', toggleBtn.dataset.labelClose ?? '');
       drawer?.setAttribute('data-open', 'true');
       overlay?.setAttribute('data-open', 'true');
       document.body.style.overflow = 'hidden';
@@ -410,7 +413,7 @@ const navItems = siteConfig.nav.map((item) => ({ ...item, active: isActive(item.
     function closeMenu() {
       setBackgroundInert(false);
       toggleBtn?.setAttribute('aria-expanded', 'false');
-      toggleBtn?.setAttribute('aria-label', '開啟導覽選單');
+      toggleBtn?.setAttribute('aria-label', toggleBtn.dataset.labelOpen ?? '');
       drawer?.removeAttribute('data-open');
       overlay?.removeAttribute('data-open');
       document.body.style.overflow = '';

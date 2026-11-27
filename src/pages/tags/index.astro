@@ -1,4 +1,5 @@
 ---
+import { t } from '../../i18n/ui';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TagPageHeader from '../../components/blog/TagPageHeader.astro';
 import { siteConfig } from '../../site.config';
@@ -19,7 +20,7 @@ const tags = collectTags(await getPublishedPosts());
           <li>
             <a href={`/tags/${tag.slug}/`}>
               <span>#{tag.name}</span>
-              <span class="count">{tag.posts.length}<span class="sr-only"> 篇文章</span></span>
+              <span class="count">{tag.posts.length}<span class="sr-only">{t.tags.countSuffix(tag.posts.length)}</span></span>
             </a>
           </li>
         ))}

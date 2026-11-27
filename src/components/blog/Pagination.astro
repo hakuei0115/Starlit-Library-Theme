@@ -1,4 +1,5 @@
 ---
+import { t } from '../../i18n/ui';
 interface Props {
   currentPage: number;
   lastPage: number;
@@ -20,10 +21,10 @@ const items = shown.flatMap((n, i) => {
 ---
 
 {lastPage > 1 && (
-  <nav class="pagination" aria-label="文章分頁">
+  <nav class="pagination" aria-label={t.pagination.nav}>
     <ul>
       {currentPage > 1 && (
-        <li><a href={pageUrl(currentPage - 1)} rel="prev">← 上一頁</a></li>
+        <li><a href={pageUrl(currentPage - 1)} rel="prev">← {t.pagination.previous}</a></li>
       )}
       {items.map((n) =>
         n === null ? (
@@ -32,7 +33,7 @@ const items = shown.flatMap((n, i) => {
           <li>
             <a
               href={pageUrl(n)}
-              aria-label={`第 ${n} 頁`}
+              aria-label={t.pagination.page(n)}
               aria-current={n === currentPage ? 'page' : undefined}
             >
               {n}
@@ -41,7 +42,7 @@ const items = shown.flatMap((n, i) => {
         ),
       )}
       {currentPage < lastPage && (
-        <li><a href={pageUrl(currentPage + 1)} rel="next">下一頁 →</a></li>
+        <li><a href={pageUrl(currentPage + 1)} rel="next">{t.pagination.next} →</a></li>
       )}
     </ul>
   </nav>

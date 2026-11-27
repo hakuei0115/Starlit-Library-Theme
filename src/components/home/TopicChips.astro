@@ -1,4 +1,5 @@
 ---
+import { t } from '../../i18n/ui';
 import { getCollection } from 'astro:content';
 import { categoryUrl } from '../../utils/categories';
 
@@ -31,10 +32,10 @@ if (!displayCategories) {
 ---
 
 {displayCategories && displayCategories.length > 0 && (
-  <nav class="topic-chips-container" aria-label="主題分類導覽">
+  <nav class="topic-chips-container" aria-label={t.home.topicsNav}>
     <div class="topic-label">
       <span class="star-icon" aria-hidden="true">✦</span>
-      <span>典藏主題</span>
+      <span>{t.home.topics}</span>
     </div>
     
     <div class="chips-list" role="list">
@@ -45,7 +46,7 @@ if (!displayCategories) {
             class:list={['topic-chip', { active: allActive && !activeCategory }]}
             aria-current={allActive && !activeCategory ? 'page' : undefined}
           >
-            全部文章
+            {t.common.allArticles}
           </a>
         </div>
       )}

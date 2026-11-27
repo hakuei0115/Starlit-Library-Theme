@@ -1,4 +1,5 @@
 ---
+import { t } from '../i18n/ui';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import MascotPortrait from '../components/mascot/MascotPortrait.astro';
 import { siteConfig } from '../site.config';
@@ -27,10 +28,10 @@ const { notFound } = siteConfig;
 
         <div class="notfound-actions">
           <a href="/" class="btn btn-primary">
-            <span>返回圖書館首頁</span>
+            <span>{t.notFound.home}</span>
           </a>
           <a href="/articles" class="btn btn-secondary">
-            <span>瀏覽全部典藏文章</span>
+            <span>{t.notFound.articles}</span>
           </a>
         </div>
       </div>

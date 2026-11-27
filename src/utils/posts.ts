@@ -2,6 +2,7 @@ import type { ImageMetadata } from 'astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { getImage } from 'astro:assets';
 import { siteConfig } from '../site.config';
+import { t } from '../i18n/ui';
 
 export type BlogPost = CollectionEntry<'blog'>;
 
@@ -31,7 +32,7 @@ export function selectFeatured(published: BlogPost[], max = 3): BlogPost[] {
   return [...featured, ...rest].slice(0, max);
 }
 
-/** Estimated reading time, e.g. "約 4 分鐘". Code blocks are excluded from the count. */
+/** Estimated reading time in the interface language. Code blocks are excluded from the count. */
 export function formatReadingTime(body: string | undefined): string | undefined {
   if (!body) return undefined;
 
@@ -41,7 +42,7 @@ export function formatReadingTime(body: string | undefined): string | undefined 
 
   // ~450 CJK characters or ~220 words per minute.
   const minutes = Math.max(1, Math.ceil(cjkChars / 450 + latinWords / 220));
-  return `約 ${minutes} 分鐘`;
+  return t.common.readingTime(minutes);
 }
 
 /**

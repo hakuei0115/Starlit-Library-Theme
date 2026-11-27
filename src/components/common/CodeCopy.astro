@@ -1,18 +1,28 @@
 ---
+import { t } from '../../i18n/ui';
 // Adds a "copy" button to every code block inside `.article-prose`.
 // Without JavaScript no button is shown and the code stays selectable as usual.
 ---
 
-<span id="code-copy-status" class="sr-only" role="status" aria-live="polite"></span>
+<span
+  id="code-copy-status"
+  class="sr-only"
+  role="status"
+  aria-live="polite"
+  data-copy={t.code.copy}
+  data-copied={t.code.copied}
+  data-failed={t.code.failed}
+  data-copied-status={t.code.copiedStatus}
+  data-failed-status={t.code.failedStatus}></span>
 
 <script>
-  const LABEL = '複製';
-  const COPIED = '已複製';
-  const FAILED = '複製失敗';
   const RESET_AFTER_MS = 2000;
 
   function setupCodeCopy() {
+    // The labels come from the interface dictionary, through the element above.
     const status = document.getElementById('code-copy-status');
+    if (!status) return;
+    const text = status.dataset;
 
     document.querySelectorAll<HTMLPreElement>('.article-prose pre').forEach((pre) => {
       if (pre.parentElement?.classList.contains('code-block')) return;
@@ -25,7 +35,7 @@
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'code-copy-button';
-      button.textContent = LABEL;
+      button.textContent = text.copy ?? '';
       wrapper.append(button, pre);
 
       let timer: number | undefined;
@@ -39,13 +49,13 @@
           copied = false;
         }
 
-        button.textContent = copied ? COPIED : FAILED;
-        if (status) status.textContent = copied ? '程式碼已複製' : '無法複製程式碼，請手動選取';
+        button.textContent = (copied ? text.copied : text.failed) ?? '';
+        status.textContent = (copied ? text.copiedStatus : text.failedStatus) ?? '';
 
         window.clearTimeout(timer);
         timer = window.setTimeout(() => {
-          button.textContent = LABEL;
-          if (status) status.textContent = '';
+          button.textContent = text.copy ?? '';
+          status.textContent = '';
         }, RESET_AFTER_MS);
       });
     });

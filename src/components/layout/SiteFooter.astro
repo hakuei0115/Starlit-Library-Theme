@@ -1,4 +1,5 @@
 ---
+import { t } from '../../i18n/ui';
 import { siteConfig } from '../../site.config';
 import { footerSky } from '../../utils/starry-sky';
 
@@ -25,9 +26,9 @@ const { links, footer, nav, appearance } = siteConfig;
         {footer.tagline && <p class="footer-tagline">{footer.tagline}</p>}
       </div>
 
-      <nav class="footer-nav" aria-label="頁尾連結">
+      <nav class="footer-nav" aria-label={t.footer.nav}>
         <div class="footer-nav-col">
-          <h2 class="footer-heading">導覽</h2>
+          <h2 class="footer-heading">{t.footer.navigation}</h2>
           <ul class="footer-links">
             {nav.map((item) => (
               <li><a href={item.href}>{item.label}</a></li>
@@ -37,9 +38,9 @@ const { links, footer, nav, appearance } = siteConfig;
 
         {(links.rss || links.github) && (
         <div class="footer-nav-col">
-          <h2 class="footer-heading">資源</h2>
+          <h2 class="footer-heading">{t.footer.resources}</h2>
           <ul class="footer-links">
-            {links.rss && <li><a href="/rss.xml">RSS 訂閱</a></li>}
+            {links.rss && <li><a href="/rss.xml">{t.footer.rss}</a></li>}
             {links.github && <li><a href={links.github} target="_blank" rel="noopener noreferrer">GitHub</a></li>}
           </ul>
         </div>
@@ -49,7 +50,7 @@ const { links, footer, nav, appearance } = siteConfig;
 
     <div class="footer-bottom">
       <p class="copyright">
-        &copy; {currentYear} {siteConfig.author}. All rights reserved.
+        &copy; {currentYear} {siteConfig.author}. {t.footer.rights}
       </p>
       {footer.note && <p class="footer-companion-note">{footer.note}</p>}
     </div>

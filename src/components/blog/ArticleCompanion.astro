@@ -10,6 +10,7 @@
  * - Rendered only when `siteConfig.mascot.enabled` is true
  * - Subdued, compact card styling using design tokens
  */
+import { t } from '../../i18n/ui';
 import { Image } from 'astro:assets';
 import { siteConfig } from '../../site.config';
 
@@ -23,12 +24,12 @@ const { message = mascot.articleQuote, class: className = '' } = Astro.props;
 ---
 
 {mascot.enabled && (
-<aside class:list={['article-companion-card', className]} aria-label="閱讀陪伴">
+<aside class:list={['article-companion-card', className]} aria-label={t.post.companion}>
   <div class="companion-header">
     <svg class="companion-star" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" fill="var(--color-gold)" />
     </svg>
-    <span class="companion-title">Reading Companion</span>
+    <span class="companion-title">{t.post.companion}</span>
   </div>
 
   <div class="companion-body">

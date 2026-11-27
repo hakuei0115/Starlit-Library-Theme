@@ -44,7 +44,7 @@ For visible changes, also check:
 - **Ask before adding a dependency**, and explain in the pull request why it is needed.
 - **Artwork:** only add images you have the right to share under this project's license. The bundled artwork is meant to be replaced by each site owner, so please keep new defaults simple and generic, without personal content.
 - **Update both READMEs** (`README.md` and `README.zh-TW.md`) when behavior or configuration changes.
-- Interface text in components is in Traditional Chinese. Match it when you add new strings.
+- **Don't write interface text into components.** Add it to `src/i18n/ui.ts` in both Traditional Chinese and English.
 
 ## Commits and pull requests
 

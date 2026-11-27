@@ -1,4 +1,5 @@
 ---
+import { t } from '../../i18n/ui';
 export interface HeadingItem {
   depth: number;
   slug: string;
@@ -34,12 +35,12 @@ const showDesktop = mode === 'desktop' || mode === 'all';
               <line x1="3" y1="12" x2="3.01" y2="12"></line>
               <line x1="3" y1="18" x2="3.01" y2="18"></line>
             </svg>
-            本文目錄
+            {t.post.tocTitle}
           </span>
           <span class="toc-mobile__chevron" aria-hidden="true">▾</span>
         </summary>
 
-        <nav class="toc-nav" aria-label="文章目錄（行動版）">
+        <nav class="toc-nav" aria-label={t.post.tocMobile}>
           <ul class="toc-list">
             {filteredHeadings.map((heading) => (
               <li class={`toc-item toc-item--depth-${heading.depth}`}>
@@ -55,12 +56,12 @@ const showDesktop = mode === 'desktop' || mode === 'all';
 
     <!-- Desktop TOC Card (>= 1024px) -->
     {showDesktop && (
-      <div class="toc-desktop" aria-label="文章目錄">
+      <div class="toc-desktop" aria-label={t.post.toc}>
         <div class="toc-desktop__header">
           <span class="toc-star" aria-hidden="true">✦</span>
-          <h2 class="toc-desktop__title">本文目錄</h2>
+          <h2 class="toc-desktop__title">{t.post.tocTitle}</h2>
         </div>
-        <nav class="toc-nav toc-nav--scrollable" aria-label="文章目錄（桌面版）">
+        <nav class="toc-nav toc-nav--scrollable" aria-label={t.post.tocDesktop}>
           <ul class="toc-list">
             {filteredHeadings.map((heading) => (
               <li class={`toc-item toc-item--depth-${heading.depth}`}>

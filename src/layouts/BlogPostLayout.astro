@@ -1,4 +1,5 @@
 ---
+import { t } from '../i18n/ui';
 import 'katex/dist/katex.min.css';
 import BaseLayout from './BaseLayout.astro';
 import ArticleCompanion from '../components/blog/ArticleCompanion.astro';
@@ -67,7 +68,7 @@ const modifiedDate = updatedDate ? new Date(updatedDate).toISOString() : undefin
       </article>
 
       <!-- Desktop Sticky Sidebar (>= 1024px) -->
-      <aside class="article-sidebar" aria-label="文章目錄與閱讀陪伴">
+      <aside class="article-sidebar" aria-label={t.post.sidebar}>
         <div class="sidebar-sticky-wrapper">
           <!-- Desktop TOC Slot (Flexible & scrollable when list is tall) -->
           <div class="sidebar-toc-container">

@@ -1,4 +1,5 @@
 ---
+import { t } from '../../i18n/ui';
 import type { Page } from 'astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from './PostCard.astro';
@@ -23,9 +24,11 @@ const categories = collectCategories(allPosts);
 const activeSlug = category ? slugify(category) : null;
 
 const heading = category ?? copy.title;
-const pageSuffix = page.currentPage > 1 ? `（第 ${page.currentPage} 頁）` : '';
-const title = category ? `${category}｜${copy.title}${pageSuffix}` : `${copy.title}${pageSuffix}`;
-const description = category ? `「${category}」分類的所有筆記。` : copy.description;
+const title = t.list.pageTitle(
+  category ? t.list.categoryTitle(category, copy.title) : copy.title,
+  page.currentPage,
+);
+const description = category ? t.list.categoryDescription(category) : copy.description;
 const baseUrl = category ? categoryUrl(category) : '/articles/';
 ---
 
@@ -33,9 +36,9 @@ const baseUrl = category ? categoryUrl(category) : '/articles/';
   <div class="articles-page">
     <header class="articles-header">
       <div class="header-container">
-        <nav class="breadcrumb-nav" aria-label="路徑導覽">
+        <nav class="breadcrumb-nav" aria-label={t.common.breadcrumb}>
           <ol class="breadcrumb-list">
-            <li class="breadcrumb-item"><a href="/" class="breadcrumb-link">首頁</a></li>
+            <li class="breadcrumb-item"><a href="/" class="breadcrumb-link">{t.common.home}</a></li>
             <li class="breadcrumb-sep" aria-hidden="true">/</li>
             {category ? (
               <>
@@ -51,29 +54,29 @@ const baseUrl = category ? categoryUrl(category) : '/articles/';
 
         <div class="header-badge">
           <span class="star-icon" aria-hidden="true">✦</span>
-          <span>Library Archives</span>
+          <span>{t.list.eyebrow}</span>
         </div>
         <h1 class="articles-title">{heading}</h1>
         <p class="articles-lead">
-          {description}共收錄
+          {description}{t.list.countBefore}
           <span class="count-badge">{page.total}</span>
-          篇典藏。
+          {t.list.countAfter(page.total)}
         </p>
       </div>
     </header>
 
     <div class="articles-content container-site">
       <!-- Category Filter Bar -->
-      <section class="filter-section" aria-label="分類篩選">
+      <section class="filter-section" aria-label={t.list.filter}>
         <div class="filter-bar">
-          <span class="filter-label">分類篩選：</span>
+          <span class="filter-label">{t.list.filterLabel}</span>
           <div class="filter-chips">
             <a
               href="/articles/"
               class:list={['filter-chip', { active: !category }]}
               aria-current={!category && page.currentPage === 1 ? 'page' : undefined}
             >
-              全部文章 ({allPosts.length})
+              {t.common.allArticles} ({allPosts.length})
             </a>
             {categories.map((cat) => (
               <a
@@ -89,12 +92,12 @@ const baseUrl = category ? categoryUrl(category) : '/articles/';
             ))}
           </div>
         </div>
-        <a href="/tags/" class="all-tags-link">瀏覽所有標籤 →</a>
+        <a href="/tags/" class="all-tags-link">{t.list.allTags} →</a>
       </section>
 
       <!-- Articles Grid -->
-      <section class="articles-grid-section" aria-label="文章列表">
-        <h2 class="sr-only">文章</h2>
+      <section class="articles-grid-section" aria-label={t.list.list}>
+        <h2 class="sr-only">{t.common.articles}</h2>
         <div class="articles-grid">
           {page.data.map((post) => (
             <div class="article-item">

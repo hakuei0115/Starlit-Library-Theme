@@ -16,7 +16,7 @@ A calm, reading-first [Astro](https://astro.build) blog theme for long-form tech
 |---|---|
 | <img src="docs/screenshots/home-mobile.png" alt="Home page (mobile)" width="260"> | <img src="docs/screenshots/article-mobile.png" alt="Article page (mobile)" width="260"> |
 
-> Screenshots show the theme's default content (neutral placeholder artwork and sample posts). The sample posts and interface text are in Traditional Chinese; see [Interface text and language](#interface-text-and-language) to change that.
+> Screenshots show the theme's default content (neutral placeholder artwork and sample posts). The sample posts, site settings and interface default to Traditional Chinese; see [Interface text and language](#interface-text-and-language) to switch to English.
 
 ## Features
 
@@ -28,6 +28,7 @@ A calm, reading-first [Astro](https://astro.build) blog theme for long-form tech
 - RSS (`/rss.xml`), sitemap and `robots.txt`, canonical, Open Graph, Twitter card and article structured data (JSON-LD), 404 page
 - Images are converted to WebP in several sizes automatically (built into Astro, no extra packages)
 - Mobile navigation drawer, visible keyboard focus styles, `prefers-reduced-motion` support
+- Interface text in Traditional Chinese or English, switched with one setting
 - No front-end UI framework: plain Astro components and CSS
 
 ## Quick start
@@ -59,7 +60,8 @@ Everything that is specific to *your* site lives in [`src/site.config.ts`](src/s
 | Section | What it controls |
 |---|---|
 | `title` / `subtitle` / `description` | Site name, tagline, default meta description |
-| `lang` | HTML `lang` attribute and date format (default `zh-TW`) |
+| `lang` | HTML `lang` attribute, date format and interface language (default `zh-TW`) |
+| `ui` | Rewording of single interface labels |
 | `author` | Name in the footer copyright line and in article structured data |
 | `nav` | Navigation items (label, secondary label, link) |
 | `links` | Footer GitHub and RSS links (`github: ''` hides the GitHub link) |
@@ -93,7 +95,24 @@ The article list shows 10 posts per page. Change `articles.pageSize` in `site.co
 
 ### Interface text and language
 
-Section headings (for example "Featured" and "Latest notes") are currently written directly in the components and default to Traditional Chinese. To change the language, search for and edit the strings in `src/components/` and `src/pages/`. Text covered by `site.config.ts` (site name, navigation, hero, footer, mascot lines, 404) is changed there, and `lang` sets the HTML `lang` attribute and date formatting.
+Headings, buttons and screen reader labels come from [`src/i18n/ui.ts`](src/i18n/ui.ts). `lang` in `site.config.ts` picks the language: any value starting with `zh` shows Traditional Chinese, and every other value shows English. Dates and the HTML `lang` attribute follow the same setting.
+
+```ts
+// src/site.config.ts
+lang: 'en',
+```
+
+To reword single labels without editing the dictionary, use `ui`. Sections and keys are the ones in `src/i18n/ui.ts`:
+
+```ts
+ui: {
+  home: { featured: 'Editor’s picks' },
+} as UiOverrides,
+```
+
+`lang` does not translate your own text. Site name, navigation, hero, footer, mascot lines and the 404 and list page copy stay as written in `site.config.ts`, so change those too, along with the sample posts and the About page.
+
+To add another language, add a dictionary of type `UiStrings` to `src/i18n/ui.ts` and select it near the bottom of that file; `npx astro check` reports any missing label. A site shows one language at a time: there are no per-language URLs.
 
 ## Writing posts
 
@@ -221,6 +240,7 @@ src/
 │   └── pages/about.md   # About page
 ├── assets/brand/        # Placeholder images (replace with your own)
 ├── components/          # blog / home / layout / mascot / common
+├── i18n/ui.ts           # Interface text (Traditional Chinese and English)
 ├── layouts/
 ├── pages/               # Routes: home, articles, about, 404, RSS, robots.txt
 ├── styles/              # tokens.css (design variables), global.css

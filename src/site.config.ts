@@ -3,12 +3,13 @@
  *
  * Everything that is specific to *your* site lives here: name, tagline, navigation,
  * footer, social links, the optional mascot corner, and the artwork.
- * Generic interface labels (e.g. section headings) live in the components.
+ * Interface labels (section headings, buttons…) come from src/i18n/ui.ts, chosen by `lang`.
  *
  * Also set `site` in astro.config.mjs to your real URL (used for canonical links,
  * Open Graph images and the RSS feed).
  */
 import type { ImageMetadata } from 'astro';
+import type { UiOverrides } from './i18n/ui';
 
 // ── Artwork ─────────────────────────────────────────────────────────────────
 // These are neutral placeholders. Replace the files in src/assets/brand/ (keeping the
@@ -36,8 +37,13 @@ export const siteConfig = {
   subtitle: 'Starlit Library',
   /** Default meta description (also used by RSS and the home page). */
   description: '一座星空中的溫柔技術圖書館，安靜陪伴讀者閱讀 AI、程式設計與軟體架構研究筆記。',
-  /** HTML lang attribute and date formatting locale. */
+  /**
+   * HTML lang attribute, date formatting locale and interface language:
+   * `zh…` shows Traditional Chinese, any other value shows English.
+   */
   lang: 'zh-TW',
+  /** Reword single interface labels, e.g. { home: { featured: 'Editor’s picks' } }. */
+  ui: {} as UiOverrides,
   /** Used in the footer copyright line. */
   author: 'Your Name',
 

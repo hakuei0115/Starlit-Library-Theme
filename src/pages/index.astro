@@ -1,4 +1,5 @@
 ---
+import { t } from '../i18n/ui';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HomeHero from '../components/home/HomeHero.astro';
 import TopicChips from '../components/home/TopicChips.astro';
@@ -30,7 +31,7 @@ const showCorner = siteConfig.mascot.enabled;
     </div>
 
     <!-- 4. Lower Region (>=1024px: Latest Notes Left, mascot corner Right when enabled) -->
-    <section class="home-section lower-grid-section" aria-label={showCorner ? `最新筆記與${siteConfig.mascot.cornerTitle}` : '最新筆記'}>
+    <section class="home-section lower-grid-section" aria-label={showCorner ? t.home.latestAndCorner(siteConfig.mascot.cornerTitle) : t.home.latest}>
       <div class="container-site">
         <div class:list={['lower-grid', { 'lower-grid--solo': !showCorner }]}>
           <div class="lower-grid__latest">

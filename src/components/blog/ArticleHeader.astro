@@ -1,4 +1,5 @@
 ---
+import { t } from '../../i18n/ui';
 import { siteConfig } from '../../site.config';
 import { tagUrl } from '../../utils/tags';
 interface Props {
@@ -43,14 +44,14 @@ const displayUpdatedDate = updatedDateObj && !isNaN(updatedDateObj.getTime())
 ---
 
 <header class="article-header">
-  <nav class="article-breadcrumb" aria-label="文章路徑導航">
+  <nav class="article-breadcrumb" aria-label={t.common.breadcrumb}>
     <ol class="breadcrumb-list">
       <li class="breadcrumb-item">
-        <a href="/" class="breadcrumb-link">首頁</a>
+        <a href="/" class="breadcrumb-link">{t.common.home}</a>
       </li>
       <li class="breadcrumb-separator" aria-hidden="true">/</li>
       <li class="breadcrumb-item">
-        <a href="/articles" class="breadcrumb-link">文章館藏</a>
+        <a href="/articles" class="breadcrumb-link">{siteConfig.articles.title}</a>
       </li>
       <li class="breadcrumb-separator" aria-hidden="true">/</li>
       <li class="breadcrumb-item breadcrumb-current" aria-current="page">
@@ -79,7 +80,7 @@ const displayUpdatedDate = updatedDateObj && !isNaN(updatedDateObj.getTime())
             <line x1="8" y1="2" x2="8" y2="6"></line>
             <line x1="3" y1="10" x2="21" y2="10"></line>
           </svg>
-          <span>發布於 {displayDate}</span>
+          <span>{t.post.published(displayDate)}</span>
         </time>
       )}
 
@@ -89,7 +90,7 @@ const displayUpdatedDate = updatedDateObj && !isNaN(updatedDateObj.getTime())
             <polyline points="23 4 23 10 17 10"></polyline>
             <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
           </svg>
-          <span>更新於 {displayUpdatedDate}</span>
+          <span>{t.post.updated(displayUpdatedDate)}</span>
         </time>
       )}
 
@@ -105,7 +106,7 @@ const displayUpdatedDate = updatedDateObj && !isNaN(updatedDateObj.getTime())
     </div>
 
     {tags.length > 0 && (
-      <div class="article-tags-wrap" aria-label="文章標籤">
+      <div class="article-tags-wrap" aria-label={t.common.articleTags}>
         <ul class="article-tags-list">
           {tags.map((tag) => (
             <li class="article-tag-item">

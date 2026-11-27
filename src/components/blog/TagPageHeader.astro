@@ -1,4 +1,5 @@
 ---
+import { t } from '../../i18n/ui';
 import { siteConfig } from '../../site.config';
 
 interface Props {
@@ -12,9 +13,9 @@ const { title, description, showIndexCrumb = false } = Astro.props;
 ---
 
 <header class="tag-header">
-  <nav class="tag-breadcrumb" aria-label="路徑導覽">
+  <nav class="tag-breadcrumb" aria-label={t.common.breadcrumb}>
     <ol>
-      <li><a href="/">首頁</a></li>
+      <li><a href="/">{t.common.home}</a></li>
       <li aria-hidden="true">/</li>
       {showIndexCrumb && (
         <>
