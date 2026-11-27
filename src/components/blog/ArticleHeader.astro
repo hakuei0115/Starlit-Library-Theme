@@ -1,6 +1,7 @@
 ---
 import { t } from '../../i18n/ui';
 import { siteConfig } from '../../site.config';
+import { copy } from '../../i18n/copy';
 import { tagUrl } from '../../utils/tags';
 interface Props {
   title: string;
@@ -51,7 +52,7 @@ const displayUpdatedDate = updatedDateObj && !isNaN(updatedDateObj.getTime())
       </li>
       <li class="breadcrumb-separator" aria-hidden="true">/</li>
       <li class="breadcrumb-item">
-        <a href="/articles" class="breadcrumb-link">{siteConfig.articles.title}</a>
+        <a href="/articles" class="breadcrumb-link">{copy.articles.title}</a>
       </li>
       <li class="breadcrumb-separator" aria-hidden="true">/</li>
       <li class="breadcrumb-item breadcrumb-current" aria-current="page">

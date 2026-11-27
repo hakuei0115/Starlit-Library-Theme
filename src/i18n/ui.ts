@@ -3,7 +3,8 @@
  *
  * `siteConfig.lang` picks the language: any `zh…` value uses Traditional Chinese,
  * everything else uses English. To reword single labels, set `siteConfig.ui`.
- * Text about your own site (name, navigation, hero, mascot lines…) is in site.config.ts.
+ * Default page copy (navigation, article list, 404…) is in ./copy.ts, and text about
+ * your own site (name, description, mascot lines…) is in site.config.ts.
  */
 import { siteConfig } from '../site.config';
 
@@ -190,7 +191,9 @@ const en: UiStrings = {
   },
 };
 
-const base = siteConfig.lang.toLowerCase().startsWith('zh') ? zhTW : en;
+export const isChinese = siteConfig.lang.toLowerCase().startsWith('zh');
+
+const base = isChinese ? zhTW : en;
 
 const overrides: UiOverrides = siteConfig.ui;
 

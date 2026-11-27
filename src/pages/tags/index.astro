@@ -2,16 +2,16 @@
 import { t } from '../../i18n/ui';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TagPageHeader from '../../components/blog/TagPageHeader.astro';
-import { siteConfig } from '../../site.config';
+import { copy } from '../../i18n/copy';
 import { getPublishedPosts } from '../../utils/posts';
 import { collectTags } from '../../utils/tags';
 
-const { tags: copy } = siteConfig;
+const { tags: page } = copy;
 const tags = collectTags(await getPublishedPosts());
 ---
 
-<BaseLayout title={copy.title} description={copy.description}>
-  <TagPageHeader title={copy.title} description={copy.description} />
+<BaseLayout title={page.title} description={page.description}>
+  <TagPageHeader title={page.title} description={page.description} />
 
   <div class="container-site tag-index">
     {tags.length > 0 ? (
@@ -26,7 +26,7 @@ const tags = collectTags(await getPublishedPosts());
         ))}
       </ul>
     ) : (
-      <p class="empty">{copy.emptyMessage}</p>
+      <p class="empty">{page.emptyMessage}</p>
     )}
   </div>
 </BaseLayout>

@@ -1,6 +1,7 @@
 ---
 import { t } from '../../i18n/ui';
 import { siteConfig } from '../../site.config';
+import { copy } from '../../i18n/copy';
 
 interface Props {
   currentPath?: string;
@@ -14,7 +15,7 @@ const isActive = (href: string) => {
   if (href === '/articles') return currentPath.startsWith('/articles') || currentPath.startsWith('/posts');
   return currentPath.startsWith(href);
 };
-const navItems = siteConfig.nav.map((item) => ({ ...item, active: isActive(item.href) }));
+const navItems = copy.nav.map((item) => ({ ...item, active: isActive(item.href) }));
 ---
 
 <header class="site-header">
@@ -85,7 +86,7 @@ const navItems = siteConfig.nav.map((item) => ({ ...item, active: isActive(item.
               aria-current={item.active ? 'page' : undefined}
             >
               <span>{item.label}</span>
-              <span class="mobile-link-sub">{item.sub}</span>
+              {item.sub && <span class="mobile-link-sub">{item.sub}</span>}
             </a>
           </li>
         ))}

@@ -63,13 +63,13 @@ Everything that is specific to *your* site lives in [`src/site.config.ts`](src/s
 | `lang` | HTML `lang` attribute, date format and interface language (default `zh-TW`) |
 | `ui` | Rewording of single interface labels |
 | `author` | Name in the footer copyright line and in article structured data |
-| `nav` | Navigation items (label, secondary label, link) |
+| `nav` | Navigation items (link, and optionally a label and secondary label) |
 | `links` | Footer GitHub and RSS links (`github: ''` hides the GitHub link) |
 | `footer` | Footer tagline and note |
 | `appearance` | `starrySky: false` turns off the soft light and star chart around the content |
-| `hero` | Hero copy, button, banner alt text |
+| `hero` | Tagline, button text and link, banner alt text |
 | `mascot` | Mascot name and every line it says; `enabled: false` removes it entirely |
-| `notFound` / `articles` / `tags` | Copy for the 404 page, the article list and the tag pages |
+| `notFound` / `articles` / `tags` | Your own wording for the 404 page, the article list and the tag pages (empty uses the default) |
 | `art` | Hero banner, mascot and social share images |
 | `covers` | Category-to-cover mapping and the default cover |
 
@@ -110,7 +110,9 @@ ui: {
 } as UiOverrides,
 ```
 
-`lang` does not translate your own text. Site name, navigation, hero, footer, mascot lines and the 404 and list page copy stay as written in `site.config.ts`, so change those too, along with the sample posts and the About page.
+`lang` also picks the default wording for the navigation, the home button, the article list, the tag pages and the 404 page (from [`src/i18n/copy.ts`](src/i18n/copy.ts)). These settings are empty in `site.config.ts`; fill one in to use your own wording, which then shows in every language.
+
+Text about your own site is not translated: `title`, `subtitle`, `description`, the hero tagline, the footer and the mascot lines stay as written in `site.config.ts`, so change those too, along with the sample posts and the About page.
 
 To add another language, add a dictionary of type `UiStrings` to `src/i18n/ui.ts` and select it near the bottom of that file; `npx astro check` reports any missing label. A site shows one language at a time: there are no per-language URLs.
 

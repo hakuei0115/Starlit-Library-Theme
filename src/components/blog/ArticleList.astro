@@ -5,7 +5,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from './PostCard.astro';
 import Pagination from './Pagination.astro';
 import MascotPortrait from '../mascot/MascotPortrait.astro';
-import { siteConfig } from '../../site.config';
+import { copy } from '../../i18n/copy';
 import { getPublishedPosts, type BlogPost } from '../../utils/posts';
 import { categoryUrl, collectCategories } from '../../utils/categories';
 import { slugify } from '../../utils/slug';
@@ -17,18 +17,18 @@ interface Props {
 }
 
 const { page, category } = Astro.props;
-const { articles: copy } = siteConfig;
+const { articles } = copy;
 
 const allPosts = await getPublishedPosts();
 const categories = collectCategories(allPosts);
 const activeSlug = category ? slugify(category) : null;
 
-const heading = category ?? copy.title;
+const heading = category ?? articles.title;
 const title = t.list.pageTitle(
-  category ? t.list.categoryTitle(category, copy.title) : copy.title,
+  category ? t.list.categoryTitle(category, articles.title) : articles.title,
   page.currentPage,
 );
-const description = category ? t.list.categoryDescription(category) : copy.description;
+const description = category ? t.list.categoryDescription(category) : articles.description;
 const baseUrl = category ? categoryUrl(category) : '/articles/';
 ---
 
@@ -42,12 +42,12 @@ const baseUrl = category ? categoryUrl(category) : '/articles/';
             <li class="breadcrumb-sep" aria-hidden="true">/</li>
             {category ? (
               <>
-                <li class="breadcrumb-item"><a href="/articles/" class="breadcrumb-link">{copy.title}</a></li>
+                <li class="breadcrumb-item"><a href="/articles/" class="breadcrumb-link">{articles.title}</a></li>
                 <li class="breadcrumb-sep" aria-hidden="true">/</li>
                 <li class="breadcrumb-item breadcrumb-current" aria-current="page">{category}</li>
               </>
             ) : (
-              <li class="breadcrumb-item breadcrumb-current" aria-current="page">{copy.title}</li>
+              <li class="breadcrumb-item breadcrumb-current" aria-current="page">{articles.title}</li>
             )}
           </ol>
         </nav>
@@ -108,7 +108,7 @@ const baseUrl = category ? categoryUrl(category) : '/articles/';
 
         {page.total === 0 && (
           <div class="articles-empty">
-            <MascotPortrait variant="thinking" size="md" message={copy.emptyMessage} />
+            <MascotPortrait variant="thinking" size="md" message={articles.emptyMessage} />
           </div>
         )}
 

@@ -65,13 +65,13 @@ npm run dev        # http://localhost:4321
 | `lang` | HTML `lang`、日期格式與介面語言（預設 `zh-TW`） |
 | `ui` | 改寫個別介面文字 |
 | `author` | 頁尾版權與文章結構化資料的作者名稱 |
-| `nav` | 導覽項目（標籤、英文小標、連結） |
+| `nav` | 導覽項目（連結，另可填標籤與小標） |
 | `links` | 頁尾的 GitHub、RSS 連結（`github: ''` 可隱藏） |
 | `footer` | 頁尾說明與備註 |
 | `appearance` | `starrySky: false` 可關閉內容周圍的柔光與星圖 |
-| `hero` | Hero 文案、按鈕、橫幅替代文字 |
+| `hero` | 標語、按鈕文字與連結、橫幅替代文字 |
 | `mascot` | 吉祥物的名字與所有台詞；`enabled: false` 會整個移除 |
-| `notFound` / `articles` / `tags` | 404 頁、文章列表頁與標籤頁的文案 |
+| `notFound` / `articles` / `tags` | 404 頁、文章列表頁與標籤頁的自訂文案（留空用預設） |
 | `art` | Hero 橫幅、吉祥物與社群分享圖 |
 | `covers` | 分類封面對應與預設封面 |
 
@@ -112,7 +112,9 @@ ui: {
 } as UiOverrides,
 ```
 
-`lang` 不會翻譯你自己寫的文字。站名、導覽、Hero、頁尾、吉祥物台詞、404 與列表頁文案仍照 `site.config.ts` 顯示，範例文章與關於頁也一樣，需要一併修改。
+`lang` 也決定導覽、首頁按鈕、文章列表、標籤頁與 404 頁的預設文案（來自 [`src/i18n/copy.ts`](src/i18n/copy.ts)）。這些項目在 `site.config.ts` 裡是空的；填入內容就改用你的文字，切換語言時也不會變。
+
+你自己網站的文字不會翻譯：`title`、`subtitle`、`description`、Hero 標語、頁尾與吉祥物台詞仍照 `site.config.ts` 顯示，範例文章與關於頁也一樣，需要一併修改。
 
 要新增其他語言，在 `src/i18n/ui.ts` 加一份型別為 `UiStrings` 的字典，並在檔案下方選用它；漏掉的字串 `npx astro check` 會指出。一個網站同一時間只顯示一種語言，沒有各語言的獨立網址。
 

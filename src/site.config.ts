@@ -23,11 +23,11 @@ import coverDusk from './assets/brand/covers/dusk.svg';
 import coverMist from './assets/brand/covers/mist.svg';
 
 export interface NavItem {
-  /** Main label. */
-  label: string;
-  /** Small English/secondary label shown in the mobile menu. */
-  sub: string;
   href: string;
+  /** Main label. May be left out for '/', '/articles' and '/about'. */
+  label?: string;
+  /** Small secondary label shown in the mobile menu. */
+  sub?: string;
 }
 
 export const siteConfig = {
@@ -52,11 +52,15 @@ export const siteConfig = {
     starrySky: true,
   },
 
+  /**
+   * Settings shown as '' (and nav labels left out) use the default copy for `lang`,
+   * from src/i18n/copy.ts. Fill one in to use your own wording.
+   */
   nav: [
-    { label: '首頁', sub: 'Home', href: '/' },
-    { label: '文章', sub: 'Articles', href: '/articles' },
-    { label: '關於', sub: 'About', href: '/about' },
-  ] satisfies NavItem[],
+    { href: '/' },
+    { href: '/articles' },
+    { href: '/about' },
+  ] satisfies NavItem[] as NavItem[],
 
   /** Footer "resources" links. Set `github` to '' to hide the GitHub link. */
   links: {
@@ -72,9 +76,10 @@ export const siteConfig = {
 
   hero: {
     tagline: '一座星空中的溫柔技術圖書館，安靜陪伴讀者閱讀 AI、程式設計與軟體架構研究筆記。',
-    ctaLabel: '開始閱讀',
+    ctaLabel: '',
     ctaHref: '/articles',
-    bannerAlt: '星空圖書館橫幅',
+    /** Alternative text of the banner artwork. */
+    bannerAlt: '',
   },
 
   /**
@@ -96,23 +101,23 @@ export const siteConfig = {
   },
 
   notFound: {
-    title: '迷失在星空書架間',
-    description: '這條星光路徑似乎不存在，或者該篇筆記已經移往其他藏書閣。別擔心，這裡為你準備了返回的路徑：',
-    message: '館員在書架間找了又找，似乎沒有這本書呢……',
+    title: '',
+    description: '',
+    message: '',
   },
 
   articles: {
-    title: '文章館藏',
-    description: '漫步於星空書架間，探索所有發布的技術筆記。',
-    emptyMessage: '目前還沒有任何藏書呢。',
+    title: '',
+    description: '',
+    emptyMessage: '',
     /** Number of posts per page in the article list and category pages. */
     pageSize: 10,
   },
 
   tags: {
-    title: '文章標籤',
-    description: '依標籤瀏覽所有筆記。',
-    emptyMessage: '目前還沒有任何標籤。',
+    title: '',
+    description: '',
+    emptyMessage: '',
   },
 
   art: {

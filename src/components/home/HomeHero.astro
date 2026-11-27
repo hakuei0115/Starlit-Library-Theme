@@ -1,6 +1,7 @@
 ---
 import HeroBanner from '../common/HeroBanner.astro';
 import { siteConfig } from '../../site.config';
+import { copy } from '../../i18n/copy';
 
 const { hero, art } = siteConfig;
 ---
@@ -9,7 +10,7 @@ const { hero, art } = siteConfig;
   <div class="hero-container container-site">
     <div class="hero-card">
       <!-- Banner artwork: siteConfig.art.heroBanner -->
-      <HeroBanner src={art.heroBanner} mobileSrc={art.heroBannerMobile} alt={hero.bannerAlt} />
+      <HeroBanner src={art.heroBanner} mobileSrc={art.heroBannerMobile} alt={copy.hero.bannerAlt} />
 
       <!-- Intro strip: the page's visible h1, one line of positioning, one primary action -->
       <div class="hero-intro">
@@ -22,7 +23,7 @@ const { hero, art } = siteConfig;
         </div>
 
         <a class="hero-cta" href={hero.ctaHref}>
-          <span>{hero.ctaLabel}</span>
+          <span>{copy.hero.ctaLabel}</span>
           <svg class="hero-cta-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
