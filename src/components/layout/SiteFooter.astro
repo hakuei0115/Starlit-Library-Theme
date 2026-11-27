@@ -1,10 +1,10 @@
 ---
 import { t } from '../../i18n/ui';
 import { siteConfig } from '../../site.config';
+import { currentYear } from '../../utils/date';
 import { copy } from '../../i18n/copy';
 import { footerSky } from '../../utils/starry-sky';
 
-const currentYear = new Date().getFullYear();
 const { links, footer, appearance } = siteConfig;
 ---
 
@@ -51,7 +51,7 @@ const { links, footer, appearance } = siteConfig;
 
     <div class="footer-bottom">
       <p class="copyright">
-        &copy; {currentYear} {siteConfig.author}. {t.footer.rights}
+        &copy; {currentYear()} {siteConfig.author}. {t.footer.rights}
       </p>
       {footer.note && <p class="footer-companion-note">{footer.note}</p>}
     </div>

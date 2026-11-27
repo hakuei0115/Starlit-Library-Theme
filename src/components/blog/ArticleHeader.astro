@@ -1,8 +1,8 @@
 ---
 import { t } from '../../i18n/ui';
-import { siteConfig } from '../../site.config';
 import { copy } from '../../i18n/copy';
 import { tagUrl } from '../../utils/tags';
+import { formatDate } from '../../utils/date';
 interface Props {
   title: string;
   pubDate: Date | string;
@@ -26,21 +26,13 @@ const {
 const dateObj = new Date(pubDate);
 const isoDate = !isNaN(dateObj.getTime()) ? dateObj.toISOString() : '';
 const displayDate = !isNaN(dateObj.getTime())
-  ? new Intl.DateTimeFormat(siteConfig.lang, {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    }).format(dateObj)
+  ? formatDate(dateObj, 'long')
   : String(pubDate);
 
 const updatedDateObj = updatedDate ? new Date(updatedDate) : null;
 const isoUpdatedDate = updatedDateObj && !isNaN(updatedDateObj.getTime()) ? updatedDateObj.toISOString() : '';
 const displayUpdatedDate = updatedDateObj && !isNaN(updatedDateObj.getTime())
-  ? new Intl.DateTimeFormat(siteConfig.lang, {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    }).format(updatedDateObj)
+  ? formatDate(updatedDateObj, 'long')
   : '';
 ---
 

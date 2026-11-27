@@ -42,6 +42,11 @@ export const siteConfig = {
    * `zh…` shows Traditional Chinese, any other value shows English.
    */
   lang: 'zh-TW',
+  /**
+   * Time zone for the dates shown on the site, as an IANA name such as 'Europe/London'
+   * or 'America/New_York'. The build machine's own time zone has no effect.
+   */
+  timeZone: 'Asia/Taipei',
   /** Reword single interface labels, e.g. { home: { featured: 'Editor’s picks' } }. */
   ui: {} as UiOverrides,
   /** Used in the footer copyright line. */

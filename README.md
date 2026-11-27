@@ -62,6 +62,7 @@ Everything that is specific to *your* site lives in [`src/site.config.ts`](src/s
 | `title` / `subtitle` / `description` | Site name, tagline, default meta description |
 | `lang` | HTML `lang` attribute, date format and interface language (default `zh-TW`) |
 | `ui` | Rewording of single interface labels |
+| `timeZone` | Time zone of the dates shown (default `Asia/Taipei`) |
 | `author` | Name in the footer copyright line and in article structured data |
 | `nav` | Navigation items (link, and optionally a label and secondary label) |
 | `links` | Footer GitHub and RSS links (`github: ''` hides the GitHub link) |
@@ -92,6 +93,10 @@ export default defineConfig({
 On screens 1600px and wider the side margins show a star chart drawn in SVG, using the theme colours (the `--sky-*` variables in [`src/styles/tokens.css`](src/styles/tokens.css)). From 2200px the site container widens and the home banner moves beside its text.
 
 The article list shows 10 posts per page. Change `articles.pageSize` in `site.config.ts` to adjust it.
+
+### Dates and time zone
+
+Dates are shown in `timeZone` (an [IANA name](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) such as `Europe/London`), whatever time zone the build machine uses. A date written without a time, such as `pubDate: 2026-11-15`, is shown as that day in every time zone.
 
 ### Interface text and language
 

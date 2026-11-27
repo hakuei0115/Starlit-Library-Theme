@@ -64,6 +64,7 @@ npm run dev        # http://localhost:4321
 | `title` / `subtitle` / `description` | 站名、副標、預設 meta 描述 |
 | `lang` | HTML `lang`、日期格式與介面語言（預設 `zh-TW`） |
 | `ui` | 改寫個別介面文字 |
+| `timeZone` | 顯示日期用的時區（預設 `Asia/Taipei`） |
 | `author` | 頁尾版權與文章結構化資料的作者名稱 |
 | `nav` | 導覽項目（連結，另可填標籤與小標） |
 | `links` | 頁尾的 GitHub、RSS 連結（`github: ''` 可隱藏） |
@@ -94,6 +95,10 @@ export default defineConfig({
 寬度 1600px 以上時，兩側留白會顯示以 SVG 繪製、沿用主題色的星圖（顏色是 [`src/styles/tokens.css`](src/styles/tokens.css) 裡的 `--sky-*` 變數）。2200px 以上時網站容器會加寬，首頁橫幅改為左文右圖。
 
 文章列表每頁 10 篇，可在 `site.config.ts` 的 `articles.pageSize` 調整。
+
+### 日期與時區
+
+日期依 `timeZone` 顯示（[IANA 名稱](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)，例如 `Europe/London`），不受建置主機的時區影響。只寫日期、沒寫時間的值（例如 `pubDate: 2026-11-15`），在任何時區都顯示為那一天。
 
 ### 文字語言
 
