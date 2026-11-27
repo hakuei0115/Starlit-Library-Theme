@@ -64,6 +64,7 @@ Everything that is specific to *your* site lives in [`src/site.config.ts`](src/s
 | `nav` | Navigation items (label, secondary label, link) |
 | `links` | Footer GitHub and RSS links (`github: ''` hides the GitHub link) |
 | `footer` | Footer tagline and note |
+| `appearance` | `starrySky: false` turns off the soft light and star chart around the content |
 | `hero` | Hero copy, button, banner alt text |
 | `mascot` | Mascot name and every line it says; `enabled: false` removes it entirely |
 | `notFound` / `articles` / `tags` | Copy for the 404 page, the article list and the tag pages |
@@ -85,6 +86,8 @@ export default defineConfig({
   site: 'https://example.com',
 });
 ```
+
+On screens 1600px and wider the side margins show a star chart drawn in SVG, using the theme colours (the `--sky-*` variables in [`src/styles/tokens.css`](src/styles/tokens.css)). From 2200px the site container widens and the home banner moves beside its text.
 
 The article list shows 10 posts per page. Change `articles.pageSize` in `site.config.ts` to adjust it.
 

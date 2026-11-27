@@ -4,6 +4,7 @@ import '../styles/tokens.css';
 import '../styles/global.css';
 import SiteHeader from '../components/layout/SiteHeader.astro';
 import SiteFooter from '../components/layout/SiteFooter.astro';
+import StarrySky from '../components/layout/StarrySky.astro';
 import { siteConfig } from '../site.config';
 
 interface Props {
@@ -13,6 +14,8 @@ interface Props {
   articleDate?: string;
   modifiedDate?: string;
   lang?: string;
+  /** Strength of the side decoration; `soft` for long reading. */
+  sky?: 'full' | 'soft';
 }
 
 const {
@@ -22,6 +25,7 @@ const {
   articleDate,
   modifiedDate,
   lang = siteConfig.lang,
+  sky = 'full',
 } = Astro.props;
 
 const siteTitle = siteConfig.title;
@@ -112,6 +116,9 @@ const jsonLd =
 
     <!-- Footer -->
     <SiteFooter />
+
+    <!-- Decoration; sits behind everything above -->
+    {siteConfig.appearance.starrySky && <StarrySky tone={sky} />}
   </body>
 </html>
 

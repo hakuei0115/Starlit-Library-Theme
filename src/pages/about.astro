@@ -14,7 +14,7 @@ const { Content } = await render(entry);
 const { title, description, eyebrow } = entry.data;
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} sky="soft">
   <div class="about-page">
     <header class="about-header">
       <div class="header-container">
@@ -47,7 +47,7 @@ const { title, description, eyebrow } = entry.data;
   }
 
   .about-header {
-    background: var(--color-surface);
+    background: var(--color-surface-veil);
     border-bottom: var(--border-thin);
     padding: var(--space-12) var(--page-gutter);
     text-align: center;

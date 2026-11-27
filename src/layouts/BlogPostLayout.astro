@@ -31,6 +31,7 @@ const modifiedDate = updatedDate ? new Date(updatedDate).toISOString() : undefin
   image={cover}
   articleDate={formattedDate}
   modifiedDate={modifiedDate}
+  sky="soft"
 >
   <div class="article-layout container-site">
     <div class="article-grid">
@@ -124,6 +125,8 @@ const modifiedDate = updatedDate ? new Date(updatedDate).toISOString() : undefin
 
 <style>
   .article-layout {
+    /* Reading pages keep their width when the site container grows on wide screens. */
+    max-width: 75rem;
     padding-top: var(--space-8);
     padding-bottom: var(--space-16);
     width: 100%;

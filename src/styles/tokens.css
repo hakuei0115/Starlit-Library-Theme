@@ -20,6 +20,15 @@
   --color-selection-bg: #E2D8E3;
   --color-selection-text: #302B40;
 
+  /* Starry sky decoration, derived from the colours above. */
+  --sky-gold: color-mix(in srgb, var(--color-gold) 68%, #96660c);
+  --sky-gold-light: color-mix(in srgb, var(--color-gold) 62%, #fff3d4);
+  --sky-glow: #fff3cf;
+  --sky-line: color-mix(in srgb, var(--color-accent) 80%, #b9a8f0);
+  --sky-ambient: 170 152 224; /* RGB channels, used with varying opacity */
+  /* Page title bands: see-through, so the sky is not cut off by a solid block. */
+  --color-surface-veil: color-mix(in srgb, var(--color-surface) 45%, transparent);
+
   --font-display: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, "Noto Serif TC", serif;
   --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
   --font-code: "JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
@@ -70,7 +79,14 @@
   --page-gutter: clamp(1rem, 3.5vw, 2rem);
 }
 
-/* Use numeric media-query thresholds: 640 / 768 / 1024 / 1280px. */
+/* Very wide screens (for example 4K at 150% scaling): a wider site container. */
+@media (min-width: 2200px) {
+  :root {
+    --container-site: 105rem;
+  }
+}
+
+/* Use numeric media-query thresholds: 640 / 768 / 1024 / 1280px, plus 1600 and 2200px for wide screens. */
 
 ::selection {
   color: var(--color-selection-text);

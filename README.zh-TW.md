@@ -66,6 +66,7 @@ npm run dev        # http://localhost:4321
 | `nav` | 導覽項目（標籤、英文小標、連結） |
 | `links` | 頁尾的 GitHub、RSS 連結（`github: ''` 可隱藏） |
 | `footer` | 頁尾說明與備註 |
+| `appearance` | `starrySky: false` 可關閉內容周圍的柔光與星圖 |
 | `hero` | Hero 文案、按鈕、橫幅替代文字 |
 | `mascot` | 吉祥物的名字與所有台詞；`enabled: false` 會整個移除 |
 | `notFound` / `articles` / `tags` | 404 頁、文章列表頁與標籤頁的文案 |
@@ -87,6 +88,8 @@ export default defineConfig({
   site: 'https://example.com',
 });
 ```
+
+寬度 1600px 以上時，兩側留白會顯示以 SVG 繪製、沿用主題色的星圖（顏色是 [`src/styles/tokens.css`](src/styles/tokens.css) 裡的 `--sky-*` 變數）。2200px 以上時網站容器會加寬，首頁橫幅改為左文右圖。
 
 文章列表每頁 10 篇，可在 `site.config.ts` 的 `articles.pageSize` 調整。
 

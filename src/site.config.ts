@@ -41,6 +41,11 @@ export const siteConfig = {
   /** Used in the footer copyright line. */
   author: 'Your Name',
 
+  appearance: {
+    /** Soft light and a star chart around the content. Set to false for a plain background. */
+    starrySky: true,
+  },
+
   nav: [
     { label: '首頁', sub: 'Home', href: '/' },
     { label: '文章', sub: 'Articles', href: '/articles' },

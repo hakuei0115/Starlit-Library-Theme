@@ -35,7 +35,6 @@ body {
   font-size: var(--text-body);
   line-height: 1.8;
   color: var(--color-text);
-  background-color: var(--color-bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   display: flex;

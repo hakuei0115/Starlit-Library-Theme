@@ -1,0 +1,103 @@
+---
+/**
+ * Decoration behind the page: a soft lavender light everywhere and, on wide screens,
+ * a star chart in the side margins. It is purely visual: hidden from screen readers,
+ * never catches clicks and is left out of print.
+ *
+ * Turn it off with `appearance.starrySky` in src/site.config.ts.
+ */
+import { leftSky, rightSky } from '../../utils/starry-sky';
+
+interface Props {
+  /** `soft` fades the star chart, for pages meant for long reading. */
+  tone?: 'full' | 'soft';
+}
+
+const { tone = 'full' } = Astro.props;
+---
+
+<div class:list={['starry-sky', `starry-sky--${tone}`]} aria-hidden="true">
+  <div class="sky-side sky-side--left" set:html={leftSky()} />
+  <div class="sky-side sky-side--right" set:html={rightSky()} />
+</div>
+
+<style>
+  /* Faint enough that muted text on top of it keeps a 4.5:1 contrast. */
+  .starry-sky {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    background:
+      radial-gradient(48vw 70vh at 0% 22%, rgb(var(--sky-ambient) / 0.08), transparent 70%),
+      radial-gradient(48vw 70vh at 100% 62%, rgb(var(--sky-ambient) / 0.08), transparent 70%),
+      radial-gradient(70vw 45vh at 50% 108%, rgb(var(--sky-ambient) / 0.07), transparent 70%);
+  }
+
+  /* The side margins only have room for the chart on wide screens. */
+  .sky-side {
+    display: none;
+  }
+
+  @media (min-width: 1600px) {
+    .sky-side {
+      position: absolute;
+      top: var(--header-height);
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      /* The margin beside the content, reaching a little into its padding. */
+      width: clamp(150px, calc((100vw - var(--container-site)) / 2 + 1.5rem), 480px);
+    }
+
+    .sky-side--left {
+      left: 0;
+    }
+
+    .sky-side--right {
+      right: 0;
+    }
+
+    /* The stronger light stays inside the margin, away from text. */
+    .sky-side--left {
+      background: radial-gradient(100% 38% at 0% 20%, rgb(var(--sky-ambient) / 0.28), transparent 100%);
+    }
+
+    .sky-side--right {
+      background: radial-gradient(100% 38% at 100% 62%, rgb(var(--sky-ambient) / 0.26), transparent 100%);
+    }
+
+    .starry-sky--soft .sky-side {
+      opacity: 0.45;
+    }
+
+    /* Top and bottom keep their proportions; the middle takes whatever height is left. */
+    .sky-side :global(.sky-top),
+    .sky-side :global(.sky-low) {
+      flex: 0 1 auto;
+      width: 100%;
+      min-height: 0;
+    }
+
+    .sky-side :global(.sky-top) {
+      aspect-ratio: 440 / 420;
+    }
+
+    .sky-side :global(.sky-low) {
+      aspect-ratio: 440 / 400;
+    }
+
+    .sky-side :global(.sky-mid) {
+      flex: 1 1 0;
+      width: 100%;
+      min-height: 0;
+    }
+  }
+
+  @media print {
+    .starry-sky {
+      display: none;
+    }
+  }
+</style>

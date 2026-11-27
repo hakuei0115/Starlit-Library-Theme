@@ -1,11 +1,12 @@
 ---
 import { siteConfig } from '../../site.config';
+import { footerSky } from '../../utils/starry-sky';
 
 const currentYear = new Date().getFullYear();
-const { links, footer, nav } = siteConfig;
+const { links, footer, nav, appearance } = siteConfig;
 ---
 
-<footer class="site-footer">
+<footer class:list={['site-footer', { 'site-footer--sky': appearance.starrySky }]}>
   <!-- Subtle Starlit Divider with Gold Star Accent -->
   <div class="footer-divider-container container-site" aria-hidden="true">
     <div class="footer-divider-line"></div>
@@ -53,6 +54,8 @@ const { links, footer, nav } = siteConfig;
       {footer.note && <p class="footer-companion-note">{footer.note}</p>}
     </div>
   </div>
+
+  {appearance.starrySky && <div class="footer-sky-slot" aria-hidden="true" set:html={footerSky()} />}
 </footer>
 
 <style>
@@ -60,9 +63,25 @@ const { links, footer, nav } = siteConfig;
     margin-top: auto;
     padding-top: var(--space-3);
     padding-bottom: var(--space-12);
-    background-color: var(--color-bg);
     color: var(--color-text-muted);
     font-size: var(--text-small);
+  }
+
+  .site-footer--sky {
+    padding-bottom: var(--space-4);
+  }
+
+  .footer-sky-slot :global(.footer-sky) {
+    display: block;
+    width: min(100%, 106rem);
+    aspect-ratio: 1600 / 180;
+    margin: var(--space-4) auto 0;
+  }
+
+  @media print {
+    .footer-sky-slot {
+      display: none;
+    }
   }
 
   /* Celestial Divider */
